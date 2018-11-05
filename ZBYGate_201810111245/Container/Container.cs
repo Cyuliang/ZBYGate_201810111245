@@ -4,17 +4,20 @@ using ZBYGate_201810111245.Log;
 
 namespace ZBYGate_201810111245.Container
 {
-    class Container
+    class Container: IDisposable
     {
+        private CLog _Log = new CLog();
         private AxVECONclient _AxVECONclient;
-        private System.Threading.Timer _TimerConnect2Server;
-        private CLog Log = new CLog();
+        private System.Threading.Timer _TimerConnect2Server;        
+        private bool _AutoLink = true;
 
         public Action<string> SetMessage;
         public Action<IVECONclientEvents_OnNewLPNEventEvent> NewLPNEvent;
         public Action<IVECONclientEvents_OnUpdateLPNEventEvent> UpdateLPNEvent;
         public Action<IVECONclientEvents_OnCombinedRecognitionResultISOEvent> CombinResult;
         //public Action<IVECONclientEvents_OnIntermediateRecognitionResultISOEvent> Intermediate;
+
+        public Action<bool> GetStatusAction;
 
         public Container()
         {
@@ -33,7 +36,7 @@ namespace ZBYGate_201810111245.Container
             #endregion
 
             #region//对象初始化
-            _TimerConnect2Server = new System.Threading.Timer(LinkCallBack, null, TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(0));
+            _TimerConnect2Server = new System.Threading.Timer(LinkCallBack, null, TimeSpan.FromSeconds(10), TimeSpan.FromSeconds(0));
             #endregion
         }
 
@@ -43,7 +46,7 @@ namespace ZBYGate_201810111245.Container
         /// <param name="o"></param>
         private void LinkCallBack(object o)
         {
-            Log.logInfo.Info("Link Container Init Start");
+            _Log.logInfo.Info("Link Container Init Start");
             SetMessage?.Invoke("Link Container Init Start");
             _AxVECONclient.Connect2Server();
         }
@@ -53,9 +56,10 @@ namespace ZBYGate_201810111245.Container
         /// </summary>
         public void LinkC(int i)
         {
-            Log.logInfo.Info("Link Container Start");
+            _Log.logInfo.Info("Link Container Start");
             SetMessage?.Invoke("Link Container Start");
             _AxVECONclient.Connect2Server();
+            _AutoLink = true;
         }
 
         /// <summary>
@@ -63,10 +67,11 @@ namespace ZBYGate_201810111245.Container
         /// </summary>
         public void CloseC(int i)
         {
-            Log.logWarn.Warn("Container Close");
+            _Log.logWarn.Warn("Container Close");
             SetMessage?.Invoke("Container Close");
             _AxVECONclient.Disconnect();
             _TimerConnect2Server.Change(-1,-1);
+            _AutoLink = false;
         }
 
         /// <summary>
@@ -86,9 +91,9 @@ namespace ZBYGate_201810111245.Container
         /// <param name="e"></param>
         private void _AxVECONclient_OnServerError(object sender, System.EventArgs e)
         {
-            Log.logWarn.Warn("Link Container Error");
-            SetMessage?.Invoke("Link COntainer Error");
-            _TimerConnect2Server.Change(TimeSpan.FromSeconds(5),TimeSpan.FromSeconds(0));
+            _Log.logWarn.Warn("Link Container Error");
+            SetMessage?.Invoke("Link Container Error");
+            //_TimerConnect2Server.Change(TimeSpan.FromSeconds(5),TimeSpan.FromSeconds(0));
         }
 
         /// <summary>
@@ -98,9 +103,13 @@ namespace ZBYGate_201810111245.Container
         /// <param name="e"></param>
         private void _AxVECONclient_OnServerDisconnected(object sender, System.EventArgs e)
         {
-            Log.logWarn.Warn("Link Container Disconnect");
+            _Log.logWarn.Warn("Link Container Disconnect");
             SetMessage?.Invoke("Link Container Disconnect");
-            _TimerConnect2Server.Change(TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(0));
+            GetStatusAction?.Invoke(false);
+            if(_AutoLink)
+            {
+                _TimerConnect2Server.Change(TimeSpan.FromSeconds(10), TimeSpan.FromSeconds(0));
+            }
         }
 
         /// <summary>
@@ -110,8 +119,9 @@ namespace ZBYGate_201810111245.Container
         /// <param name="e"></param>
         private void _AxVECONclient_OnServerConnected(object sender, System.EventArgs e)
         {
-            Log.logInfo.Info("Link Container Connected");
+            _Log.logInfo.Info("Link Container Connected");
             SetMessage?.Invoke("Link Container Connected");
+            GetStatusAction?.Invoke(true);
             _TimerConnect2Server.Change(-1,-1);
         }
         
@@ -134,8 +144,8 @@ namespace ZBYGate_201810111245.Container
         private void _AxVECONclient_OnCombinedRecognitionResultISO(object sender, AxVeconclientProj.IVECONclientEvents_OnCombinedRecognitionResultISOEvent e)
         {
             CombinResult?.Invoke(e);
-            SetMessage?.Invoke(string.Format("CombinResult1：{0} CombinResult2：{0}", e.containerNum1,e.containerNum2));
-            Log.logInfo.Info(string.Format("DateTimt：{0} CombinResult1：{1} CombinResult2：{2}",e.triggerTime.ToString("yyyy-MM-dd HH:mm:ss"), e.containerNum1,e.containerNum2));
+            SetMessage?.Invoke(string.Format("CombinResult1：{0} CombinResult2：{1}", e.containerNum1,e.containerNum2));
+            _Log.logInfo.Info(string.Format("DateTimt：{0} CombinResult1：{1} CombinResult2：{2}",e.triggerTime.ToString("yyyy-MM-dd HH:mm:ss"), e.containerNum1,e.containerNum2));
         }
 
         /// <summary>
@@ -147,7 +157,7 @@ namespace ZBYGate_201810111245.Container
         {
             UpdateLPNEvent?.Invoke(e);
             SetMessage?.Invoke(string.Format("UpdateLPN：{0}", e.lPN));
-            Log.logInfo.Info(string.Format("DateTime：{0} UpdateLPN：{1}", e.triggerTime.ToString("yyyy-MM-dd HH:mm:ss"), e.lPN));
+            _Log.logInfo.Info(string.Format("DateTime：{0} UpdateLPN：{1}", e.triggerTime.ToString("yyyy-MM-dd HH:mm:ss"), e.lPN));
         }
 
         /// <summary>
@@ -159,7 +169,44 @@ namespace ZBYGate_201810111245.Container
         {
             NewLPNEvent?.Invoke(e);
             SetMessage?.Invoke(string.Format("NewLPN：{0}", e.lPN));
-            Log.logInfo.Info(string.Format("DateTime：{0} NewLPN：{1}", e.triggerTime.ToString("yyyy-MM-dd HH:mm:ss"), e.lPN));
+            _Log.logInfo.Info(string.Format("DateTime：{0} NewLPN：{1}", e.triggerTime.ToString("yyyy-MM-dd HH:mm:ss"), e.lPN));
         }
+
+        #region IDisposable Support
+        private bool disposedValue = false; // 要检测冗余调用
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                if (disposing)
+                {
+                    // TODO: 释放托管状态(托管对象)。
+                    _TimerConnect2Server.Dispose();
+                    _AxVECONclient.Dispose();
+                }
+
+                // TODO: 释放未托管的资源(未托管的对象)并在以下内容中替代终结器。
+                // TODO: 将大型字段设置为 null。
+
+                disposedValue = true;
+            }
+        }
+
+        // TODO: 仅当以上 Dispose(bool disposing) 拥有用于释放未托管资源的代码时才替代终结器。
+        // ~Container() {
+        //   // 请勿更改此代码。将清理代码放入以上 Dispose(bool disposing) 中。
+        //   Dispose(false);
+        // }
+
+        // 添加此代码以正确实现可处置模式。
+        public void Dispose()
+        {
+            // 请勿更改此代码。将清理代码放入以上 Dispose(bool disposing) 中。
+            Dispose(true);
+            // TODO: 如果在以上内容中替代了终结器，则取消注释以下行。
+            // GC.SuppressFinalize(this);
+        }
+        #endregion
     }
 }

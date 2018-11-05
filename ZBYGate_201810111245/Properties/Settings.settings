@@ -11,5 +11,95 @@
     <Setting Name="Container_Num" Type="System.Int32" Scope="Application">
       <Value Profile="(Default)">1</Value>
     </Setting>
+    <Setting Name="Plate_IPAddr" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">10.31.54.188</Value>
+    </Setting>
+    <Setting Name="Plate_Port" Type="System.UInt32" Scope="Application">
+      <Value Profile="(Default)">8080</Value>
+    </Setting>
+    <Setting Name="Plate_LED_Prefix" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">0030323130393533</Value>
+    </Setting>
+    <Setting Name="Plate_Image_Path" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">C:\\Image\\</Value>
+    </Setting>
+    <Setting Name="Plate_Local_IpAddr" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">10.31.54.200</Value>
+    </Setting>
+    <Setting Name="Plate_Local_Message" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">祝您一路顺风！</Value>
+    </Setting>
+    <Setting Name="CVR_Com" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">1</Value>
+    </Setting>
+    <Setting Name="CVR_Read_While" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">20</Value>
+    </Setting>
+    <Setting Name="Gate_InDoorSN" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">223171120</Value>
+    </Setting>
+    <Setting Name="Gate_OutDoorSN" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">223169562</Value>
+    </Setting>
+    <Setting Name="Gate_InDoorIp" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">10.31.54.200</Value>
+    </Setting>
+    <Setting Name="Gate_OutDoorIp" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">10.31.54.200</Value>
+    </Setting>
+    <Setting Name="Gate_Port" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">60000</Value>
+    </Setting>
+    <Setting Name="LED_nControlType" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">1126</Value>
+    </Setting>
+    <Setting Name="LED_nScreenNo" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">1</Value>
+    </Setting>
+    <Setting Name="LED_nWidth" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">256</Value>
+    </Setting>
+    <Setting Name="LED_nHeight" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">160</Value>
+    </Setting>
+    <Setting Name="LED_pSocketIP" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">192.168.1.185</Value>
+    </Setting>
+    <Setting Name="LED_nSocketPort" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">5005</Value>
+    </Setting>
+    <Setting Name="LED_nDYAreaID" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">5</Value>
+    </Setting>
+    <Setting Name="LED_nTimeOut" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">30</Value>
+    </Setting>
+    <Setting Name="LED_nAreaX" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">88,88,88,161,120</Value>
+    </Setting>
+    <Setting Name="LED_nAreaY" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">29,55,81,56,107</Value>
+    </Setting>
+    <Setting Name="LED_nAreaWidth" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">168,70,70,95,128</Value>
+    </Setting>
+    <Setting Name="LED_nAreaHeight" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">19,19,19,42,19</Value>
+    </Setting>
+    <Setting Name="LED_nFontSize" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">12</Value>
+    </Setting>
+    <Setting Name="LED_nFontColor" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">65535</Value>
+    </Setting>
+    <Setting Name="LED_nDelAllDYArea" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="LED_pDYAreaIDList" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">0,1,2,3,4</Value>
+    </Setting>
+    <Setting Name="LED_nShowTime" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">5</Value>
+    </Setting>
   </Settings>
 </SettingsFile>
