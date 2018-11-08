@@ -1,13 +1,61 @@
 ﻿using AxVeconclientProj;
+using System;
 using System.Windows.Forms;
 
-namespace ZBYGate_201810111245.Container
+namespace ZBYGate_Data_Collection.Container
 {
     public partial class ContainerWindow : Form
     {
+        public Action<int> ContainerLinkAction;//链接箱号服务端
+        public Action<int> ContainerAbortAction;//断开链接
+        public Action<int> ContainerLastRAction;//获取最后一次结果
+
+        private delegate void UpdateUiInvok(string Message);//跨线程更新UI
+        private System.Threading.Timer _timer = null;//定时恢复状态
+        private int Gate = 0;
+
         public ContainerWindow()
         {
-            InitializeComponent();            
+            InitializeComponent();
+
+            SetObjectTag();
+            Gate = Properties.Settings.Default.Container_Num;
+            _timer = new System.Threading.Timer(ClearText, null, TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(0));
+        }
+
+        /// <summary>
+        /// 定时回调函数
+        /// </summary>
+        /// <param name="state"></param>
+        private void ClearText(object state)
+        {
+            SetStatusText("就绪");
+        }
+
+        /// <summary>
+        /// 状态栏显示平息
+        /// </summary>
+        /// <param name="Message">动作信息</param>
+        public void SetStatusText(string Message)
+        {
+            if (statusStrip1.InvokeRequired)
+            {
+                statusStrip1.Invoke(new UpdateUiInvok(SetStatusText), new object[] { Message });
+            }
+            else
+            {
+                StatusLabel.Text = Message;
+            }
+        }
+
+        /// <summary>
+        /// 文本发生变化事件
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void StatusLabel_TextChanged(object sender, EventArgs e)
+        {
+            _timer.Change(TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(0));
         }
 
         /// <summary>
@@ -54,6 +102,45 @@ namespace ZBYGate_201810111245.Container
                 case 0: textBox5.Text = "20 吋集装箱"; break;
                 case 1: textBox5.Text = "40 吋集装箱"; break;
                 case 2: textBox5.Text = "两个 20 吋集装箱"; break;
+            }
+        }
+
+        /// <summary>
+        /// 公共工具栏按钮
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ToolstripButton_Click(object sender, EventArgs e)
+        {
+            ToolStripButton _ToolStripButton = (ToolStripButton)sender;
+            switch (int.Parse(_ToolStripButton.Tag.ToString()))
+            {
+                case 1:
+                    ContainerLinkAction?.Invoke(0);      
+                    break;
+                case 2:
+                    ContainerAbortAction?.Invoke(0);                    
+                    break;
+                case 3:
+                    ContainerLastRAction?.Invoke(Gate);
+                    break;
+            }
+        }
+
+        /// <summary>
+        ///设置控件对象数据
+        /// </summary>
+        private void SetObjectTag()
+        {
+            int i = 1;
+            foreach (object _Control in toolStrip1.Items)
+            {
+                if (_Control is ToolStripButton)
+                {
+                    ToolStripButton _ToolStripButton = (ToolStripButton)_Control;
+                    _ToolStripButton.Tag = i;
+                    i++;
+                }
             }
         }
     }

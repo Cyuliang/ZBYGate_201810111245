@@ -8,16 +8,16 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace ZBYGate_201810111245.LED
+namespace ZBYGate_Data_Collection.LED
 {
     public partial class LEDWindow : Form
     {
-        public Action<int> InitAction;
-        public Action<int> AddScreenAction;
-        public Action<int> AddAreaAction;
-        public Action<string[]> AddTextAction;
-        public Action<int> SendAction;
-        public Action<int> UnintAction;
+        public Action<int> InitAction;//初始化动态库
+        public Action<int> AddScreenAction;//添加显示屏
+        public Action<int> AddAreaAction;//添加动态区
+        public Action<string[]> AddTextAction;//添加文本
+        public Action<int> SendAction;//推送消息
+        public Action<int> UnintAction;//卸载动态库
 
         private delegate void UpdateUiInvok(string Message);//跨线程更新UI
         private System.Threading.Timer _timer=null;//定时恢复状态
@@ -26,17 +26,7 @@ namespace ZBYGate_201810111245.LED
         {
             InitializeComponent();
 
-            int i = 1;
-            foreach(object _Control in toolStrip1.Items)
-            {       
-                if(_Control is ToolStripButton)
-                {
-                    ToolStripButton _ToolStripButton = (ToolStripButton)_Control;
-                    _ToolStripButton.Tag = i;
-                    i++;
-                }
-            }
-
+            SetObjectTag(true);
             IpTextBox.Text = Properties.Settings.Default.LED_pSocketIP;
             PortTextBox.Text = Properties.Settings.Default.LED_nSocketPort.ToString();
             _timer = new System.Threading.Timer(ClearText, null, TimeSpan.FromSeconds(5),TimeSpan.FromSeconds(0));
@@ -52,26 +42,37 @@ namespace ZBYGate_201810111245.LED
             ToolStripButton _ToolStripButton = (ToolStripButton)sender;
             switch(int.Parse(_ToolStripButton.Tag.ToString()))
             {
-                case 1:InitAction?.Invoke(0);//初始化动态库
+                case 1:InitAction?.Invoke(0);      
+                    SetObjectTag(false);
                     break;
-                case 2:AddScreenAction?.Invoke(0);//添加显示屏
+                case 2:AddScreenAction?.Invoke(0);                    
                     break;
-                case 3:AddAreaAction?.Invoke(0);//添加动态区域
+                case 3:AddAreaAction?.Invoke(0);
                     break;
                 case 4:
-                    string[] pTexts = Control();
-                    if(pTexts!=null)
+                    if (Control()!=null)
                     {
-                        AddTextAction?.Invoke(pTexts);//添加文本
+                        AddTextAction?.Invoke(Control());
                     }
                     break;
-                case 5: SendAction?.Invoke(0);//推送消息
+                case 5:
+                    SendAction?.BeginInvoke(0, new AsyncCallback(BeginInvokeCallBack), null);
+                    //SendAction?.Invoke(0);
                     break;
                 case 6:
-                    toolStripButton5.Enabled = true;
-                    UnintAction?.Invoke(0);//释放动态库
+                    UnintAction?.Invoke(0);
+                    SetObjectTag(true);
                     break;
             }
+        }
+
+        /// <summary>
+        /// 异步完成回调
+        /// </summary>
+        /// <param name="ar"></param>
+        private void BeginInvokeCallBack(IAsyncResult ar)
+        {         
+            SetStatusText("推送信息完成");
         }
 
         /// <summary>
@@ -131,6 +132,34 @@ namespace ZBYGate_201810111245.LED
             toolStripButton5.Enabled = true;
             pTexts = new string[]{ PlateTextBox.Text, SupplierTextBox.Text, AppointmentTextBox.Text, ParkedTextBox.Text, OntimeTextBox.Text };
             return pTexts;
+        }
+
+        /// <summary>
+        ///设置控件对象数据
+        /// </summary>
+        private void SetObjectTag(bool SetEnable)
+        {
+            int i = 1;
+            foreach (object _Control in toolStrip1.Items)
+            {
+                if (_Control is ToolStripButton)
+                {
+                    ToolStripButton _ToolStripButton = (ToolStripButton)_Control;
+                    _ToolStripButton.Tag = i;
+                    if(SetEnable)
+                    {
+                        if (i != 1)
+                        {
+                            _ToolStripButton.Enabled = false;
+                        }
+                    }
+                    else
+                    {
+                        _ToolStripButton.Enabled = true;
+                    }
+                    i++;
+                }
+            }
         }
     }
 }

@@ -3,10 +3,21 @@ using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 
-namespace ZBYGate_201810111245.CVR
+namespace ZBYGate_Data_Collection.CVR
 {
     public partial class CVRWindow : Form
     {
+        public Action<int> CVRInitAction;//初始化动态库
+        public Action<int> CVRReadAction;//寻卡·读卡
+        public Action<int> CVRCloseAction;//关闭读取
+        public Action<int> CVRWhileReadAction;//循环读取
+        public Action<int> CVRForReadAction;//定时读取
+        public Action<bool> CVRSetCVRvolatile;//设置定时读取状态
+
+        private delegate void UpdateUiInvok(string Message);//跨线程更新UI
+        private System.Threading.Timer _timer = null;//定时恢复状态
+        private volatile bool ReadForBooen = true;//定时循环状态
+
         #region//更新UI
         private delegate void UpdateCVR(byte[] name, byte[] sex, byte[] peopleNation, byte[] birthday, byte[] number, byte[] address, byte[] signdate, byte[] validtermOfStart, byte[] validtermOfEnd);
         private delegate void UpdateCVRImage(byte[] imgData, int length);
@@ -15,6 +26,44 @@ namespace ZBYGate_201810111245.CVR
         public CVRWindow()
         {
             InitializeComponent();
+
+            SetObjectTag();
+            _timer = new System.Threading.Timer(ClearText, null, TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(0));
+        }
+
+        /// <summary>
+        /// 定时回调函数
+        /// </summary>
+        /// <param name="state"></param>
+        private void ClearText(object state)
+        {
+            SetStatusText("就绪");
+        }
+
+        /// <summary>
+        /// 状态栏显示平息
+        /// </summary>
+        /// <param name="Message">动作信息</param>
+        public void SetStatusText(string Message)
+        {
+            if (statusStrip1.InvokeRequired)
+            {
+                statusStrip1.Invoke(new UpdateUiInvok(SetStatusText), new object[] { Message });
+            }
+            else
+            {
+                StatusLabel.Text = Message;
+            }
+        }
+
+        /// <summary>
+        /// 文本发生变化事件
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void StatusLabel_TextChanged(object sender, EventArgs e)
+        {
+            _timer.Change(TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(0));
         }
 
         /// <summary>
@@ -65,8 +114,95 @@ namespace ZBYGate_201810111245.CVR
                 {
                     myStream.WriteByte(imgData[i]);
                 }
-                Image myImage = Image.FromStream(myStream);
+                Image myImage = Image.FromStream(myStream);            
                 pictureBoxPhoto.Image = myImage;
+                myStream.Seek(0, SeekOrigin.Begin);
+                myStream.SetLength(0);
+            }
+        }
+
+        /// <summary>
+        /// 公共工具栏按钮
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ToolstripButton_Click(object sender, EventArgs e)
+        {
+            ToolStripButton _ToolStripButton = (ToolStripButton)sender;
+            switch (int.Parse(_ToolStripButton.Tag.ToString()))
+            {
+                case 1:
+                    CVRInitAction?.BeginInvoke(0, new AsyncCallback(InitCalllBack), null);
+                    break;
+                case 2:
+                    CVRReadAction?.Invoke(0);
+                    break;
+                case 3:
+                    CVRCloseAction?.Invoke(0);
+                    break;
+                case 4:
+                    if(_ToolStripButton.Checked)
+                    {
+                        CVRSetCVRvolatile?.Invoke(true);
+                        CVRWhileReadAction?.BeginInvoke(0, new AsyncCallback(CallWhileDone), null);
+                    }
+                    else//取消选中停止循环
+                    {
+                        CVRSetCVRvolatile?.Invoke(false);
+                    }
+                    break;
+                case 5:
+                    if (ReadForBooen)
+                    {
+                        CVRForReadAction?.BeginInvoke(0, new AsyncCallback(CallForDone), null);
+                        ReadForBooen = false;
+                    }
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// 初始化回调完成
+        /// </summary>
+        /// <param name="ar"></param>
+        private void InitCalllBack(IAsyncResult ar)
+        {
+            SetStatusText("初始化动作完成");
+        }
+
+        /// <summary>
+        /// 定时异步回到完成
+        /// </summary>
+        /// <param name="ar"></param>
+        private void CallForDone(IAsyncResult ar)
+        {
+            SetStatusText("循环读取完成");
+            ReadForBooen = true;
+        }
+
+        /// <summary>
+        /// 循环异步回调完成
+        /// </summary>
+        /// <param name="ar"></param>
+        private void CallWhileDone(IAsyncResult ar)
+        {
+            SetStatusText("循环读取完成");
+        }
+
+        /// <summary>
+        ///设置控件对象数据
+        /// </summary>
+        private void SetObjectTag()
+        {
+            int i = 1;
+            foreach (object _Control in toolStrip1.Items)
+            {
+                if (_Control is ToolStripButton)
+                {
+                    ToolStripButton _ToolStripButton = (ToolStripButton)_Control;
+                    _ToolStripButton.Tag = i;
+                    i++;
+                }
             }
         }
     }

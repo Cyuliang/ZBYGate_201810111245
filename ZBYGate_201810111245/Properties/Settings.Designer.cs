@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace ZBYGate_201810111245.Properties {
+namespace ZBYGate_Data_Collection.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
@@ -52,7 +52,7 @@ namespace ZBYGate_201810111245.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("10.31.54.188")]
+        [global::System.Configuration.DefaultSettingValueAttribute("192.168.1.98")]
         public string Plate_IPAddr {
             get {
                 return ((string)(this["Plate_IPAddr"]));
@@ -88,7 +88,7 @@ namespace ZBYGate_201810111245.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("10.31.54.200")]
+        [global::System.Configuration.DefaultSettingValueAttribute("192.168.1.200")]
         public string Plate_Local_IpAddr {
             get {
                 return ((string)(this["Plate_Local_IpAddr"]));
@@ -124,7 +124,7 @@ namespace ZBYGate_201810111245.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("223171120")]
+        [global::System.Configuration.DefaultSettingValueAttribute("223166359")]
         public string Gate_InDoorSN {
             get {
                 return ((string)(this["Gate_InDoorSN"]));
@@ -133,7 +133,7 @@ namespace ZBYGate_201810111245.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("223169562")]
+        [global::System.Configuration.DefaultSettingValueAttribute("223285189")]
         public string Gate_OutDoorSN {
             get {
                 return ((string)(this["Gate_OutDoorSN"]));
@@ -142,7 +142,7 @@ namespace ZBYGate_201810111245.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("10.31.54.200")]
+        [global::System.Configuration.DefaultSettingValueAttribute("192.168.1.111")]
         public string Gate_InDoorIp {
             get {
                 return ((string)(this["Gate_InDoorIp"]));
@@ -151,7 +151,7 @@ namespace ZBYGate_201810111245.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("10.31.54.200")]
+        [global::System.Configuration.DefaultSettingValueAttribute("192.168.1.112")]
         public string Gate_OutDoorIp {
             get {
                 return ((string)(this["Gate_OutDoorIp"]));
@@ -317,6 +317,16 @@ namespace ZBYGate_201810111245.Properties {
         public int LED_nShowTime {
             get {
                 return ((int)(this["LED_nShowTime"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Database=\'hw\';Data Source=\'localhost\';User Id=\'root\';Password=\'Li870419\';charset=" +
+            "\'utf8\';pooling=true;SslMode=none")]
+        public string LocalDataBase_Conn {
+            get {
+                return ((string)(this["LocalDataBase_Conn"]));
             }
         }
     }

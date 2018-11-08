@@ -1,7 +1,7 @@
 ﻿using System;
-using ZBYGate_201810111245.Log;
+using ZBYGate_Data_Collection.Log;
 
-namespace ZBYGate_201810111245.CVR
+namespace ZBYGate_Data_Collection.CVR
 {
     class CVR
     {
@@ -236,7 +236,7 @@ namespace ZBYGate_201810111245.CVR
                     FillDataBmpActive?.Invoke(imgData, Imglength);
                     FillDataActive?.Invoke(name, sex, peopleNation, birthday, number, address, signdate, validtermOfStart, validtermOfEnd);
                 }
-                STATE = false;
+                STATE = false;//读取到数据退出无限循环
             }
             catch (Exception ex)
             {

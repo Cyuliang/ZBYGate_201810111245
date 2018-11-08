@@ -1,7 +1,7 @@
 ﻿using System.Runtime.InteropServices;
 using System.Security;
 
-namespace ZBYGate_201810111245.CVR
+namespace ZBYGate_Data_Collection.CVR
 {
     /// <summary>
     /// 身份证阅读类

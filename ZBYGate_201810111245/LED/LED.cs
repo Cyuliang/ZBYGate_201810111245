@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ZBYGate_201810111245.Log;
+using ZBYGate_Data_Collection.Log;
 
-namespace ZBYGate_201810111245.LED
+namespace ZBYGate_Data_Collection.LED
 {
     class LED
     {
@@ -180,7 +180,7 @@ namespace ZBYGate_201810111245.LED
             try
             {
                 int nResult = SafeNativeMethods.AddScreen_Dynamic(nControlType, nScreenNo, 2, nWidth, nHeight,
-                            4, 1, "COM1", 57600, pSocketIP, nSocketPort, 0, 0, "", "", "127.0.0.1", 6055, "", "","");
+                            4, 1, "COM1", 57600, pSocketIP, nSocketPort, 0, 0, "", "", "112.65.245.174", 6055, "", "","");
                 GetErrorMessage("执行AddScreen函数,", nResult);
             }
             catch (Exception ex)
@@ -217,20 +217,20 @@ namespace ZBYGate_201810111245.LED
         /// </summary>
         public void AddScreenDynamicAreaText(string[] pTexts)
         {
-            try
+            int nResult = -1;
+            int i = 0;
+            foreach (string str in pTexts)
             {
-                int nResult = -1;
-                int i = 0;
-                foreach (string str in pTexts)
+                try
                 {
-                    nResult = SafeNativeMethods.AddScreenDynamicAreaText(nScreenNo, i, str, 0, 0, "宋体", nFontSize, 0, nFontColor,2, 8, nShowTime);
+                    nResult = SafeNativeMethods.AddScreenDynamicAreaText(nScreenNo, i, str, 0, 0, "宋体", nFontSize, 0, nFontColor, 2, 8, nShowTime);
                     GetErrorMessage(string.Format("执行AddScreenDynamicAreaText函数,添加 {0} 区域，文本 {1}", i, str), nResult);
                     i++;
                 }
-            }
-            catch (Exception ex)
-            {
-                _Log.logError.Error("AddScreenDynamicAreaText Error", ex);
+                catch (AccessViolationException ex)
+                {
+                    _Log.logError.Error("AddScreenDynamicAreaText Error", ex);
+                }
             }
         }
 

@@ -2,7 +2,7 @@
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace ZBYGate_201810111245
+namespace ZBYGate_Data_Collection
 {
     public partial class Form1 : Form
     {
@@ -28,8 +28,10 @@ namespace ZBYGate_201810111245
         #endregion
 
         #region//界面委托
+        private delegate void UpdateUiBInvok(bool Status);
         private delegate void UpdateUiInvok(string Message);
         private delegate void UpdateStatus(string Ip, uint status);
+        private delegate void UpdateUiUInvok(int Status, Int32 SN);
         #endregion
 
         #region //窗口对象初始化
@@ -49,35 +51,15 @@ namespace ZBYGate_201810111245
         #endregion
 
         #region//箱号识别委托
-        private Action<int> ContainerLinkAction;
-        private Action<int> ContainerAbortAction;
-        private Action<int> ContainerLastRAction;
         #endregion
 
         #region//车牌委托
-        private Action<int> PlateLinkAction;
-        private Action<int> PlateAbortAction;
-        private Action<int> PlateTiggerAction;
-        private Action<int> PlateLiftingAction;
-        private Action<int> PlateTransmissionAction;
-        private Action<int> PlateSearchAction;
-        private Action<int> PlateSetIpAction;
-        private Action<int> PlateSetPathAction;
-        private Action<bool> PlatePlayAction;
-        private Action<bool> PlateCloseAction;
         #endregion
 
         #region//身份证委托
-        private Action<int> CVRInitAction;
-        private Action<int> CVRReadAction;
-        private Action<int> CVRCloseAction;
-        private Action<int> CVRWhileReadAction;
-        private Action<int> CVRForReadAction;
-        private Action<bool> CVRSetCVRvolatile;
         #endregion
 
         #region//道闸委托
-        private Action<string,int,string> GateOpenDoorAction;
         #endregion
 
         #region//LED委托
@@ -95,39 +77,21 @@ namespace ZBYGate_201810111245
             #endregion
 
             #region//箱号识别委托订阅
-            ContainerLinkAction  += _Container.LinkC;
-            ContainerAbortAction += _Container.CloseC;
-            ContainerLastRAction += _Container.LastR;
             _Container.SetMessage += GetMessage;
-            _Container.GetStatusAction += SetStatusAction;
+            _Container.GetStatusAction += ContainerStatus;
             #endregion
 
             #region//车牌委托订阅
             _Plate.SetMessage += GetMessage;
-            PlateLinkAction += _Plate.CallbackFuntion;
-            PlateAbortAction += _Plate.QuitDevice;
-            PlateTiggerAction += _Plate.SetTrigger;
-            PlateLiftingAction += _Plate.SetRelayClose;
-            PlateSearchAction += _Plate.SearchDeviceList;
-            PlateSetIpAction += _Plate.SetIpNetwork;
-            PlateSetPathAction += _Plate.SetSaveImagePath;
-            PlatePlayAction += _Plate.Play;
-            PlateCloseAction += _Plate.Play;
             _Plate.PlateCallBack += PlateStatus;
             #endregion
 
             #region//身份证委托订阅
-            CVRInitAction += _CVR.InitComm;
-            CVRReadAction += _CVR.Authenticate;
-            CVRCloseAction += _CVR.CloseComm;
             _CVR.SetMessageAction += GetMessage;
-            CVRForReadAction += _CVR.AuthenticateFor;
-            CVRWhileReadAction += _CVR.AuthenticateWhile;
-            CVRSetCVRvolatile += _CVR.GetStarted;
             #endregion
 
             #region//道闸委托订阅
-            GateOpenDoorAction += _Gate.OpenDoor;
+            _Gate.NewState += _Gate_NewState;
             _Gate.SetMessage += GetMessage;
             #endregion
 
@@ -188,6 +152,7 @@ namespace ZBYGate_201810111245
         #endregion
 
         #region//Page页面
+
         /// <summary>
         /// 添加Page页面
         /// </summary>
@@ -272,6 +237,7 @@ namespace ZBYGate_201810111245
         #endregion
 
         #region //集装箱
+
         /// <summary>
         /// 集装箱显示按钮
         /// </summary>
@@ -295,53 +261,35 @@ namespace ZBYGate_201810111245
             _Container.NewLPNEvent += _ContainerWindow.NewLPN;
             _Container.UpdateLPNEvent += _ContainerWindow.UpdateLPN;
             _Container.CombinResult += _ContainerWindow.CombinResult;
-        }
-
-        /// <summary>
-        /// 链接箱号
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void ContainerLinkButton_Click(object sender, EventArgs e)
-        {
-            ContainerLinkAction?.Invoke(0);
-        }
-
-        /// <summary>
-        /// 主动断开链接
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void ContainerAbortAction_Click(object sender, EventArgs e)
-        {
-            ContainerAbortAction?.Invoke(0);
+            _Container.SetMessage += _ContainerWindow.SetStatusText;
+            _ContainerWindow.ContainerLinkAction += _Container.LinkC;
+            _ContainerWindow.ContainerAbortAction += _Container.CloseC;
+            _ContainerWindow.ContainerLastRAction += _Container.LastR;            
         }
 
         /// <summary>
         /// 箱号链接状态
         /// </summary>
         /// <param name="i"></param>
-        private void SetStatusAction(bool status)
+        private void ContainerStatus(bool status)
         {
-            if(status)
+            if (statusStrip2.InvokeRequired)
             {
-                toolStripStatusLabel2.BackColor = Color.DarkGreen;
+                statusStrip2.Invoke(new UpdateUiBInvok(ContainerStatus), new object[] { status });
             }
             else
             {
-                toolStripStatusLabel2.BackColor = Color.DarkRed;
+                if (status)
+                {
+                    toolStripStatusLabel2.BackColor = Color.DarkGreen;
+                }
+                else
+                {
+                    toolStripStatusLabel2.BackColor = Color.DarkRed;
+                }
             }
         }
 
-        /// <summary>
-        /// 获取最后一次识别结果
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void ContainerLastRAction_Click(object sender, EventArgs e)
-        {
-            ContainerLastRAction?.Invoke(Properties.Settings.Default.Container_Num);
-        }
         #endregion
 
         #region//车牌
@@ -358,106 +306,6 @@ namespace ZBYGate_201810111245
                 PlateWindowActiveInit();
             }
             SetTabPate("PlateTable", PlateTable, form: _PlateWindow);
-        }
-
-        /// <summary>
-        /// 车牌链接
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void PlateLinkAction_Click(object sender, EventArgs e)
-        {
-            PlateLinkAction?.Invoke(0);
-        }
-
-        /// <summary>
-        /// 断开车牌链接
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void PlateAbortAction_Click(object sender, EventArgs e)
-        {
-            PlateAbortAction?.Invoke(0);
-        }
-
-        /// <summary>
-        /// 手动抓拍
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void PlateTiggerAction_Click(object sender, EventArgs e)
-        {
-            PlateTiggerAction?.Invoke(0);
-        }
-
-        /// <summary>
-        /// 手动开闸
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void PlateLiftingAction_Click(object sender, EventArgs e)
-        {
-            PlateLiftingAction?.Invoke(0);
-        }
-
-        /// <summary>
-        /// 发送485数据
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void PlateTransmissionAction_Click(object sender, EventArgs e)
-        {
-            PlateTransmissionAction?.Invoke(0);
-        }
-
-        /// <summary>
-        /// 搜索设备
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void PlateSearchAction_Click(object sender, EventArgs e)
-        {
-            PlateSearchAction?.Invoke(0);
-        }
-
-        /// <summary>
-        /// 设置路径
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void PlateSetPathAction_Click(object sender, EventArgs e)
-        {
-            PlateSetPathAction?.Invoke(0);
-        }
-
-        /// <summary>
-        /// 设置IP
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void PlateSetIpAction_Click(object sender, EventArgs e)
-        {
-            PlateSetIpAction?.Invoke(0);
-        }
-
-        /// <summary>
-        /// 打开视频
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void PlatePlayAction_Click(object sender, EventArgs e)
-        {
-            PlatePlayAction?.Invoke(true);
-        }
-
-        /// <summary>
-        /// 关闭视频
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void PlateCloseAction_Click(object sender, EventArgs e)
-        {
-            PlateCloseAction?.Invoke(false);
         }
 
         /// <summary>
@@ -492,9 +340,19 @@ namespace ZBYGate_201810111245
             _Plate.PlateDataCallBack += _PlateWindow.PlateResult;
             _Plate.DataJpegCallBack += _PlateWindow.DataJpeg;
             _Plate.JpegCallBack += _PlateWindow.JpegCallBack;
-            PlateTransmissionAction += _PlateWindow.TestSend485Action;
+            _Plate.SetMessage += _PlateWindow.SetStatusText;
+            _PlateWindow.PlateLinkAction += _Plate.CallbackFuntion;
+            _PlateWindow.PlateAbortAction += _Plate.QuitDevice;
+            _PlateWindow.PlateTiggerAction += _Plate.SetTrigger;
+            _PlateWindow.PlateLiftingAction += _Plate.SetRelayClose;
             _PlateWindow.PlateTransmissionAction += _Plate.RS485Send;
+            _PlateWindow.PlateSearchAction += _Plate.SearchDeviceList;
+            _PlateWindow.PlateSetIpAction += _Plate.SetIpNetwork;
+            _PlateWindow.PlateSetPathAction += _Plate.SetSaveImagePath;
+            _PlateWindow.PlatePlayAction += _Plate.Play;
+            _PlateWindow.PlateCloseAction += _Plate.Play;
         }
+
         #endregion
 
         #region//身份证
@@ -513,91 +371,17 @@ namespace ZBYGate_201810111245
         /// </summary>
         private void CVRWindowActiveInit()
         {
+            _CVR.SetMessageAction += _CVRWindow.SetStatusText;
             _CVR.FillDataActive += _CVRWindow.FillData;
             _CVR.FillDataBmpActive += _CVRWindow.FillDataBmp;
+            _CVRWindow.CVRInitAction += _CVR.InitComm;
+            _CVRWindow.CVRReadAction += _CVR.Authenticate;
+            _CVRWindow.CVRForReadAction += _CVR.AuthenticateFor;
+            _CVRWindow.CVRWhileReadAction += _CVR.AuthenticateWhile;
+            _CVRWindow.CVRCloseAction += _CVR.CloseComm;
+            _CVRWindow.CVRSetCVRvolatile += _CVR.GetStarted;
         }
 
-        /// <summary>
-        /// 动态库初始化
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void CVRInit_Click(object sender, EventArgs e)
-        {
-            CVRInitAction?.Invoke(0);
-        }
-
-        /// <summary>
-        /// 读取身份证信息
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void CVRRead_Click(object sender, EventArgs e)
-        {
-            CVRReadAction?.Invoke(0);
-        }
-
-        /// <summary>
-        /// 关闭动态库
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void CVRClose_Click(object sender, EventArgs e)
-        {
-            CVRCloseAction?.Invoke(0);
-        }
-
-        /// <summary>
-        /// 定时循环读取
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void CVRForRead_Click(object sender, EventArgs e)
-        {
-            if (ReadForBooen)
-            {
-                whileToolStripMenuItem.Checked = false;
-                CVRForReadAction?.BeginInvoke(0,new AsyncCallback(CallForDone), null);
-                ReadForBooen = false;
-            }
-        }
-
-        /// <summary>
-        /// 定时循环读取回调
-        /// </summary>
-        /// <param name="ar"></param>
-        private void CallForDone(IAsyncResult ar)
-        {
-            MessageBox.Show("调用完成");
-            ReadForBooen = true;
-        }
-
-        /// <summary>
-        /// 无限循环读取
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void whileToolStripMenuItem_CheckStateChanged(object sender, EventArgs e)
-        {
-            if (whileToolStripMenuItem.Checked)
-            {
-                CVRSetCVRvolatile?.Invoke(true);
-                CVRWhileReadAction?.BeginInvoke(0,new AsyncCallback(CallWhileDone), null);
-            }
-            else//取消选中状态，停止循环
-            {
-                CVRSetCVRvolatile?.Invoke(false);
-            }
-        }
-
-        /// <summary>
-        /// 无限循环读卡回调
-        /// </summary>
-        /// <param name="ar"></param>
-        private void CallWhileDone(IAsyncResult ar)
-        {
-            MessageBox.Show("停止循环");
-        }
         #endregion
 
         #region//道闸
@@ -612,28 +396,81 @@ namespace ZBYGate_201810111245
             if (_GateWindow == null || _GateWindow.IsDisposed)
             {
                 _GateWindow = new Gate.GateWindow();
+                GateWindowActiveInit();
             }
             SetTabPate("GateTable", GateTable, form: _GateWindow);
         }
 
         /// <summary>
-        /// 进闸开门
+        /// 界面委托
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void GateOpenInDoor_Click(object sender, EventArgs e)
+        private void GateWindowActiveInit()
         {
-            GateOpenDoorAction?.Invoke(Properties.Settings.Default.Gate_InDoorIp,Properties.Settings.Default.Gate_Port,Properties.Settings.Default.Gate_InDoorSN);
+            _Gate.SetMessage += _GateWindow.SetStatusText;
+            _GateWindow.GateOpenDoorAction += _Gate.OpenDoor;
         }
 
         /// <summary>
-        /// 出闸开门
+        /// 道闸链接事件订阅
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void GateOpenOutDoor_Click(object sender, EventArgs e)
+        /// <param name="i"></param>
+        private void _Gate_NewState(object sender, Gate.DoorStateEventArgs e)
         {
-            GateOpenDoorAction?.Invoke(Properties.Settings.Default.Gate_OutDoorIp, Properties.Settings.Default.Gate_Port, Properties.Settings.Default.Gate_OutDoorSN);
+            if (e.State == 1)
+            {
+                if (e.SN == Int32.Parse(Properties.Settings.Default.Gate_InDoorSN))
+                {
+                    GateStatus(e.State, e.SN);
+                }
+                if (e.SN == Int32.Parse(Properties.Settings.Default.Gate_OutDoorSN))
+                {
+                    GateStatus(e.State, e.SN);
+                }
+            }
+            else
+            {
+                if (e.SN == Int32.Parse(Properties.Settings.Default.Gate_InDoorSN))
+                {
+                    GateStatus(e.State, e.SN);
+                }
+                if (e.SN == Int32.Parse(Properties.Settings.Default.Gate_OutDoorSN))
+                {
+                    GateStatus(e.State, e.SN);
+                }
+            }
+        }
+
+        private void  GateStatus(int Status ,Int32 SN)
+        {
+            if (statusStrip2.InvokeRequired)
+            {
+                statusStrip2.Invoke(new UpdateUiUInvok(GateStatus), new object[] { Status, SN });
+            }
+            else
+            {
+                if (SN == Int32.Parse(Properties.Settings.Default.Gate_InDoorSN))
+                {
+                    if (Status == 1)
+                    {
+                        toolStripStatusLabel4.BackColor = Color.DarkGreen;
+                    }
+                    else
+                    {
+                        toolStripStatusLabel4.BackColor = Color.DarkRed;
+                    }
+                }
+                if (SN == Int32.Parse(Properties.Settings.Default.Gate_OutDoorSN))
+                {
+                    if (Status == 1)
+                    {
+                        toolStripStatusLabel5.BackColor = Color.DarkGreen;
+                    }
+                    else
+                    {
+                        toolStripStatusLabel5.BackColor = Color.DarkRed;
+                    }
+                }
+            }
         }
 
         #endregion

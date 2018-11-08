@@ -5,13 +5,13 @@ using System.Text;
 using System.Threading.Tasks;
 using WG3000_COMM.Core;
 
-namespace ZBYGate_201810111245.Gate
+namespace ZBYGate_Data_Collection.Gate
 {
     class Gate:IDisposable
     {
         private Log.CLog _Log = new Log.CLog();
-
         private System.Threading.Timer GetTimer;
+
         public Action<string> SetMessage;
 
         /// <summary>
@@ -36,7 +36,7 @@ namespace ZBYGate_201810111245.Gate
 
         public Gate()
         {
-            GetTimer = new System.Threading.Timer(GetStatus, null, TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(10));
+            GetTimer = new System.Threading.Timer(GetStatus, null, TimeSpan.FromSeconds(10), TimeSpan.FromSeconds(10));
 
             wgMjController1 = new wgMjController
             {

@@ -1,6 +1,6 @@
 ﻿using log4net;
 
-namespace ZBYGate_201810111245.Log
+namespace ZBYGate_Data_Collection.Log
 {
     public class CLog
     {

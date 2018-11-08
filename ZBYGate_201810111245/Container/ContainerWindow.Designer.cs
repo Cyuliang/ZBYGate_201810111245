@@ -1,4 +1,4 @@
-﻿namespace ZBYGate_201810111245.Container
+﻿namespace ZBYGate_Data_Collection.Container
 {
     partial class ContainerWindow
     {
@@ -16,6 +16,7 @@
             if (disposing && (components != null))
             {
                 components.Dispose();
+                _timer.Dispose();
             }
             base.Dispose(disposing);
         }
@@ -55,15 +56,15 @@
             this.textBox11 = new System.Windows.Forms.TextBox();
             this.textBox12 = new System.Windows.Forms.TextBox();
             this.textBox13 = new System.Windows.Forms.TextBox();
-            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
-            this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButton3 = new System.Windows.Forms.ToolStripButton();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.StatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.toolStrip1.SuspendLayout();
+            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.ContainerLinkButton = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButton4 = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButton5 = new System.Windows.Forms.ToolStripButton();
             this.statusStrip1.SuspendLayout();
+            this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // label1
@@ -275,50 +276,6 @@
             this.textBox13.Size = new System.Drawing.Size(139, 21);
             this.textBox13.TabIndex = 24;
             // 
-            // toolStrip1
-            // 
-            this.toolStrip1.ImageScalingSize = new System.Drawing.Size(22, 22);
-            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripButton1,
-            this.toolStripButton2,
-            this.toolStripButton3});
-            this.toolStrip1.Location = new System.Drawing.Point(0, 0);
-            this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(800, 29);
-            this.toolStrip1.TabIndex = 26;
-            this.toolStrip1.Text = "toolStrip1";
-            this.toolStrip1.Visible = false;
-            // 
-            // toolStripButton1
-            // 
-            this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton1.Image = global::ZBYGate_201810111245.Resource1.link;
-            this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton1.Name = "toolStripButton1";
-            this.toolStripButton1.Size = new System.Drawing.Size(26, 26);
-            this.toolStripButton1.Text = "Link";
-            this.toolStripButton1.ToolTipText = "链接箱号识别系统";
-            // 
-            // toolStripButton2
-            // 
-            this.toolStripButton2.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton2.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton2.Image")));
-            this.toolStripButton2.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton2.Name = "toolStripButton2";
-            this.toolStripButton2.Size = new System.Drawing.Size(26, 26);
-            this.toolStripButton2.Text = "Abort";
-            this.toolStripButton2.ToolTipText = "断开箱号识别系统";
-            // 
-            // toolStripButton3
-            // 
-            this.toolStripButton3.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton3.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton3.Image")));
-            this.toolStripButton3.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton3.Name = "toolStripButton3";
-            this.toolStripButton3.Size = new System.Drawing.Size(26, 26);
-            this.toolStripButton3.Text = "LastR";
-            this.toolStripButton3.ToolTipText = "获取最后一次结果";
-            // 
             // statusStrip1
             // 
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -335,7 +292,7 @@
             this.StatusLabel.Name = "StatusLabel";
             this.StatusLabel.Size = new System.Drawing.Size(662, 17);
             this.StatusLabel.Spring = true;
-            this.StatusLabel.Text = "toolStripStatusLabel2";
+            this.StatusLabel.TextChanged += new System.EventHandler(this.StatusLabel_TextChanged);
             // 
             // toolStripStatusLabel1
             // 
@@ -343,13 +300,59 @@
             this.toolStripStatusLabel1.Size = new System.Drawing.Size(92, 17);
             this.toolStripStatusLabel1.Text = "集装箱号码识别";
             // 
+            // toolStrip1
+            // 
+            this.toolStrip1.ImageScalingSize = new System.Drawing.Size(25, 25);
+            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.ContainerLinkButton,
+            this.toolStripButton4,
+            this.toolStripButton5});
+            this.toolStrip1.Location = new System.Drawing.Point(0, 0);
+            this.toolStrip1.Name = "toolStrip1";
+            this.toolStrip1.Size = new System.Drawing.Size(800, 32);
+            this.toolStrip1.TabIndex = 28;
+            this.toolStrip1.Text = "toolStrip2";
+            // 
+            // ContainerLinkButton
+            // 
+            this.ContainerLinkButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.ContainerLinkButton.Image = global::ZBYGate_Data_Collection.Resource1.link;
+            this.ContainerLinkButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.ContainerLinkButton.Name = "ContainerLinkButton";
+            this.ContainerLinkButton.Size = new System.Drawing.Size(29, 29);
+            this.ContainerLinkButton.Text = "Link";
+            this.ContainerLinkButton.ToolTipText = "链接箱号识别系统";
+            this.ContainerLinkButton.Click += new System.EventHandler(this.ToolstripButton_Click);
+            // 
+            // toolStripButton4
+            // 
+            this.toolStripButton4.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton4.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton4.Image")));
+            this.toolStripButton4.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton4.Name = "toolStripButton4";
+            this.toolStripButton4.Size = new System.Drawing.Size(29, 29);
+            this.toolStripButton4.Text = "Abort";
+            this.toolStripButton4.ToolTipText = "断开箱号识别系统";
+            this.toolStripButton4.Click += new System.EventHandler(this.ToolstripButton_Click);
+            // 
+            // toolStripButton5
+            // 
+            this.toolStripButton5.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton5.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton5.Image")));
+            this.toolStripButton5.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton5.Name = "toolStripButton5";
+            this.toolStripButton5.Size = new System.Drawing.Size(29, 29);
+            this.toolStripButton5.Text = "LastR";
+            this.toolStripButton5.ToolTipText = "获取最后一次结果";
+            this.toolStripButton5.Click += new System.EventHandler(this.ToolstripButton_Click);
+            // 
             // ContainerWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.toolStrip1);
+            this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.textBox12);
             this.Controls.Add(this.textBox13);
             this.Controls.Add(this.textBox10);
@@ -378,10 +381,10 @@
             this.Controls.Add(this.label1);
             this.Name = "ContainerWindow";
             this.Text = "ContainerWindow";
-            this.toolStrip1.ResumeLayout(false);
-            this.toolStrip1.PerformLayout();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
+            this.toolStrip1.ResumeLayout(false);
+            this.toolStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -415,12 +418,12 @@
         private System.Windows.Forms.TextBox textBox11;
         private System.Windows.Forms.TextBox textBox12;
         private System.Windows.Forms.TextBox textBox13;
-        private System.Windows.Forms.ToolStrip toolStrip1;
-        private System.Windows.Forms.ToolStripButton toolStripButton1;
         private System.Windows.Forms.StatusStrip statusStrip1;
-        private System.Windows.Forms.ToolStripButton toolStripButton2;
-        private System.Windows.Forms.ToolStripButton toolStripButton3;
         private System.Windows.Forms.ToolStripStatusLabel StatusLabel;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
+        private System.Windows.Forms.ToolStrip toolStrip1;
+        private System.Windows.Forms.ToolStripButton ContainerLinkButton;
+        private System.Windows.Forms.ToolStripButton toolStripButton4;
+        private System.Windows.Forms.ToolStripButton toolStripButton5;
     }
 }

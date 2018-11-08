@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ZBYGate_201810111245.Gate
+namespace ZBYGate_Data_Collection.Gate
 {
     class DoorStateEventArgs : EventArgs
     {

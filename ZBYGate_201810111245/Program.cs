@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace ZBYGate_201810111245
+namespace ZBYGate_Data_Collection
 {
     static class Program
     {

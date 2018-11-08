@@ -214,4 +214,22 @@
   <data name="释放" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\释放.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="定时" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\定时.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="集装箱" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\集装箱.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="车牌__1_" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\车牌 (1).png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="打印机" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\打印机.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="扫描仪" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\扫描仪.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="车牌__2_" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\车牌 (2).png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>

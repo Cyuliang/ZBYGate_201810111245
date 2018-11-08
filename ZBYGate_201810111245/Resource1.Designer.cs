@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace ZBYGate_201810111245 {
+namespace ZBYGate_Data_Collection {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace ZBYGate_201810111245 {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ZBYGate_201810111245.Resource1", typeof(Resource1).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ZBYGate_Data_Collection.Resource1", typeof(Resource1).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -193,6 +193,16 @@ namespace ZBYGate_201810111245 {
         /// <summary>
         ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
+        internal static System.Drawing.Bitmap 定时 {
+            get {
+                object obj = ResourceManager.GetObject("定时", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
+        /// </summary>
         internal static System.Drawing.Bitmap 屏幕 {
             get {
                 object obj = ResourceManager.GetObject("屏幕", resourceCulture);
@@ -236,6 +246,26 @@ namespace ZBYGate_201810111245 {
         internal static System.Drawing.Bitmap 循环 {
             get {
                 object obj = ResourceManager.GetObject("循环", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
+        /// </summary>
+        internal static System.Drawing.Bitmap 打印机 {
+            get {
+                object obj = ResourceManager.GetObject("打印机", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
+        /// </summary>
+        internal static System.Drawing.Bitmap 扫描仪 {
+            get {
+                object obj = ResourceManager.GetObject("扫描仪", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -343,6 +373,26 @@ namespace ZBYGate_201810111245 {
         /// <summary>
         ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
+        internal static System.Drawing.Bitmap 车牌__1_ {
+            get {
+                object obj = ResourceManager.GetObject("车牌__1_", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
+        /// </summary>
+        internal static System.Drawing.Bitmap 车牌__2_ {
+            get {
+                object obj = ResourceManager.GetObject("车牌__2_", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
+        /// </summary>
         internal static System.Drawing.Bitmap 道闸02 {
             get {
                 object obj = ResourceManager.GetObject("道闸02", resourceCulture);
@@ -356,6 +406,16 @@ namespace ZBYGate_201810111245 {
         internal static System.Drawing.Bitmap 释放 {
             get {
                 object obj = ResourceManager.GetObject("释放", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
+        /// </summary>
+        internal static System.Drawing.Bitmap 集装箱 {
+            get {
+                object obj = ResourceManager.GetObject("集装箱", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

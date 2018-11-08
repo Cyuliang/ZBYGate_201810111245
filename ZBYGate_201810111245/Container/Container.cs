@@ -1,8 +1,8 @@
 ﻿using AxVeconclientProj;
 using System;
-using ZBYGate_201810111245.Log;
+using ZBYGate_Data_Collection.Log;
 
-namespace ZBYGate_201810111245.Container
+namespace ZBYGate_Data_Collection.Container
 {
     class Container: IDisposable
     {

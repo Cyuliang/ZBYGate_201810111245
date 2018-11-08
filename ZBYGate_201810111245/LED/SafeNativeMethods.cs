@@ -6,7 +6,7 @@ using System.Security;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ZBYGate_201810111245.LED
+namespace ZBYGate_Data_Collection.LED
 {
     [SuppressUnmanagedCodeSecurityAttribute]
     internal class SafeNativeMethods
@@ -54,7 +54,7 @@ namespace ZBYGate_201810111245.LED
             pCommandDataFile：保存到文件方式时，命令保存命令文件名称。只有在保存到文件模式下该参数有效，例："curCommandData.dat"
             返回值:    详见返回状态代码定义。
         -------------------------------------------------------------------------------*/
-        [DllImport("LedDynamicArea.dll",CharSet =CharSet.Unicode)]
+        [DllImport("LedDynamicArea.dll")]
         public static extern int AddScreen_Dynamic(int nControlType, int nScreenNo, int nSendMode, int nWidth, int nHeight,
               int nScreenType, int nPixelMode, string pCom, int nBaud, string pSocketIP, int nSocketPort, int nStaticIpMode, int nServerMode,
               string pBarcode, string pNetworkID, string pServerIP, int nServerPort, string pServerAccessUser, string pServerAccessPassword,
@@ -85,7 +85,7 @@ namespace ZBYGate_201810111245.LED
 
           返回值            :详见返回状态代码定义。
         -------------------------------------------------------------------------------*/
-        [DllImport("LedDynamicArea.dll",CharSet =CharSet.Unicode)]
+        [DllImport("LedDynamicArea.dll")]
         public static extern int QuerryServerDeviceList(string pTransitDeviceType, string pServerIP, int nServerPort, string pServerAccessUser, string pServerAccessPassword,
                                                         byte[] pDeviceList, ref int nDeviceCount);
 
@@ -121,7 +121,7 @@ namespace ZBYGate_201810111245.LED
             nAreaFMoveStep：边框移动步长；该值取值范围：1~8；
           返回值:    详见返回状态代码定义。
         -------------------------------------------------------------------------------*/
-        [DllImport("LedDynamicArea.dll",CharSet =CharSet.Unicode)]
+        [DllImport("LedDynamicArea.dll")]
         public static extern int AddScreenDynamicArea(int nScreenNo, int nDYAreaID, int nRunMode,
             int nTimeOut, int nAllProRelate, string pProRelateList, int nPlayImmediately,
             int nAreaX, int nAreaY, int nAreaWidth, int nAreaHeight, int nAreaFMode, int nAreaFLine, int nAreaFColor,
@@ -194,7 +194,7 @@ namespace ZBYGate_201810111245.LED
             nShowTime：动态区域信息显示时间；单位：10ms
           返回值:    详见返回状态代码定义。
         -------------------------------------------------------------------------------*/
-        [DllImport("LedDynamicArea.dll",CharSet =CharSet.Unicode)]
+        [DllImport("LedDynamicArea.dll")]
         public static extern int AddScreenDynamicAreaFile(int nScreenNo, int nDYAreaID,
             string pFileName, int nShowSingle, int nAlignment, string pFontName, int nFontSize, int nBold, int nFontColor,
             int nStunt, int nRunSpeed, int nShowTime);
@@ -257,7 +257,7 @@ namespace ZBYGate_201810111245.LED
             nShowTime：动态区域信息显示时间；单位：10ms
           返回值:    详见返回状态代码定义。
         -------------------------------------------------------------------------------*/
-        [DllImport("LedDynamicArea.dll",CharSet =CharSet.Unicode)]
+        [DllImport("LedDynamicArea.dll")]
         public static extern int AddScreenDynamicAreaText(int nScreenNo, int nDYAreaID,
             string pText, int nShowSingle, int nAlignment, string pFontName, int nFontSize, int nBold, int nFontColor,
             int nStunt, int nRunSpeed, int nShowTime);
@@ -293,7 +293,7 @@ namespace ZBYGate_201810111245.LED
            pDYAreaIDList	动态区域编号；当nDelAllDYArea为1时，其值为""；当nDelAllDYArea为0时，该参数与AddScreenDynamicArea函数中的nDYAreaID参数对应，发送相应动态区域
           返回值:    详见返回状态代码定义
        -------------------------------------------------------------------------------*/
-        [DllImport("LedDynamicArea.dll",CharSet =CharSet.Unicode)]
+        [DllImport("LedDynamicArea.dll")]
         public static extern int SendDynamicAreasInfoCommand(int nScreenNo, int nDelAllDYArea, string pDYAreaIDList);
 
         /*-------------------------------------------------------------------------------
@@ -305,7 +305,7 @@ namespace ZBYGate_201810111245.LED
             pDYAreaIDList	动态区域编号；当nDelAllDYArea为1时，其值为""；当nDelAllDYArea为0时，该参数与AddScreenDynamicArea函数中的nDYAreaID参数对应，删除相应动态区域
           返回值:    详见返回状态代码定义
         -------------------------------------------------------------------------------*/
-        [DllImport("LedDynamicArea.dll",CharSet =CharSet.Unicode)]
+        [DllImport("LedDynamicArea.dll")]
         public static extern int SendDeleteDynamicAreasCommand(int nScreenNo, int nDelAllDYArea, string pDYAreaIDList); //删除指定动态区域的信息
 
         /*-------------------------------------------------------------------------------
@@ -323,7 +323,7 @@ namespace ZBYGate_201810111245.LED
             nServerPort     :中转服务器网络端口
           返回值            :详见返回状态代码定义。
         -------------------------------------------------------------------------------*/
-        [DllImport("LedDynamicArea.dll",CharSet =CharSet.Unicode)]
+        [DllImport("LedDynamicArea.dll")]
         public static extern int StartServer(int nSendMode, string pServerIP, int nServerPort);
 
         /*-------------------------------------------------------------------------------

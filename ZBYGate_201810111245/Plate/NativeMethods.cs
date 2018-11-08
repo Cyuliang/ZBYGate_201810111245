@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ZBYGate_201810111245.Plate
+namespace ZBYGate_Data_Collection.Plate
 {
     public partial class NativeConstants
     {

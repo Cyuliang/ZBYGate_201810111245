@@ -1,4 +1,4 @@
-﻿namespace ZBYGate_201810111245.LED
+﻿namespace ZBYGate_Data_Collection.LED
 {
     partial class LEDWindow
     {
@@ -110,7 +110,7 @@
             // toolStripButton1
             // 
             this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton1.Image = global::ZBYGate_201810111245.Resource1.初始化;
+            this.toolStripButton1.Image = global::ZBYGate_Data_Collection.Resource1.初始化;
             this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton1.Name = "toolStripButton1";
             this.toolStripButton1.Size = new System.Drawing.Size(29, 29);
@@ -121,7 +121,7 @@
             // toolStripButton2
             // 
             this.toolStripButton2.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton2.Image = global::ZBYGate_201810111245.Resource1.屏幕;
+            this.toolStripButton2.Image = global::ZBYGate_Data_Collection.Resource1.屏幕;
             this.toolStripButton2.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton2.Name = "toolStripButton2";
             this.toolStripButton2.Size = new System.Drawing.Size(29, 29);
@@ -132,7 +132,7 @@
             // toolStripButton3
             // 
             this.toolStripButton3.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton3.Image = global::ZBYGate_201810111245.Resource1.区域;
+            this.toolStripButton3.Image = global::ZBYGate_Data_Collection.Resource1.区域;
             this.toolStripButton3.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton3.Name = "toolStripButton3";
             this.toolStripButton3.Size = new System.Drawing.Size(29, 29);
@@ -143,7 +143,7 @@
             // toolStripButton4
             // 
             this.toolStripButton4.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton4.Image = global::ZBYGate_201810111245.Resource1.文本;
+            this.toolStripButton4.Image = global::ZBYGate_Data_Collection.Resource1.文本;
             this.toolStripButton4.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton4.Name = "toolStripButton4";
             this.toolStripButton4.Size = new System.Drawing.Size(29, 29);
@@ -154,7 +154,7 @@
             // toolStripButton5
             // 
             this.toolStripButton5.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton5.Image = global::ZBYGate_201810111245.Resource1.发送;
+            this.toolStripButton5.Image = global::ZBYGate_Data_Collection.Resource1.发送;
             this.toolStripButton5.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton5.Name = "toolStripButton5";
             this.toolStripButton5.Size = new System.Drawing.Size(29, 29);
@@ -165,7 +165,7 @@
             // toolStripButton6
             // 
             this.toolStripButton6.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton6.Image = global::ZBYGate_201810111245.Resource1.释放;
+            this.toolStripButton6.Image = global::ZBYGate_Data_Collection.Resource1.释放;
             this.toolStripButton6.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton6.Name = "toolStripButton6";
             this.toolStripButton6.Size = new System.Drawing.Size(29, 29);
@@ -187,15 +187,14 @@
             // StatusLabel
             // 
             this.StatusLabel.Name = "StatusLabel";
-            this.StatusLabel.Size = new System.Drawing.Size(32, 17);
-            this.StatusLabel.Text = "就绪";
+            this.StatusLabel.Size = new System.Drawing.Size(724, 17);
+            this.StatusLabel.Spring = true;
             this.StatusLabel.TextChanged += new System.EventHandler(this.StatusLabel_TextChanged);
             // 
             // toolStripStatusLabel2
             // 
             this.toolStripStatusLabel2.Name = "toolStripStatusLabel2";
-            this.toolStripStatusLabel2.Size = new System.Drawing.Size(753, 17);
-            this.toolStripStatusLabel2.Spring = true;
+            this.toolStripStatusLabel2.Size = new System.Drawing.Size(30, 17);
             this.toolStripStatusLabel2.Text = "LED";
             // 
             // label3

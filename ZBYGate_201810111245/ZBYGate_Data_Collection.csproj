@@ -6,12 +6,27 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{94F86C57-54BD-48E1-AA9F-C737E7289D84}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>ZBYGate_201810111245</RootNamespace>
-    <AssemblyName>ZBYGate_201810111245</AssemblyName>
+    <RootNamespace>ZBYGate_Data_Collection</RootNamespace>
+    <AssemblyName>ZBYGate Data Collection</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -44,6 +59,10 @@
     <Prefer32Bit>true</Prefer32Bit>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <WarningLevel>0</WarningLevel>
+    <Optimize>true</Optimize>
+    <DocumentationFile>
+    </DocumentationFile>
+    <RunCodeAnalysis>true</RunCodeAnalysis>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
     <OutputPath>bin\x86\Release\</OutputPath>
@@ -61,6 +80,14 @@
   <ItemGroup>
     <Reference Include="log4net">
       <HintPath>..\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="MySql.Data, Version=8.0.12.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>LocalDataBase\MySql.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="MySql.Web, Version=8.0.12.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>LocalDataBase\MySql.Web.dll</HintPath>
     </Reference>
     <Reference Include="n3kAdrtB">
       <HintPath>Gate\n3kAdrtB.dll</HintPath>
@@ -116,6 +143,13 @@
       <DependentUpon>LEDWindow.cs</DependentUpon>
     </Compile>
     <Compile Include="LED\SafeNativeMethods.cs" />
+    <Compile Include="LocalDataBase\LocalDataBaseWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="LocalDataBase\LocalDataBaseWindow.Designer.cs">
+      <DependentUpon>LocalDataBaseWindow.cs</DependentUpon>
+    </Compile>
+    <Compile Include="LocalDataBase\MySqlHelper.cs" />
     <Compile Include="Log\CLog.cs" />
     <Compile Include="Plate\NativeMethods.cs" />
     <Compile Include="Plate\Plate.cs" />
@@ -146,6 +180,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="LED\LEDWindow.resx">
       <DependentUpon>LEDWindow.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="LocalDataBase\LocalDataBaseWindow.resx">
+      <DependentUpon>LocalDataBaseWindow.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Plate\PlateWindow.resx">
       <DependentUpon>PlateWindow.cs</DependentUpon>
@@ -283,8 +320,25 @@
     <None Include="Resources\区域.png" />
     <None Include="Resources\释放.png" />
     <None Include="Resources\文本.png" />
+    <None Include="Resources\定时.png" />
+    <None Include="Resources\集装箱.png" />
+    <None Include="Resources\车牌 %281%29.png" />
+    <None Include="Resources\车牌 %282%29.png" />
+    <None Include="Resources\打印机.png" />
+    <None Include="Resources\扫描仪.png" />
     <Content Include="Zby.ico" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.5.2">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.5.2 %28x86 和 x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

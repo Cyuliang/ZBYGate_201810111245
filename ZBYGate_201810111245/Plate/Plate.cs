@@ -2,9 +2,9 @@
 using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Text;
-using ZBYGate_201810111245.Log;
+using ZBYGate_Data_Collection.Log;
 
-namespace ZBYGate_201810111245.Plate
+namespace ZBYGate_Data_Collection.Plate
 {
     class Plate:IDisposable
     {
@@ -34,7 +34,7 @@ namespace ZBYGate_201810111245.Plate
         /// <summary>
         /// 回调函数:获取相机485发送的数据	
         /// </summary>
-        public CLIENT_LPRC_SerialDataCallback SerialDataCallback = null;
+        //public CLIENT_LPRC_SerialDataCallback SerialDataCallback = null;
 
         /// <summary>
         /// Jpeg流回调返回每一帧jpeg数据结构体
@@ -82,7 +82,7 @@ namespace ZBYGate_201810111245.Plate
             NativeMethods.CLIENT_LPRC_RegCLIENTConnEvent(ConnectCallback);
             NativeMethods.CLIENT_LPRC_RegDataEx2Event(DataEx2Callback);
             NativeMethods.CLIENT_LPRC_RegJpegEvent(JpegCallback);
-            NativeMethods.CLIENT_LPRC_RegSerialDataEvent(SerialDataCallback);
+            //NativeMethods.CLIENT_LPRC_RegSerialDataEvent(SerialDataCallback);
 
             CallbackTimer = new System.Threading.Timer(PlateStartLink, null, TimeSpan.FromSeconds(10), TimeSpan.FromSeconds(0));
 
@@ -126,7 +126,7 @@ namespace ZBYGate_201810111245.Plate
                     return;
                 }
                 Marshal.Copy(this.JpegInfo.pchBuf, chJpegStream, 0, (Int32)nJpegStream);
-                JpegCallBack?.Invoke(chJpegStream);
+                JpegCallBack?.Invoke(chJpegStream);                
             }
         }
 
@@ -252,13 +252,14 @@ namespace ZBYGate_201810111245.Plate
             prefix.CopyTo(dst, 0);
             data.CopyTo(dst, prefix.Length);
             end.CopyTo(dst, prefix.Length + data.Length);
-            var x = Encoding.GetEncoding("GB2312").GetString(dst).Replace(" ", "\0");
+            string x = Encoding.GetEncoding("GB2312").GetString(dst);//.Replace(" ", "\0");
             if (Running == true)
             {
                 if (NativeMethods.CLIENT_LPRC_RS485Send(pIP, 9110, Marshal.StringToHGlobalAnsi(x), dst.Length) == 0)
                 {
-                    SetMessage?.Invoke(string.Format("信息：{0} 传输成功", x));
-                    Log.logInfo.Info(string.Format("信息：{0} 传输成功", x));
+                    string tmp = string.Format("{0} 传输成功", Encoding.GetEncoding("GB2312").GetString(data));
+                    SetMessage?.Invoke(tmp);
+                    Log.logInfo.Info(tmp);
                 }
             }
         }
@@ -325,6 +326,7 @@ namespace ZBYGate_201810111245.Plate
             {
                 if (state)
                 {
+                    NativeMethods.CLIENT_LPRC_RegJpegEvent(JpegCallback);
                     if (NativeMethods.CLIENT_LPRC_SetJpegStreamPlayOrStop(pIP, 1) == 0)
                     {
                         SetMessage?.Invoke("Open Plate Video！");
@@ -332,6 +334,7 @@ namespace ZBYGate_201810111245.Plate
                 }
                 else
                 {
+                    NativeMethods.CLIENT_LPRC_RegJpegEvent(null);
                     if (NativeMethods.CLIENT_LPRC_SetJpegStreamPlayOrStop(pIP, 0) == 0)
                     {
                         SetMessage?.Invoke("Close Plate Video！");
@@ -357,7 +360,7 @@ namespace ZBYGate_201810111245.Plate
                 ConnectCallback = null;
                 DataEx2Callback = null;
                 JpegCallback = null;
-                SerialDataCallback = null;
+                //SerialDataCallback = null;
                 NativeMethods.CLIENT_LPRC_QuitSDK();
 
                 // TODO: 释放未托管的资源(未托管的对象)并在以下内容中替代终结器。
