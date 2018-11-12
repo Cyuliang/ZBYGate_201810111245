@@ -15,6 +15,7 @@
         {
             if (disposing && (components != null))
             {
+                _Working.Dispose();
                 components.Dispose();
                 _Container.Dispose();
                 _Plate.Dispose();
@@ -236,20 +237,21 @@
             // 服务端ToolStripMenuItem
             // 
             this.服务端ToolStripMenuItem.Name = "服务端ToolStripMenuItem";
-            this.服务端ToolStripMenuItem.Size = new System.Drawing.Size(112, 22);
+            this.服务端ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.服务端ToolStripMenuItem.Text = "服务端";
             // 
             // 客户端ToolStripMenuItem
             // 
             this.客户端ToolStripMenuItem.Name = "客户端ToolStripMenuItem";
-            this.客户端ToolStripMenuItem.Size = new System.Drawing.Size(112, 22);
+            this.客户端ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.客户端ToolStripMenuItem.Text = "客户端";
             // 
             // hTTPToolStripMenuItem
             // 
             this.hTTPToolStripMenuItem.Name = "hTTPToolStripMenuItem";
-            this.hTTPToolStripMenuItem.Size = new System.Drawing.Size(112, 22);
+            this.hTTPToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.hTTPToolStripMenuItem.Text = "HTTP";
+            this.hTTPToolStripMenuItem.Click += new System.EventHandler(this.HttpWindowShow_Click);
             // 
             // 数据库ToolStripMenuItem
             // 
@@ -264,21 +266,21 @@
             // 本地数据库ToolStripMenuItem
             // 
             this.本地数据库ToolStripMenuItem.Name = "本地数据库ToolStripMenuItem";
-            this.本地数据库ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.本地数据库ToolStripMenuItem.Size = new System.Drawing.Size(136, 22);
             this.本地数据库ToolStripMenuItem.Text = "本地数据库";
             this.本地数据库ToolStripMenuItem.Click += new System.EventHandler(this.LocalDataWindowShow_Click);
             // 
             // 入闸数据库ToolStripMenuItem
             // 
             this.入闸数据库ToolStripMenuItem.Name = "入闸数据库ToolStripMenuItem";
-            this.入闸数据库ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.入闸数据库ToolStripMenuItem.Size = new System.Drawing.Size(136, 22);
             this.入闸数据库ToolStripMenuItem.Text = "入闸数据库";
             this.入闸数据库ToolStripMenuItem.Click += new System.EventHandler(this.InDataWindowShow_Click);
             // 
             // 车闸数据库ToolStripMenuItem
             // 
             this.车闸数据库ToolStripMenuItem.Name = "车闸数据库ToolStripMenuItem";
-            this.车闸数据库ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.车闸数据库ToolStripMenuItem.Size = new System.Drawing.Size(136, 22);
             this.车闸数据库ToolStripMenuItem.Text = "出闸数据库";
             this.车闸数据库ToolStripMenuItem.Click += new System.EventHandler(this.OutDataWindowShow_Click);
             // 

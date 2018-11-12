@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace ZBYGate_Data_Collection.Https
 {
@@ -13,13 +14,9 @@ namespace ZBYGate_Data_Collection.Https
         private Log.CLog _Log = new Log.CLog();
         public Action<string> SetMessage;
 
-        private string http = Properties.Settings.Default.Http_www;
-        private int HttpTimeOut = Properties.Settings.Default.Http_HttpTimeOut;
-        private int HttpReadWriteTimeout = Properties.Settings.Default.Http_HttpReadWriteTimeout;
-
-        public CHttp()
-        {            
-        }
+        private readonly string http = Properties.Settings.Default.Http_www;
+        private readonly int HttpTimeOut = Properties.Settings.Default.Http_HttpTimeOut;
+        private readonly int HttpReadWriteTimeout = Properties.Settings.Default.Http_HttpReadWriteTimeout;
 
         public string SetJosn(string Id, string Time, string Plate, string Container)
         {
@@ -71,5 +68,30 @@ namespace ZBYGate_Data_Collection.Https
             }
             return "null";
         }
+
+        public void JsonSplit(string result)
+        {
+            JsonPaner jp = (JsonPaner)JsonConvert.DeserializeObject(result);
+            Result re = jp.result;            
+        }
     }
+
+    public class JsonPaner
+    {
+        public string error_code;
+        public string error_desc;
+        public Result result;
+    }
+
+    public class Result
+    {
+        public string resultList;
+        public string status;
+        public string visitor;
+        public string ledgename;
+        public string platform;
+        public string truckNumber;
+        public string tranNo;
+        public string arrivedTime;
+    }  
 }

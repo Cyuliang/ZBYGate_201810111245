@@ -24,7 +24,7 @@ namespace ZBYGate_Data_Collection
         #endregion
 
         #region//初始变量初始化
-        private volatile bool ReadForBooen=true;
+        //private volatile bool ReadForBooen=true;
         #endregion
 
         #region//界面委托
@@ -43,6 +43,7 @@ namespace ZBYGate_Data_Collection
         private LocalDataBase.LocalDataBaseWindow _LocalDataBaseWindow = null;
         private IEDataBase.InDataWindow _InDataWindow = null;
         private IEDataBase.OutDataWindow _OutDataWindow = null;
+        private Https.HttpWindow _HttpWindow = null;
         #endregion
 
         #region//类对象初始化
@@ -54,7 +55,7 @@ namespace ZBYGate_Data_Collection
         private LocalDataBase.LocalDataBase _LocalDataBase = new LocalDataBase.LocalDataBase();
         private IEDataBase.RunData _RunData = new IEDataBase.RunData();
         private Https.CHttp _CHttp = new Https.CHttp();
-        private Working _Working = new Working();        
+        private Working _Working = new Working();
         #endregion
 
         #region//箱号识别委托
@@ -92,7 +93,7 @@ namespace ZBYGate_Data_Collection
             _Working.Out_InsertDataBaseAction += _RunData.Out_Insert;//出闸数据写入
             _Working.SetMessage += GetMessage;//动作日志
             _Working.HttpPostAction += _CHttp.SetJosn;//查询远端服务器
-            _Working.Set_Out_Led_Message += _Plate.RS485Send;
+            _Working.SetOutLedMessageAction += _Plate.RS485Send;
             #endregion
 
             #region //控件状态初始化
@@ -128,6 +129,10 @@ namespace ZBYGate_Data_Collection
 
             #region//出入闸数据库委托
             _RunData.SetMessage += GetMessage;
+            #endregion
+
+            #region//Https 委托
+            _CHttp.SetMessage += GetMessage;
             #endregion
         }
 
@@ -616,6 +621,22 @@ namespace ZBYGate_Data_Collection
                 _OutDataWindow = new IEDataBase.OutDataWindow();
             }
             SetTabPate("OutTable", OutTable, form: _OutDataWindow);
+        }
+        #endregion
+
+        #region//Https
+        /// <summary>
+        /// 数据库显示界面
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void HttpWindowShow_Click(object sender, EventArgs e)
+        {
+            if (_HttpWindow == null || _HttpWindow.IsDisposed)
+            {
+                _HttpWindow = new Https.HttpWindow();
+            }
+            SetTabPate("HttpTable", HttpTable, form: _HttpWindow);
         }
         #endregion
     }

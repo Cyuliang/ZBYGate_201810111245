@@ -29,7 +29,7 @@ namespace ZBYGate_Data_Collection.LocalDataBase
 
             string[] ResultTrup = new string[5];//返回数据
 
-            #region
+            #region//空参数赋值
             string plate = Plate;
             if (Plate == string.Empty||Plate==null)
             {
@@ -51,6 +51,7 @@ namespace ZBYGate_Data_Collection.LocalDataBase
             parameters[1].Value = container;
             parameters[2].Value = cards;
 
+            SetMessage?.Invoke(cmdText);
             _Log.logInfo.Info(cmdText);
 
             using (MySqlDataReader reader = MySqlHelper.ExecuteReader(MySqlHelper.Conn, CommandType.Text, cmdText, parameters))
@@ -75,6 +76,7 @@ namespace ZBYGate_Data_Collection.LocalDataBase
                     ResultTrup[4] = reader["Ontime"].ToString();
 
                     SetMessage?.Invoke(Result);
+                    _Log.logInfo.Info(Result);
                     break;                    
                 }
             }

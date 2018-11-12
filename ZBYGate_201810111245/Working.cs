@@ -15,8 +15,6 @@ namespace ZBYGate_Data_Collection
 
         #region//集装箱
         private bool State = false;//车牌和箱号是否都处理完成
-        private int AutoState = 0;//开闸自动状态
-        private bool IsTrueOcr = false;//是否识别到车牌或箱号
         private string Containernumber = string.Empty;//集装箱号
         private string NewLpn = string.Empty;//空车车牌
         private string UpdateLpn = string.Empty;//重车车牌
@@ -24,11 +22,11 @@ namespace ZBYGate_Data_Collection
         #endregion
 
         #region//道闸
-        string In_IP = Properties.Settings.Default.Gate_InDoorIp;
-        string In_ControllerSN = Properties.Settings.Default.Gate_InDoorSN;
-        string Out_IP = Properties.Settings.Default.Gate_OutDoorIp;        
-        string Out_ControllerSN = Properties.Settings.Default.Gate_OutDoorSN;
-        int PORT = Properties.Settings.Default.Gate_Port;
+        private readonly string In_IP = Properties.Settings.Default.Gate_InDoorIp;
+        private readonly string In_ControllerSN = Properties.Settings.Default.Gate_InDoorSN;
+        private readonly string Out_IP = Properties.Settings.Default.Gate_OutDoorIp;        
+        private readonly string Out_ControllerSN = Properties.Settings.Default.Gate_OutDoorSN;
+        private readonly int PORT = Properties.Settings.Default.Gate_Port;
         #endregion
 
         #region//本地数据库
@@ -47,7 +45,7 @@ namespace ZBYGate_Data_Collection
         #region//出入闸数据库
         public Action<string , string , DateTime , int > In_InsertDataBaseAction;
         public Action<string , DateTime ,int > Out_InsertDataBaseAction;
-        public Action<string> Set_Out_Led_Message;
+        public Action<string> SetOutLedMessageAction;
         #endregion
 
         #region//HTTP
@@ -56,20 +54,22 @@ namespace ZBYGate_Data_Collection
 
         #region
         public Action<string> SetMessage;
-        private string NoOCRresult = Properties.Settings.Default.Working_NoOCRresult;
-        private string Working_NoDataBaseResult = Properties.Settings.Default.Working_NoDataBaseResult;
-        private bool HttpSwitch = Properties.Settings.Default.Http_switch;
-        private string eqid = Properties.Settings.Default.Http_eqId;
-        private string Plate_Local_End_Message = Properties.Settings.Default.Plate_Local_End_Message;
-        private string Plate_local_Message = Properties.Settings.Default.Plate_Local_Message;
+        private readonly string Working_NoOCRresult = Properties.Settings.Default.Working_NoOCRresult;
+        private readonly string Working_NoDataBaseResult = Properties.Settings.Default.Working_NoDataBaseResult;
+        private readonly bool HttpSwitch = Properties.Settings.Default.Http_switch;
+        private readonly string eqid = Properties.Settings.Default.Http_eqId;
+        private readonly string Plate_Local_End_Message = Properties.Settings.Default.Plate_Local_End_Message;
+        private readonly string Plate_local_Message = Properties.Settings.Default.Plate_Local_Message;
         private System.Threading.Timer _Timer = null;
         #endregion
 
         public Working()
         {
             //LED初始化
-            _Timer = new System.Threading.Timer(Out_Led_Default_Show, null,TimeSpan.FromSeconds(6), TimeSpan.FromSeconds(0));
+            _Timer = new System.Threading.Timer(OutLedDefaultShowCallBack, null,TimeSpan.FromSeconds(6), TimeSpan.FromSeconds(0));
         }
+
+        #region//入闸
 
         /// <summary>
         /// 箱号结果事件
@@ -126,43 +126,6 @@ namespace ZBYGate_Data_Collection
         }
 
         /// <summary>
-        /// 出闸车牌识别结果
-        /// </summary>
-        /// <param name="arg1"></param>
-        /// <param name="arg2"></param>
-        /// <param name="arg3"></param>
-        /// <param name="arg4"></param>
-        internal void PlateResult(string ChIp, string ChLicesen, string ChColor, DateTime ChTime)
-        {
-            if(!string.IsNullOrEmpty(ChLicesen))
-            {
-                OpenDoorAction?.BeginInvoke(Out_IP, PORT, Out_ControllerSN, OpendoorSuccess, null);//出闸开闸
-                Set_Out_Led_Message?.BeginInvoke(string.Format("{0} {1}", ChLicesen, Plate_Local_End_Message),SetOutLedMessage,null);//LED显示
-                SetMessage?.Invoke(string.Format("Out Led Show {0} {1}", ChLicesen, Plate_Local_End_Message));
-                Out_InsertDataBaseAction?.BeginInvoke(ChLicesen, ChTime, 1, InsertSuccess, null);//插入数据库
-            }
-        }
-
-        /// <summary>
-        /// 出闸LED显示完成
-        /// </summary>
-        /// <param name="ar"></param>
-        private void SetOutLedMessage(IAsyncResult ar)
-        {
-            _Timer.Change(TimeSpan.FromSeconds(6), TimeSpan.FromSeconds(0));
-        }
-
-        /// <summary>
-        /// 恢复默认显示
-        /// </summary>
-        /// <param name="state"></param>
-        private void Out_Led_Default_Show(object state)
-        {
-            Set_Out_Led_Message?.Invoke(Plate_local_Message);//LED显示
-            SetMessage?.Invoke(string.Format("Out Led show {0}" ,Plate_local_Message));
-        }
-
-        /// <summary>
         /// 查询数据库
         /// </summary>
         private void Select(string Lpn, string Container)
@@ -174,102 +137,39 @@ namespace ZBYGate_Data_Collection
             {
                 //查询数据库
                 DataBaseResult = SelectDataBase?.Invoke(Lpn, Container, "");
-                if (DataBaseResult.All(string.IsNullOrEmpty))
+                if (DataBaseResult.All(string.IsNullOrEmpty))//数据库没有对应数据
                 {
-                    //if(HttpSwitch)//是否允许查询远端服务器
-                    //{
-                    //    string  ResultHttp= HttpPostAction?.Invoke(eqid,Passtime.ToString("yyyyMMddhhmmss"),Lpn,Container);
-                    //    if(!string.IsNullOrEmpty(ResultHttp))
-                    //    {
-                    //        ProductDetails = "{'size':'10', 'weight':'10kg'}";                         
-                    //        foreach (var item in ProductDetailList)
-                    //        {
-                    //            Console.WriteLine(item.Key + " " + item.Value);
-                    //        }
-                    //    }
-                    //}
-                    DataBaseResult = new string[] { "NONE", "NONE", "NONE", "NONE", "NONE" };
+                    DataBaseResult = new string[] { "NONE", "NONE", "NONE", "NONE", Working_NoDataBaseResult };
+                    DataBaseResult[0] = string.Format("{0}/{1}", Lpn, Container);//联合显示车牌，箱号
                     DataBaseResult[4] = Working_NoDataBaseResult;
-                    AutoState = 0;//开闸状态
+                    LedShow(DataBaseResult);//推送LED 
+                    In_InsertDataBaseAction?.BeginInvoke(Lpn, Container, Passtime, 0, InsertCallBack, null);//插入数据库
+
+                    if (HttpSwitch)//是否允许查询远端服务器
+                    {
+                        HttpPostAction?.Invoke(eqid, Passtime.ToString("yyyyMMddhhmmss"), Lpn, Container);      
+                    }
                 }
                 else
                 {
-                    //查询到数据开闸
-                    OpenDoorAction?.BeginInvoke(In_IP,PORT,In_ControllerSN,OpendoorSuccess,null);
-                    AutoState = 1;
+                    DataBaseResult[0] = string.Format("{0}/{1}", Lpn, Container);//联合显示车牌，箱号
+                    LedShow(DataBaseResult);//推送LED                    
+                    OpenDoorAction?.BeginInvoke(In_IP, PORT, In_ControllerSN, OpendoorCallBack, null);//查询到数据开闸
+                    In_InsertDataBaseAction?.BeginInvoke(Lpn, Container, Passtime, 1, InsertCallBack, null);//插入数据库
                 }
-                DataBaseResult[0] = string.Format("{0}/{1}", Lpn, Container);//联合显示车牌，箱号
-
-                _Log.logInfo.Info(string.Format("Select {0} {1} from Gate", Lpn, Container));
-                SetMessage?.Invoke(string.Format("Select {0} {1} from Gate", Lpn, Container));
-
-                IsTrueOcr = true;//识别结果不为空
             }
             else
             {
-                DataBaseResult[4] = NoOCRresult;
-                AutoState = 0;
-                IsTrueOcr = false;
+                DataBaseResult[4] = Working_NoOCRresult;
+                LedShow(DataBaseResult);//推送LED
             }
             if (State)
             {
-                LedShow(DataBaseResult);
-
-                if(IsTrueOcr)
-                {
-                    In_InsertDataBaseAction?.BeginInvoke(Lpn, Container, Passtime, AutoState,InsertSuccess,null);//插入数据库
-                }
-
                 Containernumber = string.Empty;
                 NewLpn = string.Empty;
                 UpdateLpn = string.Empty;
                 State = false;
-                AutoState = 0;
-                IsTrueOcr = false;
             }
-        }
-       
-        private string ProductDetails { get; set; }
-        /// <summary>
-        /// 解析http返回的Json数据
-        /// </summary>
-        private Dictionary<string, string> ProductDetailList
-        {
-            get
-            {
-                if (string.IsNullOrWhiteSpace(ProductDetails))
-                {
-                    return new Dictionary<string, string>();
-                }
-                try
-                {
-                    var obj = JToken.Parse(ProductDetails);
-                }
-                catch (Exception ex)
-                {
-                    _Log.logError.Error("ProductDetails不符合json格式.", ex);
-                    SetMessage?.Invoke("ProductDetails不符合json格式.");
-                }
-                return JsonConvert.DeserializeObject<Dictionary<string, string>>(ProductDetails);
-            }
-        }
-
-        /// <summary>
-        /// 插入数据完成
-        /// </summary>
-        /// <param name="ar"></param>
-        private void InsertSuccess(IAsyncResult ar)
-        {
-            SetMessage?.Invoke("写入数据库完成");
-        }
-
-        /// <summary>
-        /// 开闸完成
-        /// </summary>
-        /// <param name="ar"></param>
-        private void OpendoorSuccess(IAsyncResult ar)
-        {
-            SetMessage?.Invoke("开闸完成");
         }
 
         /// <summary>
@@ -282,12 +182,12 @@ namespace ZBYGate_Data_Collection
             SendAction?.BeginInvoke(0, SendCallBack, null);
 
             string tmp = string.Empty;
-            foreach(string str in dataBaseResult)
+            foreach (string str in dataBaseResult)
             {
                 tmp += str + ",";
             }
             _Log.logInfo.Info(string.Format("LED Show {0}", tmp));
-            SetMessage?.Invoke(string.Format("LED Show {0}",tmp));
+            SetMessage?.Invoke(string.Format("LED Show {0}", tmp));
         }
 
         /// <summary>
@@ -298,6 +198,78 @@ namespace ZBYGate_Data_Collection
         {
             SetMessage?.Invoke("LED信息推送完成");
         }
+
+        #endregion
+
+        #region/公共
+
+        /// <summary>
+        /// 插入数据完成
+        /// </summary>
+        /// <param name="ar"></param>
+        private void InsertCallBack(IAsyncResult ar)
+        {
+            SetMessage?.Invoke("写入数据库完成");
+        }
+
+        /// <summary>
+        /// 开闸完成
+        /// </summary>
+        /// <param name="ar"></param>
+        private void OpendoorCallBack(IAsyncResult ar)
+        {
+            SetMessage?.Invoke("开闸完成");
+        }
+
+        #endregion
+
+        #region//出闸
+        /// <summary>
+        /// 出闸车牌识别结果
+        /// </summary>
+        /// <param name="arg1"></param>
+        /// <param name="arg2"></param>
+        /// <param name="arg3"></param>
+        /// <param name="arg4"></param>
+        internal void PlateResult(string ChIp, string ChLicesen, string ChColor, DateTime ChTime)
+        {
+            if(!string.IsNullOrEmpty(ChLicesen))
+            {
+                OpenDoorAction?.BeginInvoke(Out_IP, PORT, Out_ControllerSN, OpendoorCallBack, null);//出闸开闸
+                SetOutLedMessageAction?.BeginInvoke(string.Format("{0} {1}", ChLicesen, Plate_Local_End_Message),SetOutLedCallBack,null);//LED显示
+                Out_InsertDataBaseAction?.BeginInvoke(ChLicesen, ChTime,  1, InsertCallBack, null);//插入数据库
+            }
+            else
+            {
+                SetOutLedMessageAction?.BeginInvoke(Working_NoOCRresult, SetOutLedCallBack, null);//LED显示
+            }
+        }
+
+        /// <summary>
+        /// 出闸LED显示完成
+        /// </summary>
+        /// <param name="ar"></param>
+        private void SetOutLedCallBack(IAsyncResult ar)
+        {
+            _Timer.Change(TimeSpan.FromSeconds(6), TimeSpan.FromSeconds(0));
+        }
+
+        /// <summary>
+        /// 恢复默认显示
+        /// </summary>
+        /// <param name="state"></param>
+        private void OutLedDefaultShowCallBack(object state)
+        {
+            SetOutLedMessageAction?.Invoke(Plate_local_Message);
+        }
+
+        #endregion
+
+        #region//Json
+
+
+
+        #endregion
 
         #region IDisposable Support
         private bool disposedValue = false; // 要检测冗余调用

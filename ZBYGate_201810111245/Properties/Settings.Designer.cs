@@ -25,7 +25,7 @@ namespace ZBYGate_Data_Collection.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("127.0.0.1")]
+        [global::System.Configuration.DefaultSettingValueAttribute("192.168.1.55")]
         public string Container_Ip {
             get {
                 return ((string)(this["Container_Ip"]));
@@ -88,7 +88,7 @@ namespace ZBYGate_Data_Collection.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("192.168.1.200")]
+        [global::System.Configuration.DefaultSettingValueAttribute("192.168.1.250")]
         public string Plate_Local_IpAddr {
             get {
                 return ((string)(this["Plate_Local_IpAddr"]));

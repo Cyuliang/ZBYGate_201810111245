@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MySql.Data.MySqlClient;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -32,7 +33,7 @@ namespace ZBYGate_Data_Collection.LocalDataBase
             bindingNavigator1.BindingSource = bindingSource1;
             dataGridView1.DataSource = bindingSource1;
 
-            dataGridView1.Columns[0].Visible = false;
+            //dataGridView1.Columns[0].Visible = false;
         }
 
         /// <summary>
@@ -70,21 +71,13 @@ namespace ZBYGate_Data_Collection.LocalDataBase
             SetStatusText("就绪");
         }
 
+        /// <summary>
+        /// 编辑数据
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void toolStripButton1_Click(object sender, EventArgs e)
         {
-            //int row = dataGridView1.NewRowIndex-1;
-            //string cmdText = string.Format("INSERT INTO `hw`.`gate` " +
-            //    "(`Plate`, `Container`, `Supplier`, `Appointment`, `Parked`, `Ontime`, `Cards`, `Truetime`) " +
-            //    "VALUES('{0}', '{1}', '{2}', '{3}', '{4}', '{5}', '{6}', '{7}')", 
-            //    dataGridView1.Rows[row].Cells[1].Value,
-            //    dataGridView1.Rows[row].Cells[2].Value,
-            //    dataGridView1.Rows[row].Cells[3].Value,
-            //    dataGridView1.Rows[row].Cells[4].Value,
-            //    dataGridView1.Rows[row].Cells[5].Value,
-            //    dataGridView1.Rows[row].Cells[6].Value,
-            //    dataGridView1.Rows[row].Cells[7].Value,
-            //    dataGridView1.Rows[row].Cells[8].Value.ToString());
-            //MySqlHelper.DataPersistence(MySqlHelper.Conn, System.Data.CommandType.Text, cmdText, null);
             int rowindex = dataGridView1.CurrentCell.RowIndex;
             ItemDataWindow dataItem = new ItemDataWindow();
             dataItem.UpdataUi(int.Parse(dataGridView1.Rows[rowindex].Cells[0].Value.ToString()));
@@ -93,6 +86,11 @@ namespace ZBYGate_Data_Collection.LocalDataBase
             dataGridView1.CurrentCell = dataGridView1.Rows[rowindex].Cells[1];
         }
 
+        /// <summary>
+        /// 删除数据
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void bindingNavigatorDeleteItem_Click(object sender, EventArgs e)
         {
             int rowindex = dataGridView1.CurrentCell.RowIndex;
@@ -105,7 +103,7 @@ namespace ZBYGate_Data_Collection.LocalDataBase
                     MySqlHelper.ExecuteNonQuery(MySqlHelper.Conn, System.Data.CommandType.Text, drop, null);
                     Init();
                     _Log.logInfo.Info(drop);
-                    MessageBox.Show("Delete Success!");
+                    //MessageBox.Show("Delete Success!");
                 }
                 catch (Exception ex)
                 {
@@ -118,6 +116,11 @@ namespace ZBYGate_Data_Collection.LocalDataBase
             }
         }
 
+        /// <summary>
+        /// 添加数据
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void toolStripButton3_Click(object sender, EventArgs e)
         {
             dataGridView1.DataSource = MySqlHelper.GetDataSet(MySqlHelper.Conn, System.Data.CommandType.Text, "select * from gate", null).Tables[0].DefaultView;
@@ -125,6 +128,56 @@ namespace ZBYGate_Data_Collection.LocalDataBase
             dataItem.ShowDialog();
             Init();
             dataGridView1.CurrentCell = dataGridView1.Rows[dataGridView1.Rows.Count - 1].Cells[1];
+        }
+
+        /// <summary>
+        /// 查找数据
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void FindButton_Click(object sender, EventArgs e)
+        {
+            string cmdText = string.Format("SELECT *  FROM `hw`.`gate` WHERE Plate='{0}' or Container='{1}' or Cards='{2}'", FindTextBox.Text, FindTextBox.Text, FindTextBox.Text);
+            MySqlDataReader reader = MySqlHelper.ExecuteReader(MySqlHelper.Conn, CommandType.Text, cmdText, null);
+            if (reader.Read())
+            {
+                //MessageBox.Show(String.Format("Find Data\n Plate={0}\n Container={1}\n Cards={2}\n", reader[1].ToString(), reader[2].ToString(), reader[7].ToString()));
+                if (reader[1].ToString() != string.Empty)
+                {
+                    ReturnDataView(reader[1].ToString(), 1);
+                }
+                else if (reader[2].ToString() != string.Empty)
+                {
+                    ReturnDataView(reader[2].ToString(), 2);
+                }
+                else
+                {
+                    if (reader[7].ToString() != string.Empty)
+                    {
+                        ReturnDataView(reader[7].ToString(), 7);
+                    }
+                }
+            }
+            else
+            {
+                MessageBox.Show("Not Find Data");
+            }
+        }
+
+        /// <summary>
+        /// 循环判断数据
+        /// </summary>
+        /// <param name="reader"></param>
+        private void ReturnDataView(string reader, int index)
+        {
+            for (int i = 0; i < dataGridView1.Rows.Count; i++)
+            {
+                if (reader == dataGridView1.Rows[i].Cells[index].Value.ToString())
+                {
+                    dataGridView1.CurrentCell = dataGridView1.Rows[i].Cells[index];
+                    break;
+                }
+            }
         }
     }
 }
