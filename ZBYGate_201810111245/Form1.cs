@@ -39,7 +39,10 @@ namespace ZBYGate_Data_Collection
         private Plate.PlateWindow _PlateWindow = null;
         private CVR.CVRWindow _CVRWindow = null;
         private Gate.GateWindow _GateWindow = null;
-        private LED.LEDWindow _LEDWindow = null;    
+        private LED.LEDWindow _LEDWindow = null;
+        private LocalDataBase.LocalDataBaseWindow _LocalDataBaseWindow = null;
+        private IEDataBase.InDataWindow _InDataWindow = null;
+        private IEDataBase.OutDataWindow _OutDataWindow = null;
         #endregion
 
         #region//类对象初始化
@@ -48,6 +51,9 @@ namespace ZBYGate_Data_Collection
         private CVR.CVR _CVR = new CVR.CVR();
         private Gate.Gate _Gate = new Gate.Gate();
         private LED.LED _LED = new LED.LED();
+        private LocalDataBase.LocalDataBase _LocalDataBase = new LocalDataBase.LocalDataBase();
+        private IEDataBase.RunData _RunData = new IEDataBase.RunData();
+        private Working _Working = new Working();        
         #endregion
 
         #region//箱号识别委托
@@ -65,11 +71,28 @@ namespace ZBYGate_Data_Collection
         #region//LED委托
         #endregion
 
+        #region//本地数据库委托
+        #endregion
+
         public Form1()
         {
             InitializeComponent();
 
             #region//系统动作初始化
+            _Plate.SetIpNetwork(0);//设置车牌绑定IP
+            _Plate.PlateDataCallBack += _Working.PlateResult;//出闸车牌识别结果
+
+            _Container.CombinResult += _Working.ContainerResult;//集装箱结果
+            _Container.NewLPNEvent += _Working.NewLpnResult;//空车车牌结果
+            _Container.UpdateLPNEvent += _Working.UpdateLpnResult;//重车车牌结果
+            _Working.SelectDataBase += _LocalDataBase.SelectData;//本地数据库查询
+            _Working.AddTextAction += _LED.AddScreenDynamicAreaText;//LED推送流程数据
+            _Working.SendAction += _LED.SendDynamicAreasInfoCommand;
+            _Working.OpenDoorAction += _Gate.OpenDoor;//开闸
+            _Working.In_InsertDataBaseAction += _RunData.In_Insert;//入闸数据库写入
+            _Working.Out_InsertDataBaseAction += _RunData.Out_Insert;//出闸数据写入
+            _Working.SetMessage += GetMessage;//动作日志
+            _RunData.SetMessage += GetMessage;//写入数据库日志
             #endregion
 
             #region //控件状态初始化
@@ -98,10 +121,36 @@ namespace ZBYGate_Data_Collection
             #region//显示屏委托订阅
             _LED.SetMessage += GetMessage;
             #endregion
+
+            #region//本地数据库委托
+            _LocalDataBase.SetMessage += GetMessage;
+            #endregion
+
+            #region//出入闸数据库委托
+            #endregion
         }
+
+        #region//窗口初始化
+        /// <summary>
+        /// 窗口加载初始化
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            _LED.Initialize(0);
+            _LED.AddScreen_Dynamic(0);
+            _LED.AddScreenDynamicArea(0);            
+        }
+        #endregion
 
         #region//主界面
 
+        /// <summary>
+        /// 后台进程退出
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Form1_FormClosed(object sender, FormClosedEventArgs e)
         {
             System.Environment.Exit(0);
@@ -506,6 +555,66 @@ namespace ZBYGate_Data_Collection
             _LED.SetMessage += _LEDWindow.SetStatusText;
         }
 
+        #endregion
+
+        #region//本地数据库
+
+        /// <summary>
+        /// 数据库显示界面
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void LocalDataWindowShow_Click(object sender, EventArgs e)
+        {
+            if (_LocalDataBaseWindow == null || _LocalDataBaseWindow.IsDisposed)
+            {
+                _LocalDataBaseWindow = new LocalDataBase.LocalDataBaseWindow();
+                LocalDataWindowActiveInit();
+            }
+            SetTabPate("LocalTable", LocalTable, form: _LocalDataBaseWindow);
+        }
+
+        /// <summary>
+        /// 数据库界面初始化
+        /// </summary>
+        private void LocalDataWindowActiveInit()
+        {
+            //string[] message= _LocalDataBase.SelectData("123", "", "");
+            _LocalDataBase.SetMessage += _LocalDataBaseWindow.SetStatusText;
+        }
+
+        #endregion
+
+        #region//进闸数据库
+        /// <summary>
+        /// 数据库显示界面
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void InDataWindowShow_Click(object sender, EventArgs e)
+        {
+            if (_InDataWindow == null || _InDataWindow.IsDisposed)
+            {
+                _InDataWindow = new IEDataBase.InDataWindow();
+            }
+            SetTabPate("InTable", InTable, form: _InDataWindow);
+        }
+        #endregion
+
+        #region//出闸数据库
+        /// <summary>
+        /// 数据库显示界面
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void OutDataWindowShow_Click(object sender, EventArgs e)
+        {
+            if (_OutDataWindow == null || _OutDataWindow.IsDisposed)
+            {
+                _OutDataWindow = new IEDataBase.OutDataWindow();
+            }
+            SetTabPate("OutTable", OutTable, form: _OutDataWindow);
+        }
         #endregion
     }
 }

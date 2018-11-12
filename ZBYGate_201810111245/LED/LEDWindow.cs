@@ -20,16 +20,18 @@ namespace ZBYGate_Data_Collection.LED
         public Action<int> UnintAction;//卸载动态库
 
         private delegate void UpdateUiInvok(string Message);//跨线程更新UI
-        private System.Threading.Timer _timer=null;//定时恢复状态
+
+        private System.Threading.Timer _Timer = null;
 
         public LEDWindow()
         {
             InitializeComponent();
 
+            _Timer = new System.Threading.Timer(ClearText, null, TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(0));
+
             SetObjectTag(true);
             IpTextBox.Text = Properties.Settings.Default.LED_pSocketIP;
             PortTextBox.Text = Properties.Settings.Default.LED_nSocketPort.ToString();
-            _timer = new System.Threading.Timer(ClearText, null, TimeSpan.FromSeconds(5),TimeSpan.FromSeconds(0));
         }
 
         /// <summary>
@@ -98,7 +100,7 @@ namespace ZBYGate_Data_Collection.LED
         /// <param name="e"></param>
         private void StatusLabel_TextChanged(object sender, EventArgs e)
         {
-            _timer.Change(TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(0));
+            _Timer.Change(TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(0));
         }
 
         /// <summary>

@@ -11,16 +11,19 @@ namespace ZBYGate_Data_Collection.Container
         public Action<int> ContainerLastRAction;//获取最后一次结果
 
         private delegate void UpdateUiInvok(string Message);//跨线程更新UI
-        private System.Threading.Timer _timer = null;//定时恢复状态
         private int Gate = 0;
+
+        private System.Threading.Timer _Timer = null;
 
         public ContainerWindow()
         {
             InitializeComponent();
 
             SetObjectTag();
+
+            _Timer = new System.Threading.Timer(ClearText, null, TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(0));
+
             Gate = Properties.Settings.Default.Container_Num;
-            _timer = new System.Threading.Timer(ClearText, null, TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(0));
         }
 
         /// <summary>
@@ -55,7 +58,7 @@ namespace ZBYGate_Data_Collection.Container
         /// <param name="e"></param>
         private void StatusLabel_TextChanged(object sender, EventArgs e)
         {
-            _timer.Change(TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(0));
+            _Timer.Change(TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(0));
         }
 
         /// <summary>

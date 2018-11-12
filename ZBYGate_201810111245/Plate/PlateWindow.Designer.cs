@@ -15,9 +15,8 @@
         {
             if (disposing && (components != null))
             {
-                Mjpeg.Dispose();
-                _timer.Dispose();
                 PlatePlayAction?.Invoke(false);
+                _Timer.Dispose();
                 components.Dispose();
             }
             base.Dispose(disposing);

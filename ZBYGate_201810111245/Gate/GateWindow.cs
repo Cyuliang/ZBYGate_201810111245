@@ -15,14 +15,16 @@ namespace ZBYGate_Data_Collection.Gate
         public Action<string, int, string> GateOpenDoorAction;
 
         private delegate void UpdateUiInvok(string Message);//跨线程更新UI
-        private System.Threading.Timer _timer = null;//定时恢复状态
+
+        private System.Threading.Timer _Timer = null;
 
         public GateWindow()
         {
             InitializeComponent();
 
             SetObjectTag();
-            _timer = new System.Threading.Timer(ClearText, null, TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(0));
+
+            _Timer = new System.Threading.Timer(ClearText, null, TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(0));
 
             textBox1.Text = Properties.Settings.Default.Gate_InDoorIp;
             textBox2.Text = Properties.Settings.Default.Gate_Port.ToString();
@@ -100,7 +102,7 @@ namespace ZBYGate_Data_Collection.Gate
         /// <param name="e"></param>
         private void StatusLabel_TextChanged(object sender, EventArgs e)
         {
-            _timer.Change(TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(0));
+            _Timer.Change(TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(0));
         }
     }
 }

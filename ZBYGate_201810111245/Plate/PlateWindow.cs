@@ -26,11 +26,8 @@ namespace ZBYGate_Data_Collection.Plate
 
         private delegate void UpdateUiInvok(string Message);//跨线程更新UI
         private delegate void UpdateImageInvok(byte[] Jpeg);
-        private UpdateImageInvok ImageInvok;
-        private UpdateImageInvok DataImInvok;
-        private System.Threading.Timer _timer = null;//定时恢复状态
 
-        private MemoryStream Mjpeg = null;
+        private System.Threading.Timer _Timer = null;
 
         #region//更新UI
         private delegate void  UpdatePlate(string ChIp, string ChLicesen, string ChColor, string ChTime);
@@ -42,15 +39,12 @@ namespace ZBYGate_Data_Collection.Plate
 
             SetObjectTag();
 
+            _Timer= new System.Threading.Timer(ClearText, null, TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(0));
+
             #region//界面初始化
             PlateIpTextBox.Text = Properties.Settings.Default.Plate_IPAddr;
             PlatePortTextBox.Text = Properties.Settings.Default.Plate_Port.ToString();
-            #endregion
-
-            DataImInvok += DataJpeg;
-            ImageInvok += JpegCallBack;
-            
-            _timer = new System.Threading.Timer(ClearText, null, TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(0));
+            #endregion          
         }
 
         /// <summary>
@@ -76,7 +70,7 @@ namespace ZBYGate_Data_Collection.Plate
         /// <param name="e"></param>
         private void StatusLabel_TextChanged(object sender, EventArgs e)
         {
-            _timer.Change(TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(0));
+            _Timer.Change(TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(0));
         }
 
         /// <summary>
@@ -135,15 +129,17 @@ namespace ZBYGate_Data_Collection.Plate
         {
             if (pictureBox2.InvokeRequired)
             {
-                pictureBox2.Invoke(DataImInvok, new object[] { jpeg });
+                pictureBox2.Invoke(new UpdateImageInvok(DataJpeg), new object[] { jpeg });
             }
             else
             {
-                Mjpeg = new MemoryStream(jpeg, 0, jpeg.Length);
-                pictureBox2.Image = Image.FromStream(Mjpeg);
+                using (MemoryStream ms = new MemoryStream(jpeg,0,jpeg.Length))
+                {
+                    pictureBox2.Image = Image.FromStream(ms);
+                    ms.Seek(0, SeekOrigin.Begin);
+                    ms.SetLength(0);
+                }
             }
-            Mjpeg.Seek(0, SeekOrigin.Begin);
-            Mjpeg.SetLength(0);          
         }
 
         /// <summary>
@@ -151,18 +147,20 @@ namespace ZBYGate_Data_Collection.Plate
         /// </summary>
         /// <param name="jpeg"></param>
         public void JpegCallBack(byte[] jpeg)
-        {
+        {            
             if (pictureBox1.InvokeRequired)
             {
-                pictureBox1.Invoke(ImageInvok, new object[] { jpeg });
+                pictureBox1.Invoke(new UpdateImageInvok(JpegCallBack), new object[] { jpeg });
             }
             else
             {
-                Mjpeg = new MemoryStream(jpeg, 0, jpeg.Length);
-                pictureBox1.Image = Image.FromStream(Mjpeg);
+                using (MemoryStream ms = new MemoryStream(jpeg,0,jpeg.Length))
+                {
+                    pictureBox1.Image = Image.FromStream(ms);
+                    ms.Seek(0, SeekOrigin.Begin);
+                    ms.SetLength(0);
+                }
             }
-            Mjpeg.Seek(0, SeekOrigin.Begin);
-            Mjpeg.SetLength(0);
         }     
         
         /// <summary>
@@ -218,7 +216,7 @@ namespace ZBYGate_Data_Collection.Plate
                     break;
                 case 10:
                     PlatePlayAction?.Invoke(false);
-                    new System.Threading.Timer(ClearPicCallBack,null, TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(0));
+                    _Timer.Change(TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(0));
                     break;
             }
         }
@@ -228,17 +226,7 @@ namespace ZBYGate_Data_Collection.Plate
         /// </summary>
         /// <param name="state"></param>
         private void ClearPicCallBack(object state)
-        {
-            try
-            {
-                Mjpeg.Seek(0, SeekOrigin.Begin);
-                Mjpeg.SetLength(0);
-                Mjpeg = null;
-            }
-            catch (Exception)
-            {
-                SetStatusText("重复关闭视频");
-            }
+        {        
             pictureBox1.Image = null;
             SetStatusText("关闭视频回调完成");
         }

@@ -81,6 +81,10 @@
     <Reference Include="log4net">
       <HintPath>..\log4net.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Office.Interop.Excel">
+      <HintPath>IEDataBase\Microsoft.Office.Interop.Excel.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
     <Reference Include="MySql.Data, Version=8.0.12.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>LocalDataBase\MySql.Data.dll</HintPath>
@@ -135,6 +139,19 @@
       <DependentUpon>GateWindow.cs</DependentUpon>
     </Compile>
     <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="IEDataBase\InDataWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="IEDataBase\InDataWindow.Designer.cs">
+      <DependentUpon>InDataWindow.cs</DependentUpon>
+    </Compile>
+    <Compile Include="IEDataBase\OutDataWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="IEDataBase\OutDataWindow.Designer.cs">
+      <DependentUpon>OutDataWindow.cs</DependentUpon>
+    </Compile>
+    <Compile Include="IEDataBase\RunData.cs" />
     <Compile Include="LED\LED.cs" />
     <Compile Include="LED\LEDWindow.cs">
       <SubType>Form</SubType>
@@ -143,6 +160,13 @@
       <DependentUpon>LEDWindow.cs</DependentUpon>
     </Compile>
     <Compile Include="LED\SafeNativeMethods.cs" />
+    <Compile Include="LocalDataBase\ItemDataWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="LocalDataBase\ItemDataWindow.Designer.cs">
+      <DependentUpon>ItemDataWindow.cs</DependentUpon>
+    </Compile>
+    <Compile Include="LocalDataBase\LocalDataBase.cs" />
     <Compile Include="LocalDataBase\LocalDataBaseWindow.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -166,6 +190,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resource1.resx</DependentUpon>
     </Compile>
+    <Compile Include="Working.cs" />
     <EmbeddedResource Include="Container\ContainerWindow.resx">
       <DependentUpon>ContainerWindow.cs</DependentUpon>
     </EmbeddedResource>
@@ -178,8 +203,17 @@
     <EmbeddedResource Include="Gate\GateWindow.resx">
       <DependentUpon>GateWindow.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="IEDataBase\InDataWindow.resx">
+      <DependentUpon>InDataWindow.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="IEDataBase\OutDataWindow.resx">
+      <DependentUpon>OutDataWindow.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="LED\LEDWindow.resx">
       <DependentUpon>LEDWindow.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="LocalDataBase\ItemDataWindow.resx">
+      <DependentUpon>ItemDataWindow.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="LocalDataBase\LocalDataBaseWindow.resx">
       <DependentUpon>LocalDataBaseWindow.cs</DependentUpon>
@@ -326,6 +360,11 @@
     <None Include="Resources\车牌 %282%29.png" />
     <None Include="Resources\打印机.png" />
     <None Include="Resources\扫描仪.png" />
+    <None Include="Resources\保存.png" />
+    <None Include="Resources\删除筛选项.png" />
+    <None Include="Resources\添加.png" />
+    <None Include="Resources\添加 %281%29.png" />
+    <None Include="Resources\编辑.png" />
     <Content Include="Zby.ico" />
   </ItemGroup>
   <ItemGroup>

@@ -15,8 +15,9 @@ namespace ZBYGate_Data_Collection.CVR
         public Action<bool> CVRSetCVRvolatile;//设置定时读取状态
 
         private delegate void UpdateUiInvok(string Message);//跨线程更新UI
-        private System.Threading.Timer _timer = null;//定时恢复状态
         private volatile bool ReadForBooen = true;//定时循环状态
+
+        private System.Threading.Timer _Timer = null;
 
         #region//更新UI
         private delegate void UpdateCVR(byte[] name, byte[] sex, byte[] peopleNation, byte[] birthday, byte[] number, byte[] address, byte[] signdate, byte[] validtermOfStart, byte[] validtermOfEnd);
@@ -27,8 +28,9 @@ namespace ZBYGate_Data_Collection.CVR
         {
             InitializeComponent();
 
+            _Timer = new System.Threading.Timer(ClearText, null, TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(0));
+
             SetObjectTag();
-            _timer = new System.Threading.Timer(ClearText, null, TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(0));
         }
 
         /// <summary>
@@ -63,7 +65,7 @@ namespace ZBYGate_Data_Collection.CVR
         /// <param name="e"></param>
         private void StatusLabel_TextChanged(object sender, EventArgs e)
         {
-            _timer.Change(TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(0));
+            _Timer.Change(TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(0));
         }
 
         /// <summary>

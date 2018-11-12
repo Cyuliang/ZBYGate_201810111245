@@ -143,6 +143,16 @@ namespace ZBYGate_Data_Collection {
         /// <summary>
         ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
+        internal static System.Drawing.Bitmap 保存 {
+            get {
+                object obj = ResourceManager.GetObject("保存", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
+        /// </summary>
         internal static System.Drawing.Bitmap 关_闭 {
             get {
                 object obj = ResourceManager.GetObject("关_闭", resourceCulture);
@@ -166,6 +176,16 @@ namespace ZBYGate_Data_Collection {
         internal static System.Drawing.Bitmap 初始化 {
             get {
                 object obj = ResourceManager.GetObject("初始化", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
+        /// </summary>
+        internal static System.Drawing.Bitmap 删除筛选项 {
+            get {
+                object obj = ResourceManager.GetObject("删除筛选项", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -323,9 +343,39 @@ namespace ZBYGate_Data_Collection {
         /// <summary>
         ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
+        internal static System.Drawing.Bitmap 添加 {
+            get {
+                object obj = ResourceManager.GetObject("添加", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
+        /// </summary>
+        internal static System.Drawing.Bitmap 添加__1_ {
+            get {
+                object obj = ResourceManager.GetObject("添加__1_", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
+        /// </summary>
         internal static System.Drawing.Bitmap 目录 {
             get {
                 object obj = ResourceManager.GetObject("目录", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
+        /// </summary>
+        internal static System.Drawing.Bitmap 编辑 {
+            get {
+                object obj = ResourceManager.GetObject("编辑", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

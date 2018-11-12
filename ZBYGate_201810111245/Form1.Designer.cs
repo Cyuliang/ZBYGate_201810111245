@@ -264,20 +264,23 @@
             // 本地数据库ToolStripMenuItem
             // 
             this.本地数据库ToolStripMenuItem.Name = "本地数据库ToolStripMenuItem";
-            this.本地数据库ToolStripMenuItem.Size = new System.Drawing.Size(136, 22);
+            this.本地数据库ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.本地数据库ToolStripMenuItem.Text = "本地数据库";
+            this.本地数据库ToolStripMenuItem.Click += new System.EventHandler(this.LocalDataWindowShow_Click);
             // 
             // 入闸数据库ToolStripMenuItem
             // 
             this.入闸数据库ToolStripMenuItem.Name = "入闸数据库ToolStripMenuItem";
-            this.入闸数据库ToolStripMenuItem.Size = new System.Drawing.Size(136, 22);
+            this.入闸数据库ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.入闸数据库ToolStripMenuItem.Text = "入闸数据库";
+            this.入闸数据库ToolStripMenuItem.Click += new System.EventHandler(this.InDataWindowShow_Click);
             // 
             // 车闸数据库ToolStripMenuItem
             // 
             this.车闸数据库ToolStripMenuItem.Name = "车闸数据库ToolStripMenuItem";
-            this.车闸数据库ToolStripMenuItem.Size = new System.Drawing.Size(136, 22);
-            this.车闸数据库ToolStripMenuItem.Text = "车闸数据库";
+            this.车闸数据库ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.车闸数据库ToolStripMenuItem.Text = "出闸数据库";
+            this.车闸数据库ToolStripMenuItem.Click += new System.EventHandler(this.OutDataWindowShow_Click);
             // 
             // 设置ToolStripMenuItem
             // 
@@ -361,8 +364,10 @@
             // 
             // MainlistBox
             // 
+            this.MainlistBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.MainlistBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.MainlistBox.FormattingEnabled = true;
+            this.MainlistBox.HorizontalScrollbar = true;
             this.MainlistBox.ItemHeight = 12;
             this.MainlistBox.Location = new System.Drawing.Point(3, 3);
             this.MainlistBox.Name = "MainlistBox";
@@ -427,6 +432,7 @@
             this.Name = "Form1";
             this.Text = "ZBY Gate Data Collection";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form1_FormClosed);
+            this.Load += new System.EventHandler(this.Form1_Load);
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
             this.statusStrip2.ResumeLayout(false);

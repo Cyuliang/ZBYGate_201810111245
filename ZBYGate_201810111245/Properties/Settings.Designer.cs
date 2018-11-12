@@ -241,7 +241,7 @@ namespace ZBYGate_Data_Collection.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("88,88,88,161,120")]
+        [global::System.Configuration.DefaultSettingValueAttribute("88,88,88,120,161")]
         public string LED_nAreaX {
             get {
                 return ((string)(this["LED_nAreaX"]));
@@ -250,7 +250,7 @@ namespace ZBYGate_Data_Collection.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("29,55,81,56,107")]
+        [global::System.Configuration.DefaultSettingValueAttribute("29,55,81,107,56")]
         public string LED_nAreaY {
             get {
                 return ((string)(this["LED_nAreaY"]));
@@ -259,7 +259,7 @@ namespace ZBYGate_Data_Collection.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("168,70,70,95,128")]
+        [global::System.Configuration.DefaultSettingValueAttribute("168,70,70,128,95")]
         public string LED_nAreaWidth {
             get {
                 return ((string)(this["LED_nAreaWidth"]));
@@ -268,7 +268,7 @@ namespace ZBYGate_Data_Collection.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("19,19,19,42,19")]
+        [global::System.Configuration.DefaultSettingValueAttribute("19,19,19,19,42")]
         public string LED_nAreaHeight {
             get {
                 return ((string)(this["LED_nAreaHeight"]));
@@ -327,6 +327,30 @@ namespace ZBYGate_Data_Collection.Properties {
         public string LocalDataBase_Conn {
             get {
                 return ((string)(this["LocalDataBase_Conn"]));
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("没有识别到数据，请按规定车道行驶！")]
+        public string Working_NoOCRresult {
+            get {
+                return ((string)(this["Working_NoOCRresult"]));
+            }
+            set {
+                this["Working_NoOCRresult"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("没有登记数据，请下车登记！")]
+        public string Working_NoDataBaseResult {
+            get {
+                return ((string)(this["Working_NoDataBaseResult"]));
+            }
+            set {
+                this["Working_NoDataBaseResult"] = value;
             }
         }
     }

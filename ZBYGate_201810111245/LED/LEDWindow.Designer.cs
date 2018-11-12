@@ -15,8 +15,9 @@
         {
             if (disposing && (components != null))
             {
+                UnintAction?.Invoke(0);
+                _Timer.Dispose();
                 components.Dispose();
-                _timer.Dispose();
             }
             base.Dispose(disposing);
         }

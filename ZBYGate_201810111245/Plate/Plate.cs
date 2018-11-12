@@ -13,8 +13,8 @@ namespace ZBYGate_Data_Collection.Plate
         public Action<string> SetMessage;//日志信息
         public Action<string, uint> PlateCallBack;//通讯状态
         public Action<string, string, string, string> PlateDataCallBack;//识别结果
-        public Action<byte[]> JpegCallBack;//图片回调
-        public Action<byte[]> DataJpegCallBack;//图片流回调
+        public Action<byte[]> JpegCallBack;//图片流回调
+        public Action<byte[]> DataJpegCallBack;//识别结果图片回调
 
         /// <summary>
         /// 回调函数: 通知相机设备通讯状态的回调函数	
@@ -64,7 +64,7 @@ namespace ZBYGate_Data_Collection.Plate
         /// <summary>
         /// 图片流大小
         /// </summary>
-        private byte[] chJpegStream = new byte[NativeConstants.CLIENT_LPRC_BIG_PICSTREAM_SIZE_EX + 312];
+        //private byte[] chJpegStream = new byte[NativeConstants.CLIENT_LPRC_BIG_PICSTREAM_SIZE_EX + 312];
 
         //开机链接
         private System.Threading.Timer CallbackTimer;
@@ -119,6 +119,7 @@ namespace ZBYGate_Data_Collection.Plate
             {
                 this.JpegInfo = JpegInfo;
                 //把图像数据拷贝到指定内存
+                byte[] chJpegStream = new byte[NativeConstants.CLIENT_LPRC_BIG_PICSTREAM_SIZE_EX + 312];
                 uint nJpegStream = this.JpegInfo.nLen;
                 Array.Clear(chJpegStream, 0, chJpegStream.Length);
                 if (this.JpegInfo.pchBuf == IntPtr.Zero)
@@ -126,7 +127,9 @@ namespace ZBYGate_Data_Collection.Plate
                     return;
                 }
                 Marshal.Copy(this.JpegInfo.pchBuf, chJpegStream, 0, (Int32)nJpegStream);
-                JpegCallBack?.Invoke(chJpegStream);                
+                JpegCallBack?.Invoke(chJpegStream);
+                //Array.Clear(chJpegStream, 0, chJpegStream.Length);
+               
             }
         }
 
@@ -151,11 +154,12 @@ namespace ZBYGate_Data_Collection.Plate
         /// <param name="recResultEx"></param>
         private void JpegData(CLIENT_LPRC_PLATE_RESULTEX recResultEx)
         {
-            byte[] chJpegStream = new byte[NativeConstants.CLIENT_LPRC_BIG_PICSTREAM_SIZE_EX + 312];
             Int32 nJpegStream = recResultEx.pFullImage.nLen;
+            byte[] chJpegStream = new byte[NativeConstants.CLIENT_LPRC_BIG_PICSTREAM_SIZE_EX + 312];
             Array.Clear(chJpegStream, 0, chJpegStream.Length);
             Marshal.Copy(recResultEx.pFullImage.pBuffer, chJpegStream, 0, nJpegStream);
             DataJpegCallBack?.Invoke(chJpegStream);
+            //Array.Clear(chJpegStream, 0, chJpegStream.Length);
         }
 
         /// <summary>
@@ -339,6 +343,7 @@ namespace ZBYGate_Data_Collection.Plate
                     {
                         SetMessage?.Invoke("Close Plate Video！");
                     }
+                    //Array.Clear(chJpegStream, 0, chJpegStream.Length);
                 }
             }
         }
