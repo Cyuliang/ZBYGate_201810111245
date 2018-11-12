@@ -20,7 +20,7 @@ namespace ZBYGate_Data_Collection.IEDataBase
         /// <param name="dt"></param>
         public void In_Insert(string lpn,string container,DateTime dt,int auto)
         {
-            string Inserttext = string.Format("INSERT INTO `hw`.`indata` (Plate,Container,Time,Auto) VALUES('{0}','{1}','{2}','{3}')", lpn,container,dt, auto);
+            string Inserttext = string.Format("INSERT INTO `hw`.`indata` (Plate,Container,Time,Auto) VALUES('{0}','{1}','{2}','{3}')", lpn,container, dt.ToUniversalTime().AddHours(8), auto);
             LocalDataBase.MySqlHelper.ExecuteNonQuery(LocalDataBase.MySqlHelper.Conn, CommandType.Text, Inserttext, null);
             SetMessage?.Invoke(Inserttext);
             _Log.logInfo.Info(Inserttext);
@@ -33,7 +33,7 @@ namespace ZBYGate_Data_Collection.IEDataBase
         /// <param name="dt"></param>
         public void Out_Insert(string lpn,DateTime dt,int auto)
         {
-            string Inserttext = string.Format("INSERT INTO `hw`.`outdata` (Plate,Time,Auto) VALUES('{0}','{1}','{2}')", lpn, dt,auto);
+            string Inserttext = string.Format("INSERT INTO `hw`.`outdata` (Plate,Time,Auto) VALUES('{0}','{1}','{2}')", lpn, dt.ToUniversalTime().AddHours(8), auto);
             LocalDataBase.MySqlHelper.ExecuteNonQuery(LocalDataBase.MySqlHelper.Conn, CommandType.Text, Inserttext, null);
             SetMessage?.Invoke(Inserttext);
             _Log.logInfo.Info(Inserttext);

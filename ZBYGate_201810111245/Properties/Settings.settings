@@ -110,5 +110,23 @@
     <Setting Name="Working_NoDataBaseResult" Type="System.String" Scope="User">
       <Value Profile="(Default)">没有登记数据，请下车登记！</Value>
     </Setting>
+    <Setting Name="Http_www" Type="System.String" Scope="User">
+      <Value Profile="(Default)">http://10.87.216.31:19090/ProsGardenCar</Value>
+    </Setting>
+    <Setting Name="Http_HttpTimeOut" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">3000</Value>
+    </Setting>
+    <Setting Name="Http_HttpReadWriteTimeout" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">3000</Value>
+    </Setting>
+    <Setting Name="Http_eqId" Type="System.String" Scope="User">
+      <Value Profile="(Default)">SPPLS01</Value>
+    </Setting>
+    <Setting Name="Http_switch" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="Plate_Local_End_Message" Type="System.String" Scope="User">
+      <Value Profile="(Default)">请出闸！</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

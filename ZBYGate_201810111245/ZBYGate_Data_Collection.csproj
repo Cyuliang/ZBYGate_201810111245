@@ -96,6 +96,9 @@
     <Reference Include="n3kAdrtB">
       <HintPath>Gate\n3kAdrtB.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -139,6 +142,13 @@
       <DependentUpon>GateWindow.cs</DependentUpon>
     </Compile>
     <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="Https\CHttp.cs" />
+    <Compile Include="Https\HttpWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Https\HttpWindow.Designer.cs">
+      <DependentUpon>HttpWindow.cs</DependentUpon>
+    </Compile>
     <Compile Include="IEDataBase\InDataWindow.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -203,6 +213,9 @@
     <EmbeddedResource Include="Gate\GateWindow.resx">
       <DependentUpon>GateWindow.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Https\HttpWindow.resx">
+      <DependentUpon>HttpWindow.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="IEDataBase\InDataWindow.resx">
       <DependentUpon>InDataWindow.cs</DependentUpon>
     </EmbeddedResource>
@@ -233,6 +246,7 @@
     <None Include="Log\Log4net.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -365,6 +379,7 @@
     <None Include="Resources\添加.png" />
     <None Include="Resources\添加 %281%29.png" />
     <None Include="Resources\编辑.png" />
+    <None Include="Resources\测试.png" />
     <Content Include="Zby.ico" />
   </ItemGroup>
   <ItemGroup>

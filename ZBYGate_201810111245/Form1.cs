@@ -53,6 +53,7 @@ namespace ZBYGate_Data_Collection
         private LED.LED _LED = new LED.LED();
         private LocalDataBase.LocalDataBase _LocalDataBase = new LocalDataBase.LocalDataBase();
         private IEDataBase.RunData _RunData = new IEDataBase.RunData();
+        private Https.CHttp _CHttp = new Https.CHttp();
         private Working _Working = new Working();        
         #endregion
 
@@ -79,9 +80,7 @@ namespace ZBYGate_Data_Collection
             InitializeComponent();
 
             #region//系统动作初始化
-            _Plate.SetIpNetwork(0);//设置车牌绑定IP
             _Plate.PlateDataCallBack += _Working.PlateResult;//出闸车牌识别结果
-
             _Container.CombinResult += _Working.ContainerResult;//集装箱结果
             _Container.NewLPNEvent += _Working.NewLpnResult;//空车车牌结果
             _Container.UpdateLPNEvent += _Working.UpdateLpnResult;//重车车牌结果
@@ -92,7 +91,8 @@ namespace ZBYGate_Data_Collection
             _Working.In_InsertDataBaseAction += _RunData.In_Insert;//入闸数据库写入
             _Working.Out_InsertDataBaseAction += _RunData.Out_Insert;//出闸数据写入
             _Working.SetMessage += GetMessage;//动作日志
-            _RunData.SetMessage += GetMessage;//写入数据库日志
+            _Working.HttpPostAction += _CHttp.SetJosn;//查询远端服务器
+            _Working.Set_Out_Led_Message += _Plate.RS485Send;
             #endregion
 
             #region //控件状态初始化
@@ -127,6 +127,7 @@ namespace ZBYGate_Data_Collection
             #endregion
 
             #region//出入闸数据库委托
+            _RunData.SetMessage += GetMessage;
             #endregion
         }
 
@@ -138,6 +139,7 @@ namespace ZBYGate_Data_Collection
         /// <param name="e"></param>
         private void Form1_Load(object sender, EventArgs e)
         {
+            _Plate.SetIpNetwork(0);//设置车牌绑定IP
             _LED.Initialize(0);
             _LED.AddScreen_Dynamic(0);
             _LED.AddScreenDynamicArea(0);            

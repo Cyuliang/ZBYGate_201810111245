@@ -353,5 +353,77 @@ namespace ZBYGate_Data_Collection.Properties {
                 this["Working_NoDataBaseResult"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("http://10.87.216.31:19090/ProsGardenCar")]
+        public string Http_www {
+            get {
+                return ((string)(this["Http_www"]));
+            }
+            set {
+                this["Http_www"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("3000")]
+        public int Http_HttpTimeOut {
+            get {
+                return ((int)(this["Http_HttpTimeOut"]));
+            }
+            set {
+                this["Http_HttpTimeOut"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("3000")]
+        public int Http_HttpReadWriteTimeout {
+            get {
+                return ((int)(this["Http_HttpReadWriteTimeout"]));
+            }
+            set {
+                this["Http_HttpReadWriteTimeout"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("SPPLS01")]
+        public string Http_eqId {
+            get {
+                return ((string)(this["Http_eqId"]));
+            }
+            set {
+                this["Http_eqId"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool Http_switch {
+            get {
+                return ((bool)(this["Http_switch"]));
+            }
+            set {
+                this["Http_switch"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("请出闸！")]
+        public string Plate_Local_End_Message {
+            get {
+                return ((string)(this["Plate_Local_End_Message"]));
+            }
+            set {
+                this["Plate_Local_End_Message"] = value;
+            }
+        }
     }
 }

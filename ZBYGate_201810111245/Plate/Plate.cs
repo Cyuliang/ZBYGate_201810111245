@@ -12,7 +12,7 @@ namespace ZBYGate_Data_Collection.Plate
 
         public Action<string> SetMessage;//日志信息
         public Action<string, uint> PlateCallBack;//通讯状态
-        public Action<string, string, string, string> PlateDataCallBack;//识别结果
+        public Action<string, string, string, DateTime> PlateDataCallBack;//识别结果
         public Action<byte[]> JpegCallBack;//图片流回调
         public Action<byte[]> DataJpegCallBack;//识别结果图片回调
 
@@ -141,8 +141,9 @@ namespace ZBYGate_Data_Collection.Plate
         private void OnDataEx2Callback(ref CLIENT_LPRC_PLATE_RESULTEX recResultEx, uint dwUser)
         {
             recRes = recResultEx;
-            string time = (new DateTime(recRes.shootTime.Year, recRes.shootTime.Month, recRes.shootTime.Day, recRes.shootTime.Hour, recRes.shootTime.Minute, recRes.shootTime.Second)).ToString("yyyy-MM-dd HH:mm:ss");
-            PlateDataCallBack?.Invoke(recRes.chCLIENTIP, recRes.chLicense, recRes.chColor, time);
+            DateTime datetime = new DateTime(recRes.shootTime.Year, recRes.shootTime.Month, recRes.shootTime.Day, recRes.shootTime.Hour, recRes.shootTime.Minute, recRes.shootTime.Second);
+            string time = datetime.ToString("yyyy-MM-dd HH:mm:ss");
+            PlateDataCallBack?.Invoke(recRes.chCLIENTIP, recRes.chLicense, recRes.chColor, datetime);
             SetMessage?.Invoke(string.Format("Plate Result Time：{0} Plate：{1}", time, recRes.chLicense));
             Log.logInfo.Info(string.Format("Plate Result Time：{0} Plate：{1}", time, recRes.chLicense));
             JpegData(recRes);

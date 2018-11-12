@@ -30,7 +30,7 @@ namespace ZBYGate_Data_Collection.Plate
         private System.Threading.Timer _Timer = null;
 
         #region//更新UI
-        private delegate void  UpdatePlate(string ChIp, string ChLicesen, string ChColor, string ChTime);
+        private delegate void  UpdatePlate(string ChIp, string ChLicesen, string ChColor, DateTime ChTime);
         #endregion
 
         public PlateWindow()
@@ -106,7 +106,7 @@ namespace ZBYGate_Data_Collection.Plate
         /// <param name="ChLicesen"></param>
         /// <param name="ChColor"></param>
         /// <param name="ChTime"></param>
-        public void PlateResult(string ChIp, string ChLicesen, string ChColor, string ChTime)
+        public void PlateResult(string ChIp, string ChLicesen, string ChColor, DateTime ChTime)
         {
             if(TimeTextBox.InvokeRequired)
             {
@@ -114,7 +114,7 @@ namespace ZBYGate_Data_Collection.Plate
             }
             else
             {
-                TimeTextBox.Text = ChTime;
+                TimeTextBox.Text = ChTime.ToString("yyyy-MM-dd HH:mm:ss"); 
                 IpTextBox.Text = ChIp;
                 PlateTextBox.Text = ChLicesen;
                 ColorTextBox.Text = ChColor;
