@@ -36,9 +36,7 @@
             this.label8 = new System.Windows.Forms.Label();
             this.textBox5 = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
-            this.textBox6 = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
-            this.textBox7 = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
             this.TimetextBox = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
@@ -57,7 +55,7 @@
             // 
             // textBox10
             // 
-            this.textBox10.Location = new System.Drawing.Point(86, 323);
+            this.textBox10.Location = new System.Drawing.Point(86, 278);
             this.textBox10.Name = "textBox10";
             this.textBox10.Size = new System.Drawing.Size(299, 21);
             this.textBox10.TabIndex = 41;
@@ -65,7 +63,7 @@
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(27, 330);
+            this.label10.Location = new System.Drawing.Point(27, 285);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(53, 12);
             this.label10.TabIndex = 40;
@@ -73,7 +71,7 @@
             // 
             // textBox9
             // 
-            this.textBox9.Location = new System.Drawing.Point(86, 296);
+            this.textBox9.Location = new System.Drawing.Point(86, 251);
             this.textBox9.Name = "textBox9";
             this.textBox9.Size = new System.Drawing.Size(299, 21);
             this.textBox9.TabIndex = 39;
@@ -81,7 +79,7 @@
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(39, 303);
+            this.label9.Location = new System.Drawing.Point(39, 258);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(41, 12);
             this.label9.TabIndex = 38;
@@ -89,7 +87,7 @@
             // 
             // textBox8
             // 
-            this.textBox8.Location = new System.Drawing.Point(86, 269);
+            this.textBox8.Location = new System.Drawing.Point(86, 224);
             this.textBox8.Name = "textBox8";
             this.textBox8.Size = new System.Drawing.Size(299, 21);
             this.textBox8.TabIndex = 37;
@@ -97,7 +95,7 @@
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(39, 276);
+            this.label8.Location = new System.Drawing.Point(39, 231);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(41, 12);
             this.label8.TabIndex = 36;
@@ -115,41 +113,25 @@
             this.label5.AutoSize = true;
             this.label5.Location = new System.Drawing.Point(39, 246);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(41, 12);
+            this.label5.Size = new System.Drawing.Size(0, 12);
             this.label5.TabIndex = 33;
-            this.label5.Text = "Result";
-            // 
-            // textBox6
-            // 
-            this.textBox6.Location = new System.Drawing.Point(86, 215);
-            this.textBox6.Name = "textBox6";
-            this.textBox6.Size = new System.Drawing.Size(299, 21);
-            this.textBox6.TabIndex = 32;
             // 
             // label6
             // 
             this.label6.AutoSize = true;
             this.label6.Location = new System.Drawing.Point(51, 219);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(29, 12);
+            this.label6.Size = new System.Drawing.Size(0, 12);
             this.label6.TabIndex = 31;
-            this.label6.Text = "Desc";
-            // 
-            // textBox7
-            // 
-            this.textBox7.Location = new System.Drawing.Point(86, 242);
-            this.textBox7.Name = "textBox7";
-            this.textBox7.Size = new System.Drawing.Size(299, 21);
-            this.textBox7.TabIndex = 30;
             // 
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(51, 192);
+            this.label7.Location = new System.Drawing.Point(21, 192);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(29, 12);
+            this.label7.Size = new System.Drawing.Size(59, 12);
             this.label7.TabIndex = 29;
-            this.label7.Text = "Code";
+            this.label7.Text = "车牌/箱号";
             // 
             // TimetextBox
             // 
@@ -238,7 +220,7 @@
             // 
             // textBox1
             // 
-            this.textBox1.Location = new System.Drawing.Point(86, 350);
+            this.textBox1.Location = new System.Drawing.Point(86, 305);
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(299, 21);
             this.textBox1.TabIndex = 44;
@@ -246,7 +228,7 @@
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(27, 357);
+            this.label11.Location = new System.Drawing.Point(27, 312);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(53, 12);
             this.label11.TabIndex = 43;
@@ -268,9 +250,7 @@
             this.Controls.Add(this.label8);
             this.Controls.Add(this.textBox5);
             this.Controls.Add(this.label5);
-            this.Controls.Add(this.textBox6);
             this.Controls.Add(this.label6);
-            this.Controls.Add(this.textBox7);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.TimetextBox);
             this.Controls.Add(this.label4);
@@ -299,9 +279,7 @@
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.TextBox textBox5;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.TextBox textBox6;
         private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.TextBox textBox7;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.TextBox TimetextBox;
         private System.Windows.Forms.Label label4;

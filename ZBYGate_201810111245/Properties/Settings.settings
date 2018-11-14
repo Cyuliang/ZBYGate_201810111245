@@ -128,5 +128,20 @@
     <Setting Name="Plate_Local_End_Message" Type="System.String" Scope="User">
       <Value Profile="(Default)">请出闸！</Value>
     </Setting>
+    <Setting Name="Http_NoStatus" Type="System.String" Scope="User">
+      <Value Profile="(Default)">没有预约数据，请下车登记！</Value>
+    </Setting>
+    <Setting Name="LED_nLogAreaX" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="LED_nLogAreaY" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="LED_nLogAreaW" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">256</Value>
+    </Setting>
+    <Setting Name="LED_nLogAreaH" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">19</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

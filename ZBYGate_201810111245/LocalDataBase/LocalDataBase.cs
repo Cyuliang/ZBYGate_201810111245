@@ -69,11 +69,12 @@ namespace ZBYGate_Data_Collection.LocalDataBase
                         reader["Cards"].ToString(),
                         reader["Truetime"].ToString());
 
-                    ResultTrup[0] = reader["Plate"].ToString()+"/"+reader["Container"].ToString();                   
-                    ResultTrup[1] = reader["Supplier"].ToString();
-                    ResultTrup[2] = reader["Appointment"].ToString();
+                    ResultTrup[0] = reader["Plate"].ToString()+"/"+reader["Container"].ToString();
+                    ResultTrup[1] = reader["Ontime"].ToString();
+                    ResultTrup[2] = reader["Supplier"].ToString();
                     ResultTrup[3] = reader["Parked"].ToString();
-                    ResultTrup[4] = reader["Ontime"].ToString();
+                    ResultTrup[4] = reader["Appointment"].ToString();
+
 
                     SetMessage?.Invoke(Result);
                     _Log.logInfo.Info(Result);

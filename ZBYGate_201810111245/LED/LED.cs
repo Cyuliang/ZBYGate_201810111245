@@ -87,6 +87,11 @@ namespace ZBYGate_Data_Collection.LED
         private readonly string[] nAreaWidths;
         private readonly string[] nAreaHeights;
 
+        private readonly int nAreaLogX=Properties.Settings.Default.LED_nLogAreaX;
+        private readonly int nAreaLogY=Properties.Settings.Default.LED_nLogAreaY;
+        private readonly int nAreaLogW=Properties.Settings.Default.LED_nLogAreaW;
+        private readonly int nAreaLogH=Properties.Settings.Default.LED_nLogAreaH;
+
         public LED()
         {
             nAreaXs = nAreaX.Split(',');
@@ -197,13 +202,24 @@ namespace ZBYGate_Data_Collection.LED
             try
             {
                 int nResult = -1;
-                for (int i = 0; i < nDYAreaID; i++)
+                if (j==1)//（添加正在处理请稍后，单个动态区）
                 {
-                    nResult = SafeNativeMethods.AddScreenDynamicArea(nScreenNo, i, 2,nTimeOut, 0, "", 0,
-                                 int.Parse(nAreaXs[i]), int.Parse(nAreaYs[i]), int.Parse(nAreaWidths[i]), int.Parse(nAreaHeights[i]),
-                                 255, 0, 255, 7, 6, 1);
+                    nResult = SafeNativeMethods.AddScreenDynamicArea(nScreenNo, 0, 2, nTimeOut, 0, "", 0,
+                                nAreaLogX, nAreaLogY, nAreaLogW, nAreaLogH,
+                                255, 0, 255, 7, 6, 1);
                     GetErrorMessage(string.Format("执行AddScreenDynamicArea函数,添加 {0} X:{1} Y:{2} W:{3} H:{4} 动态区域",
-                                 i, nAreaXs[i], nAreaYs[i], nAreaWidths[i], nAreaHeights[i]), nResult);
+                                 0, nAreaLogX, nAreaLogY, nAreaLogW, nAreaLogH), nResult);
+                }
+                else//（添加车牌动态区信息，多个动态区）
+                {
+                    for (int i = 0; i < nDYAreaID; i++)
+                    {
+                        nResult = SafeNativeMethods.AddScreenDynamicArea(nScreenNo, i, 2, nTimeOut, 0, "", 0,
+                                     int.Parse(nAreaXs[i]), int.Parse(nAreaYs[i]), int.Parse(nAreaWidths[i]), int.Parse(nAreaHeights[i]),
+                                     255, 0, 255, 7, 6, 1);
+                        GetErrorMessage(string.Format("执行AddScreenDynamicArea函数,添加 {0} X:{1} Y:{2} W:{3} H:{4} 动态区域",
+                                     i, nAreaXs[i], nAreaYs[i], nAreaWidths[i], nAreaHeights[i]), nResult);
+                    }
                 }
             }
             catch (Exception ex)
@@ -219,11 +235,18 @@ namespace ZBYGate_Data_Collection.LED
         {
             int nResult = -1;
             int i = 0;
+
+            int nAlignment = 0;//剧中显示
+            if (pTexts.Length==1)
+            {
+                nAlignment = 1;
+            }
+
             foreach (string str in pTexts)
             {
                 try
                 {
-                    nResult = SafeNativeMethods.AddScreenDynamicAreaText(nScreenNo, i, str, 0, 0, "宋体", nFontSize, 0, nFontColor, 2, 8, nShowTime);
+                    nResult = SafeNativeMethods.AddScreenDynamicAreaText(nScreenNo, i, str, 0, nAlignment, "宋体", nFontSize, 0, nFontColor, 2, 8, nShowTime);
                     GetErrorMessage(string.Format("执行AddScreenDynamicAreaText函数,添加 {0} 区域，文本 {1}", i, str), nResult);
                     i++;
                 }
@@ -243,15 +266,42 @@ namespace ZBYGate_Data_Collection.LED
             {
                 if (m_bSendBusy == false)
                 {
-                    m_bSendBusy = true;
-                    int nResult = SafeNativeMethods.SendDynamicAreasInfoCommand(nScreenNo, nDelAllDYArea, pDYAreaIDList);//如果发送多个动态区域，动态区域编号间用","隔开。
-                    GetErrorMessage("执行SendDynamicAreasInfoCommand函数, ", nResult);
-                    m_bSendBusy = false;
+                    if(i==1)//单个动态去区域
+                    {
+                        m_bSendBusy = true;
+                        int nResult = SafeNativeMethods.SendDynamicAreasInfoCommand(nScreenNo, 0, nDYAreaID.ToString());//如果发送多个动态区域，动态区域编号间用","隔开。
+                        GetErrorMessage("执行SendDynamicAreasInfoCommand函数, ", nResult);
+                        m_bSendBusy = false;
+                    }
+                    else//多个动态区域
+                    {
+                        m_bSendBusy = true;
+                        int nResult = SafeNativeMethods.SendDynamicAreasInfoCommand(nScreenNo, nDelAllDYArea, pDYAreaIDList);//如果发送多个动态区域，动态区域编号间用","隔开。
+                        GetErrorMessage("执行SendDynamicAreasInfoCommand函数, ", nResult);
+                        m_bSendBusy = false;
+                    }
                 }
             }
             catch (Exception ex)
             {
                 _Log.logError.Error("SendDynamicAreasInfoCommand Error", ex);
+            }
+        }
+
+        /// <summary>
+        /// 删除显示屏
+        /// </summary>
+        /// <param name="i"></param>
+        public void DeleteScreen_Dynamic(int i)
+        {
+            try
+            {
+                int nResult = SafeNativeMethods.DeleteScreen_Dynamic(nScreenNo);
+                GetErrorMessage("DeleteScreen_Dynamic", nResult);
+            }
+            catch (Exception ex)
+            {
+                _Log.logError.Error("DeleteScreen_Dynamic", ex);
             }
         }
 

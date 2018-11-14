@@ -82,18 +82,28 @@ namespace ZBYGate_Data_Collection
 
             #region//系统动作初始化
             _Plate.PlateDataCallBack += _Working.PlateResult;//出闸车牌识别结果
+            _Working.SetOutLedMessageAction += _Plate.RS485Send;//发送出闸LED信息
+
             _Container.CombinResult += _Working.ContainerResult;//集装箱结果
             _Container.NewLPNEvent += _Working.NewLpnResult;//空车车牌结果
             _Container.UpdateLPNEvent += _Working.UpdateLpnResult;//重车车牌结果
+
             _Working.SelectDataBase += _LocalDataBase.SelectData;//本地数据库查询
-            _Working.AddTextAction += _LED.AddScreenDynamicAreaText;//LED推送流程数据
-            _Working.SendAction += _LED.SendDynamicAreasInfoCommand;
-            _Working.OpenDoorAction += _Gate.OpenDoor;//开闸
             _Working.In_InsertDataBaseAction += _RunData.In_Insert;//入闸数据库写入
             _Working.Out_InsertDataBaseAction += _RunData.Out_Insert;//出闸数据写入
+
+            _Working.DeleteScreen_DynamicAction += _LED.DeleteScreen_Dynamic;//删除显示屏
+            _Working.AddScreen_DynamicAction += _LED.AddScreen_Dynamic;//添加显示屏
+            _Working.AddScreenDynamicAreaAction += _LED.AddScreenDynamicArea;//添加显示屏
+            _Working.AddTextAction += _LED.AddScreenDynamicAreaText;//添加动态区域文本
+            _Working.SendAction += _LED.SendDynamicAreasInfoCommand;//推送LED信息
+
+            _Working.OpenDoorAction += _Gate.OpenDoor;//开闸
+
             _Working.SetMessage += GetMessage;//动作日志
+
             _Working.HttpPostAction += _CHttp.SetJosn;//查询远端服务器
-            _Working.SetOutLedMessageAction += _Plate.RS485Send;
+            _Working.HttpJsonSplitAction += _CHttp.JsonSplit;
             #endregion
 
             #region //控件状态初始化
@@ -146,8 +156,8 @@ namespace ZBYGate_Data_Collection
         {
             _Plate.SetIpNetwork(0);//设置车牌绑定IP
             _LED.Initialize(0);
-            _LED.AddScreen_Dynamic(0);
-            _LED.AddScreenDynamicArea(0);            
+            //_LED.AddScreen_Dynamic(0);
+            //_LED.AddScreenDynamicArea(0);            
         }
         #endregion
 
@@ -635,9 +645,21 @@ namespace ZBYGate_Data_Collection
             if (_HttpWindow == null || _HttpWindow.IsDisposed)
             {
                 _HttpWindow = new Https.HttpWindow();
+                HttpWindowActiveInit();
             }
             SetTabPate("HttpTable", HttpTable, form: _HttpWindow);
         }
+
+        /// <summary>
+        /// http委托界面初始化
+        /// </summary>
+        private void HttpWindowActiveInit()
+        {
+            _HttpWindow.SetJsonAction += _CHttp.SetJosn;
+            _HttpWindow.JsonSplitAction += _CHttp.JsonSplit;
+        }
+
+
         #endregion
     }
 }

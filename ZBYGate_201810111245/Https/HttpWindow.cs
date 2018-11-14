@@ -14,11 +14,13 @@ namespace ZBYGate_Data_Collection.Https
 {
     public partial class HttpWindow : Form
     {
-        public Func<string, string, string, string,string> SetJsonAction;
+        public Func<string, string, string,string> SetJsonAction;
+        public Func<string, string[]> JsonSplitAction;
 
         public HttpWindow()
         {
             InitializeComponent();
+            IDtextBox.Text = Properties.Settings.Default.Http_eqId;
         }
 
         /// <summary>
@@ -28,6 +30,14 @@ namespace ZBYGate_Data_Collection.Https
         /// <param name="e"></param>
         private void TestButton_Click(object sender, EventArgs e)
         {
+            string tmp = string.Empty;
+            tmp= SetJsonAction?.Invoke(TimetextBox.Text, PlatetextBox.Text, ContainertextBox.Text);
+            string[] ReturnData = JsonSplitAction?.Invoke(tmp);
+            textBox5.Text = ReturnData[0];
+            textBox8.Text = ReturnData[2];
+            textBox9.Text = ReturnData[3];
+            textBox10.Text = ReturnData[1];
+            textBox1.Text = ReturnData[4];
         }
     }       
 }

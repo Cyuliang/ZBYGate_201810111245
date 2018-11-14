@@ -425,5 +425,65 @@ namespace ZBYGate_Data_Collection.Properties {
                 this["Plate_Local_End_Message"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("没有预约数据，请下车登记！")]
+        public string Http_NoStatus {
+            get {
+                return ((string)(this["Http_NoStatus"]));
+            }
+            set {
+                this["Http_NoStatus"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int LED_nLogAreaX {
+            get {
+                return ((int)(this["LED_nLogAreaX"]));
+            }
+            set {
+                this["LED_nLogAreaX"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int LED_nLogAreaY {
+            get {
+                return ((int)(this["LED_nLogAreaY"]));
+            }
+            set {
+                this["LED_nLogAreaY"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("256")]
+        public int LED_nLogAreaW {
+            get {
+                return ((int)(this["LED_nLogAreaW"]));
+            }
+            set {
+                this["LED_nLogAreaW"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("19")]
+        public int LED_nLogAreaH {
+            get {
+                return ((int)(this["LED_nLogAreaH"]));
+            }
+            set {
+                this["LED_nLogAreaH"] = value;
+            }
+        }
     }
 }
