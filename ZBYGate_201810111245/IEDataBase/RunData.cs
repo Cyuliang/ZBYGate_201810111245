@@ -38,5 +38,18 @@ namespace ZBYGate_Data_Collection.IEDataBase
             SetMessage?.Invoke(Inserttext);
             _Log.logInfo.Info(Inserttext);
         }
+
+        /// <summary>
+        /// 更新身份证
+        /// </summary>
+        /// <param name="Cards"></param>
+        /// <param name="dt"></param>
+        /// <param name="auto"></param>
+        public void In_Update(string Cards,DateTime dt,int auto)
+        {
+            string Updatetext = string.Format("UPDATE  `hw`.`indata` SET Cards = '{0}', Auto='{1}' WHERE Time = '{2}'", Cards,auto, dt.ToUniversalTime().AddHours(8));
+            LocalDataBase.MySqlHelper.ExecuteNonQuery(LocalDataBase.MySqlHelper.Conn, CommandType.Text, Updatetext, null);
+            _Log.logInfo.Info(Updatetext);
+        }
     }
 }

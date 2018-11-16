@@ -91,12 +91,16 @@ namespace ZBYGate_Data_Collection
             _Working.SelectDataBase += _LocalDataBase.SelectData;//本地数据库查询
             _Working.In_InsertDataBaseAction += _RunData.In_Insert;//入闸数据库写入
             _Working.Out_InsertDataBaseAction += _RunData.Out_Insert;//出闸数据写入
+            _Working.In_UpdateDataBaseAction += _RunData.In_Update;//更新入闸身份证信息
 
             _Working.DeleteScreen_DynamicAction += _LED.DeleteScreen_Dynamic;//删除显示屏
             _Working.AddScreen_DynamicAction += _LED.AddScreen_Dynamic;//添加显示屏
             _Working.AddScreenDynamicAreaAction += _LED.AddScreenDynamicArea;//添加显示屏
             _Working.AddTextAction += _LED.AddScreenDynamicAreaText;//添加动态区域文本
             _Working.SendAction += _LED.SendDynamicAreasInfoCommand;//推送LED信息
+
+            _Working.CVRForReadAction += _CVR.AuthenticateFor;//循环读取身份证
+            _CVR.FillDataActive += _Working.FillDataAction;//回调读取身份证的信息
 
             _Working.OpenDoorAction += _Gate.OpenDoor;//开闸
 
@@ -155,7 +159,8 @@ namespace ZBYGate_Data_Collection
         private void Form1_Load(object sender, EventArgs e)
         {
             _Plate.SetIpNetwork(0);//设置车牌绑定IP
-            _LED.Initialize(0);
+            _LED.Initialize(0);//LED初始化
+            _CVR.InitComm(0);//读卡器初始化
             //_LED.AddScreen_Dynamic(0);
             //_LED.AddScreenDynamicArea(0);            
         }

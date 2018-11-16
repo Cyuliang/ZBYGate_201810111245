@@ -16,6 +16,7 @@ namespace ZBYGate_Data_Collection.Https
         private readonly int HttpTimeOut = Properties.Settings.Default.Http_HttpTimeOut;
         private readonly int HttpReadWriteTimeout = Properties.Settings.Default.Http_HttpReadWriteTimeout;
         private readonly string Http_NoStatus = Properties.Settings.Default.Http_NoStatus;
+        private readonly string Http_Status = Properties.Settings.Default.Http_Status;
 
         /// <summary>
         /// 远程通讯处理
@@ -43,7 +44,7 @@ namespace ZBYGate_Data_Collection.Https
             }
             catch (Exception ex)
             {
-                SetMessage?.Invoke(string.Format("Send {0} Error",Json));
+                SetMessage?.Invoke(string.Format("Send {0} {1}",Json,ex.ToString()));
                 _Log.logError.Error("Send Data Error", ex);
             }
             if (writer != null)
@@ -73,7 +74,7 @@ namespace ZBYGate_Data_Collection.Https
                 sreader.Close();
                 SetMessage(string.Format("Return Data：{0}", postConent));
                 _Log.logInfo.Info(string.Format("Return Data：{0}", postConent));
-                //return postConent;
+
                 return postConent;
             }
             return null;
@@ -86,33 +87,34 @@ namespace ZBYGate_Data_Collection.Https
         /// <returns></returns>
         public string[] JsonSplit(string result)
         {
-            string[] ReturnData = new string[] {"NONE", "NONE" , "NONE" , "NONE" , "NONE" ,"NONE"};
+            string[] ReturnData = new string[] {"*", "*" , "*" , "*" , "*" ,"*"};
 
             JsonPaner jp = JsonConvert.DeserializeObject<JsonPaner>(result);
-            ReturnData[0] = string.Format("{0}/{1}", jp.result.truckNumber, jp.result.tranNo);
-            ReturnData[5] = jp.result.resultList;
+            ReturnData[0] = string.Format("{0} {1}", jp.result.truckNumber, jp.result.tranNo);//车牌，箱号
             if (jp.result.resultList=="Y")
             {
-                if(!string.IsNullOrEmpty(jp.result.arrivedTime))
+                if(!string.IsNullOrEmpty(jp.result.resultList))
                 {
-                    ReturnData[1] = jp.result.arrivedTime;
+                    ReturnData[1] = jp.result.resultList;//是否准时
                 }
                 if (!string.IsNullOrEmpty(jp.result.visitor))
                 {
-                    ReturnData[2] = jp.result.visitor;
-                }
-                if (!string.IsNullOrEmpty(jp.result.platform))
-                {
-                    ReturnData[3] = jp.result.platform;
+                    ReturnData[2] = jp.result.visitor;//供应商
                 }
                 if (!string.IsNullOrEmpty(jp.result.status))
                 {
-                    ReturnData[4] = jp.result.status;
-                }                                               
+                    ReturnData[3] = jp.result.status;//车辆状体
+                }
+                if (!string.IsNullOrEmpty(jp.result.platform))
+                {
+                    ReturnData[4] = jp.result.platform;//停靠位
+                }
+                ReturnData[5] = Http_Status;//请进闸
+               
             }
             else if(jp.result.resultList=="N")
             {
-                ReturnData[4] = Http_NoStatus;
+                ReturnData[5] = Http_NoStatus;//请登记
             }
             return ReturnData;
         }

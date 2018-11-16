@@ -25,7 +25,7 @@ namespace ZBYGate_Data_Collection.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("192.168.1.55")]
+        [global::System.Configuration.DefaultSettingValueAttribute("127.0.0.1")]
         public string Container_Ip {
             get {
                 return ((string)(this["Container_Ip"]));
@@ -223,7 +223,7 @@ namespace ZBYGate_Data_Collection.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("5")]
+        [global::System.Configuration.DefaultSettingValueAttribute("6")]
         public int LED_nDYAreaID {
             get {
                 return ((int)(this["LED_nDYAreaID"]));
@@ -241,7 +241,7 @@ namespace ZBYGate_Data_Collection.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("88,88,88,120,161")]
+        [global::System.Configuration.DefaultSettingValueAttribute("80,80,80,80,116,0")]
         public string LED_nAreaX {
             get {
                 return ((string)(this["LED_nAreaX"]));
@@ -250,7 +250,7 @@ namespace ZBYGate_Data_Collection.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("29,55,81,107,56")]
+        [global::System.Configuration.DefaultSettingValueAttribute("25,44,63,82,101,120")]
         public string LED_nAreaY {
             get {
                 return ((string)(this["LED_nAreaY"]));
@@ -259,7 +259,7 @@ namespace ZBYGate_Data_Collection.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("168,70,70,128,95")]
+        [global::System.Configuration.DefaultSettingValueAttribute("176,176,176,176,140,256")]
         public string LED_nAreaWidth {
             get {
                 return ((string)(this["LED_nAreaWidth"]));
@@ -268,7 +268,7 @@ namespace ZBYGate_Data_Collection.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("19,19,19,19,42")]
+        [global::System.Configuration.DefaultSettingValueAttribute("19,19,19,19,19,19")]
         public string LED_nAreaHeight {
             get {
                 return ((string)(this["LED_nAreaHeight"]));
@@ -304,7 +304,7 @@ namespace ZBYGate_Data_Collection.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0,1,2,3,4")]
+        [global::System.Configuration.DefaultSettingValueAttribute("0,1,2,3,4,5")]
         public string LED_pDYAreaIDList {
             get {
                 return ((string)(this["LED_pDYAreaIDList"]));
@@ -332,7 +332,7 @@ namespace ZBYGate_Data_Collection.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("没有识别到数据，请按规定车道行驶！")]
+        [global::System.Configuration.DefaultSettingValueAttribute("没有识别到数据，请按标识驶入！")]
         public string Working_NoOCRresult {
             get {
                 return ((string)(this["Working_NoOCRresult"]));
@@ -344,7 +344,7 @@ namespace ZBYGate_Data_Collection.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("没有登记数据，请下车登记！")]
+        [global::System.Configuration.DefaultSettingValueAttribute("没有登记数据，请下车刷身份证！")]
         public string Working_NoDataBaseResult {
             get {
                 return ((string)(this["Working_NoDataBaseResult"]));
@@ -404,7 +404,7 @@ namespace ZBYGate_Data_Collection.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
         public bool Http_switch {
             get {
                 return ((bool)(this["Http_switch"]));
@@ -440,49 +440,49 @@ namespace ZBYGate_Data_Collection.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public int LED_nLogAreaX {
+        [global::System.Configuration.DefaultSettingValueAttribute("欢迎光临，请进闸！")]
+        public string Http_Status {
             get {
-                return ((int)(this["LED_nLogAreaX"]));
+                return ((string)(this["Http_Status"]));
             }
             set {
-                this["LED_nLogAreaX"] = value;
+                this["Http_Status"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public int LED_nLogAreaY {
+        [global::System.Configuration.DefaultSettingValueAttribute("没有身份证数据，请人工处理!")]
+        public string Working_NoNumberResult {
             get {
-                return ((int)(this["LED_nLogAreaY"]));
+                return ((string)(this["Working_NoNumberResult"]));
             }
             set {
-                this["LED_nLogAreaY"] = value;
+                this["Working_NoNumberResult"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("256")]
-        public int LED_nLogAreaW {
+        [global::System.Configuration.DefaultSettingValueAttribute("0,120,256,129")]
+        public string LED_LogSHow {
             get {
-                return ((int)(this["LED_nLogAreaW"]));
+                return ((string)(this["LED_LogSHow"]));
             }
             set {
-                this["LED_nLogAreaW"] = value;
+                this["LED_LogSHow"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("19")]
-        public int LED_nLogAreaH {
+        [global::System.Configuration.DefaultSettingValueAttribute("后台正在比对数据，请稍后!")]
+        public string Led_Log {
             get {
-                return ((int)(this["LED_nLogAreaH"]));
+                return ((string)(this["Led_Log"]));
             }
             set {
-                this["LED_nLogAreaH"] = value;
+                this["Led_Log"] = value;
             }
         }
     }

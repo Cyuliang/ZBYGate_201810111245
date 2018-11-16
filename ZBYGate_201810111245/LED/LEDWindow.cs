@@ -132,7 +132,7 @@ namespace ZBYGate_Data_Collection.LED
                 }
             }
             toolStripButton5.Enabled = true;
-            pTexts = new string[]{ PlateTextBox.Text, SupplierTextBox.Text, AppointmentTextBox.Text, ParkedTextBox.Text, OntimeTextBox.Text };
+            pTexts = new string[]{ PlateTextBox.Text, SupplierTextBox.Text, AppointmentTextBox.Text, ParkedTextBox.Text, OntimeTextBox.Text,LogtextBox.Text };
             return pTexts;
         }
 
@@ -144,11 +144,10 @@ namespace ZBYGate_Data_Collection.LED
             int i = 1;
             foreach (object _Control in toolStrip1.Items)
             {
-                if (_Control is ToolStripButton)
+                if (_Control is ToolStripButton _ToolStripButton)
                 {
-                    ToolStripButton _ToolStripButton = (ToolStripButton)_Control;
                     _ToolStripButton.Tag = i;
-                    if(SetEnable)
+                    if (SetEnable)
                     {
                         if (i != 1)
                         {

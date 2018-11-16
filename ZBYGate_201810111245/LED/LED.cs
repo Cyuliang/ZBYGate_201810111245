@@ -72,6 +72,8 @@ namespace ZBYGate_Data_Collection.LED
         private readonly string nAreaWidth = Properties.Settings.Default.LED_nAreaWidth;
         private readonly string nAreaHeight = Properties.Settings.Default.LED_nAreaHeight;
 
+        private readonly string LED_LogSHow = Properties.Settings.Default.LED_LogSHow;
+
         //添加文本
         private readonly int nFontSize = Properties.Settings.Default.LED_nFontSize;
         private readonly int nFontColor = Properties.Settings.Default.LED_nFontColor;
@@ -87,10 +89,7 @@ namespace ZBYGate_Data_Collection.LED
         private readonly string[] nAreaWidths;
         private readonly string[] nAreaHeights;
 
-        private readonly int nAreaLogX=Properties.Settings.Default.LED_nLogAreaX;
-        private readonly int nAreaLogY=Properties.Settings.Default.LED_nLogAreaY;
-        private readonly int nAreaLogW=Properties.Settings.Default.LED_nLogAreaW;
-        private readonly int nAreaLogH=Properties.Settings.Default.LED_nLogAreaH;
+        private readonly string[] nAreaLogShow;//提示区
 
         public LED()
         {
@@ -98,6 +97,8 @@ namespace ZBYGate_Data_Collection.LED
             nAreaYs = nAreaY.Split(',');
             nAreaWidths = nAreaWidth.Split(',');
             nAreaHeights = nAreaHeight.Split(',');
+
+            nAreaLogShow = LED_LogSHow.Split(',');
         }
 
         #endregion
@@ -202,15 +203,17 @@ namespace ZBYGate_Data_Collection.LED
             try
             {
                 int nResult = -1;
-                if (j==1)//（添加正在处理请稍后，单个动态区）
+
+                //添加一个动态区
+                if(j==1)
                 {
                     nResult = SafeNativeMethods.AddScreenDynamicArea(nScreenNo, 0, 2, nTimeOut, 0, "", 0,
-                                nAreaLogX, nAreaLogY, nAreaLogW, nAreaLogH,
+                                int.Parse(nAreaLogShow[0]), int.Parse(nAreaLogShow[1]), int.Parse(nAreaLogShow[2]), int.Parse(nAreaLogShow[3]),
                                 255, 0, 255, 7, 6, 1);
                     GetErrorMessage(string.Format("执行AddScreenDynamicArea函数,添加 {0} X:{1} Y:{2} W:{3} H:{4} 动态区域",
-                                 0, nAreaLogX, nAreaLogY, nAreaLogW, nAreaLogH), nResult);
+                                 0, nAreaLogShow[0], nAreaLogShow[1], nAreaLogShow[2], nAreaLogShow[3]), nResult);
                 }
-                else//（添加车牌动态区信息，多个动态区）
+                else
                 {
                     for (int i = 0; i < nDYAreaID; i++)
                     {
@@ -235,18 +238,11 @@ namespace ZBYGate_Data_Collection.LED
         {
             int nResult = -1;
             int i = 0;
-
-            int nAlignment = 0;//剧中显示
-            if (pTexts.Length==1)
-            {
-                nAlignment = 1;
-            }
-
             foreach (string str in pTexts)
             {
                 try
                 {
-                    nResult = SafeNativeMethods.AddScreenDynamicAreaText(nScreenNo, i, str, 0, nAlignment, "宋体", nFontSize, 0, nFontColor, 2, 8, nShowTime);
+                    nResult = SafeNativeMethods.AddScreenDynamicAreaText(nScreenNo, i, str, 0, 0, "宋体", nFontSize, 0, nFontColor, 2, 8, nShowTime);
                     GetErrorMessage(string.Format("执行AddScreenDynamicAreaText函数,添加 {0} 区域，文本 {1}", i, str), nResult);
                     i++;
                 }
@@ -266,20 +262,18 @@ namespace ZBYGate_Data_Collection.LED
             {
                 if (m_bSendBusy == false)
                 {
-                    if(i==1)//单个动态去区域
+                    m_bSendBusy = true;
+                    if(i==1)
                     {
-                        m_bSendBusy = true;
-                        int nResult = SafeNativeMethods.SendDynamicAreasInfoCommand(nScreenNo, 0, nDYAreaID.ToString());//如果发送多个动态区域，动态区域编号间用","隔开。
+                        int nResult = SafeNativeMethods.SendDynamicAreasInfoCommand(nScreenNo, 1, "");//如果发送多个动态区域，动态区域编号间用","隔开。
                         GetErrorMessage("执行SendDynamicAreasInfoCommand函数, ", nResult);
-                        m_bSendBusy = false;
                     }
-                    else//多个动态区域
+                    else
                     {
-                        m_bSendBusy = true;
                         int nResult = SafeNativeMethods.SendDynamicAreasInfoCommand(nScreenNo, nDelAllDYArea, pDYAreaIDList);//如果发送多个动态区域，动态区域编号间用","隔开。
                         GetErrorMessage("执行SendDynamicAreasInfoCommand函数, ", nResult);
-                        m_bSendBusy = false;
                     }
+                    m_bSendBusy = false;
                 }
             }
             catch (Exception ex)

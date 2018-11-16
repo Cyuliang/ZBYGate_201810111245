@@ -3,7 +3,7 @@
   <Profiles />
   <Settings>
     <Setting Name="Container_Ip" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">192.168.1.55</Value>
+      <Value Profile="(Default)">127.0.0.1</Value>
     </Setting>
     <Setting Name="Container_Port" Type="System.Int32" Scope="Application">
       <Value Profile="(Default)">12011</Value>
@@ -69,22 +69,22 @@
       <Value Profile="(Default)">5005</Value>
     </Setting>
     <Setting Name="LED_nDYAreaID" Type="System.Int32" Scope="Application">
-      <Value Profile="(Default)">5</Value>
+      <Value Profile="(Default)">6</Value>
     </Setting>
     <Setting Name="LED_nTimeOut" Type="System.Int32" Scope="Application">
       <Value Profile="(Default)">30</Value>
     </Setting>
     <Setting Name="LED_nAreaX" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">88,88,88,120,161</Value>
+      <Value Profile="(Default)">80,80,80,80,116,0</Value>
     </Setting>
     <Setting Name="LED_nAreaY" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">29,55,81,107,56</Value>
+      <Value Profile="(Default)">25,44,63,82,101,120</Value>
     </Setting>
     <Setting Name="LED_nAreaWidth" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">168,70,70,128,95</Value>
+      <Value Profile="(Default)">176,176,176,176,140,256</Value>
     </Setting>
     <Setting Name="LED_nAreaHeight" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">19,19,19,19,42</Value>
+      <Value Profile="(Default)">19,19,19,19,19,19</Value>
     </Setting>
     <Setting Name="LED_nFontSize" Type="System.Int32" Scope="Application">
       <Value Profile="(Default)">12</Value>
@@ -96,7 +96,7 @@
       <Value Profile="(Default)">0</Value>
     </Setting>
     <Setting Name="LED_pDYAreaIDList" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">0,1,2,3,4</Value>
+      <Value Profile="(Default)">0,1,2,3,4,5</Value>
     </Setting>
     <Setting Name="LED_nShowTime" Type="System.Int32" Scope="Application">
       <Value Profile="(Default)">5</Value>
@@ -105,10 +105,10 @@
       <Value Profile="(Default)">Database='hw';Data Source='localhost';User Id='root';Password='Li870419';charset='utf8';pooling=true;SslMode=none</Value>
     </Setting>
     <Setting Name="Working_NoOCRresult" Type="System.String" Scope="User">
-      <Value Profile="(Default)">没有识别到数据，请按规定车道行驶！</Value>
+      <Value Profile="(Default)">没有识别到数据，请按标识驶入！</Value>
     </Setting>
     <Setting Name="Working_NoDataBaseResult" Type="System.String" Scope="User">
-      <Value Profile="(Default)">没有登记数据，请下车登记！</Value>
+      <Value Profile="(Default)">没有登记数据，请下车刷身份证！</Value>
     </Setting>
     <Setting Name="Http_www" Type="System.String" Scope="User">
       <Value Profile="(Default)">http://10.87.216.31:19090/ProsGardenCar</Value>
@@ -123,7 +123,7 @@
       <Value Profile="(Default)">SPPLS01</Value>
     </Setting>
     <Setting Name="Http_switch" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">False</Value>
+      <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="Plate_Local_End_Message" Type="System.String" Scope="User">
       <Value Profile="(Default)">请出闸！</Value>
@@ -131,17 +131,17 @@
     <Setting Name="Http_NoStatus" Type="System.String" Scope="User">
       <Value Profile="(Default)">没有预约数据，请下车登记！</Value>
     </Setting>
-    <Setting Name="LED_nLogAreaX" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">0</Value>
+    <Setting Name="Http_Status" Type="System.String" Scope="User">
+      <Value Profile="(Default)">欢迎光临，请进闸！</Value>
     </Setting>
-    <Setting Name="LED_nLogAreaY" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">0</Value>
+    <Setting Name="Working_NoNumberResult" Type="System.String" Scope="User">
+      <Value Profile="(Default)">没有身份证数据，请人工处理!</Value>
     </Setting>
-    <Setting Name="LED_nLogAreaW" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">256</Value>
+    <Setting Name="LED_LogSHow" Type="System.String" Scope="User">
+      <Value Profile="(Default)">0,120,256,129</Value>
     </Setting>
-    <Setting Name="LED_nLogAreaH" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">19</Value>
+    <Setting Name="Led_Log" Type="System.String" Scope="User">
+      <Value Profile="(Default)">后台正在比对数据，请稍后!</Value>
     </Setting>
   </Settings>
 </SettingsFile>

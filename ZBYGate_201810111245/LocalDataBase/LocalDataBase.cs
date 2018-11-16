@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace ZBYGate_Data_Collection.LocalDataBase
 {
+    //防止数据库过大，照成数据查询缓慢》》》》》》》》》》》》》》》》》》》》》》》》暂时未处理
     class LocalDataBase
     {
         public Action<string> SetMessage;//状态回显
@@ -22,28 +23,28 @@ namespace ZBYGate_Data_Collection.LocalDataBase
         /// <returns></returns>
         public string[] SelectData(string Plate,string Container,string Cards)
         {
-            string cmdText = "SELECT *  FROM `hw`.`gate` WHERE Plate=@Plate or Container=@Container or Cards=@Cards";
+            string cmdText = "SELECT *  FROM `hw`.`gate` WHERE Plate=@Plate UNION ALL SELECT *  FROM `hw`.`gate` WHERE Container=@Container UNION ALL SELECT *  FROM `hw`.`gate` WHERE Cards=@Cards";
             MySqlParameter[] parameters = { new MySqlParameter("@Plate", MySqlDbType.VarChar),
                                         new MySqlParameter("@Container", MySqlDbType.VarChar),
                                         new MySqlParameter("@Cards",MySqlDbType.VarChar)};
 
-            string[] ResultTrup = new string[5];//返回数据
+            string[] ResultTrup = new string[6];//返回数据
 
             #region//空参数赋值
             string plate = Plate;
             if (Plate == string.Empty||Plate==null)
             {
-                plate = "NONE";
+                plate = "*";
             }
             string container = Container;
             if (Container == string.Empty||Container==null)
             {
-                container = "NONE";
+                container = "*";
             }
             string cards = Cards;
             if (Cards == string.Empty||Cards==null)
             {
-                cards = "NONE";
+                cards = "*";
             }
             #endregion
 
@@ -51,8 +52,11 @@ namespace ZBYGate_Data_Collection.LocalDataBase
             parameters[1].Value = container;
             parameters[2].Value = cards;
 
-            SetMessage?.Invoke(cmdText);
-            _Log.logInfo.Info(cmdText);
+            string tmp = string.Format("SELECT *  FROM `hw`.`gate` FORCE INDEX('PLATE') WHERE Plate={0} " +
+                                       "UNION ALL SELECT * FROM `hw`.`gate` WHERE Container ={1} " +
+                                       "UNION ALL SELECT * FROM `hw`.`gate` WHERE Cards={2}", plate,container, cards);
+            SetMessage?.Invoke(tmp);
+            _Log.logInfo.Info(tmp);
 
             using (MySqlDataReader reader = MySqlHelper.ExecuteReader(MySqlHelper.Conn, CommandType.Text, cmdText, parameters))
             {
@@ -69,11 +73,12 @@ namespace ZBYGate_Data_Collection.LocalDataBase
                         reader["Cards"].ToString(),
                         reader["Truetime"].ToString());
 
-                    ResultTrup[0] = reader["Plate"].ToString()+"/"+reader["Container"].ToString();
+                    ResultTrup[0] = reader["Plate"].ToString()+" "+reader["Container"].ToString();
                     ResultTrup[1] = reader["Ontime"].ToString();
-                    ResultTrup[2] = reader["Supplier"].ToString();
-                    ResultTrup[3] = reader["Parked"].ToString();
-                    ResultTrup[4] = reader["Appointment"].ToString();
+                    ResultTrup[2] = reader["Supplier"].ToString();                    
+                    ResultTrup[3] = reader["Appointment"].ToString();
+                    ResultTrup[4] = reader["Parked"].ToString();
+                    ResultTrup[5] = reader["Cards"].ToString();
 
 
                     SetMessage?.Invoke(Result);
