@@ -485,5 +485,17 @@ namespace ZBYGate_Data_Collection.Properties {
                 this["Led_Log"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool WorkIng_ReadID {
+            get {
+                return ((bool)(this["WorkIng_ReadID"]));
+            }
+            set {
+                this["WorkIng_ReadID"] = value;
+            }
+        }
     }
 }

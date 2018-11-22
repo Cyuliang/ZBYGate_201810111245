@@ -32,12 +32,15 @@ namespace ZBYGate_Data_Collection.Https
         {
             string tmp = string.Empty;
             tmp= SetJsonAction?.Invoke(TimetextBox.Text, PlatetextBox.Text, ContainertextBox.Text);
-            string[] ReturnData = JsonSplitAction?.Invoke(tmp);
-            textBox5.Text = ReturnData[0];
-            textBox8.Text = ReturnData[2];
-            textBox9.Text = ReturnData[3];
-            textBox10.Text = ReturnData[1];
-            textBox1.Text = ReturnData[4];
+            if(!string.IsNullOrEmpty(tmp))
+            {
+                string[] ReturnData = JsonSplitAction?.Invoke(tmp);
+                textBox5.Text = ReturnData[0];
+                textBox8.Text = ReturnData[2];
+                textBox9.Text = ReturnData[3];
+                textBox10.Text = ReturnData[1];
+                textBox1.Text = ReturnData[4];
+            }
         }
     }       
 }

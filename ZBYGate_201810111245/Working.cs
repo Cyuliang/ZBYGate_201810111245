@@ -71,6 +71,7 @@ namespace ZBYGate_Data_Collection
         private readonly string Plate_Local_End_Message = Properties.Settings.Default.Plate_Local_End_Message;
         private readonly string Plate_local_Message = Properties.Settings.Default.Plate_Local_Message;
         private readonly string Led_Log = Properties.Settings.Default.Led_Log;
+        private readonly bool WorkIng_ReadID = Properties.Settings.Default.WorkIng_ReadID;
         private System.Threading.Timer _Timer = null;
 
         private Dictionary<IAsyncResult, bool> IsOpenDoorDictionary=new Dictionary<IAsyncResult, bool>();//开闸字典
@@ -154,11 +155,11 @@ namespace ZBYGate_Data_Collection
             if (Lpn != null || Container != null)//字段其中一个不为空就查询服务器
             {
                 string[] Head = { Lpn, Container };                                                //组合显示车牌和箱号
+                IAsyncResultData = SelectDataBase?.BeginInvoke(Lpn, Container, "", SelectDataBaseCallBack, Head);//查询数据库    
                 if (HttpSwitch)                                                                    //是否查询远端服务器
                 {
                     IAsyncResultHttp = HttpPostAction?.BeginInvoke(Passtime.ToString("yyyyMMddhhmmss"), Lpn, Container, SelectHttpCallBack, Head);
                 }
-                IAsyncResultData = SelectDataBase?.BeginInvoke(Lpn, Container, "", this.SelectDataBaseCallBack, Head);//查询数据库    
             }
             else//没有识别到数据
             {
@@ -179,11 +180,12 @@ namespace ZBYGate_Data_Collection
         {
             bool IsOpenDoorH = false;                                               //是否开闸
             var Head = (string[])ar.AsyncState;                                     //车牌和箱号
+
+            var HttpResult = HttpPostAction.EndInvoke(ar);                          ////http请求数据回调函数返回数据  
             if (IAsyncResultData != null)
             {
                 IAsyncResultData.AsyncWaitHandle.WaitOne();                         //等待数据库查询完成
             }
-            var HttpResult = HttpPostAction.EndInvoke(ar);                          ////http请求数据回调函数返回数据  
 
             //HttpResult = @"{""error_code"":""AE0000"",""error_desc"":""The request handled successful."",""result"":{""resultList"":""N"",""status"":""已预约"",""visito"":""TMT"",""ledgename"":""松山湖"",""platform"":""活态"",""truckNumber"":""粤B050CS"",""tranNo"":""12345"",""arrivedTime"":""2018 - 11 - 12 17:10:30""}}";
             if (HttpResult != null)                                                 
@@ -222,11 +224,13 @@ namespace ZBYGate_Data_Collection
         {
             bool IsOpenDoorD = false;                                             //是否开闸
             var Head = (string[])ar.AsyncState;                                   //车牌和箱号   
+
+            var LedShowDataResult = SelectDataBase.EndInvoke(ar);                 //查询本地数据库回调返回数据
+
             if (IAsyncResultHttp != null)
             {
                 IAsyncResultHttp.AsyncWaitHandle.WaitOne();                       //等待远端服务器查询完成
             }
-            var LedShowDataResult = SelectDataBase.EndInvoke(ar);                 //查询本地数据库回调返回数据
 
             SetMessage?.Invoke("查询数据库回调函数完成");
 
@@ -241,7 +245,7 @@ namespace ZBYGate_Data_Collection
                 LedShowDataResult[5] = Http_Status;                               //提示进闸字段
                 IsOpenDoorD = true;
             }
-            if(IAsyncResultData!=null)
+            if (IAsyncResultData != null)
             {
                 if (!ResultDictionary.ContainsKey(IAsyncResultData))
                 {
@@ -258,57 +262,62 @@ namespace ZBYGate_Data_Collection
         //查询本地数据库和远端服务器同步执行处理LED显示
         private void LedShow()
         {
-            if (IsOpenDoorDictionary.Count == 2 || IAsyncResultHttp == null)                          //本地和远端处理完成或远端返回空
+            if (IsOpenDoorDictionary != null || ResultDictionary != null)
             {
-                bool status = false;
-                string[] dataBaseResult = new string[] { "*", "*", "*", "*", "*", "*" };
-                if (IsOpenDoorDictionary.ContainsValue(true))                                         //是否有开闸数据在字典中
+                if ((IsOpenDoorDictionary.Count == 2 || IAsyncResultHttp == null)&&IsOpenDoorDictionary.Count!=0)                      //本地和远端处理完成或远端返回空
                 {
-                    OpenDoorAction?.BeginInvoke(In_IP, PORT, In_ControllerSN, OpendoorCallBack, null);//查询到数据开闸
-                    var firstKey = IsOpenDoorDictionary.FirstOrDefault(q => q.Value == true).Key;     //获取开闸字段对应LED显示的信息的键
-                    dataBaseResult = ResultDictionary[firstKey];                                      //对应VALUES 
-                    status = true;
-                }
-                else                                                                                  
-                {
-                    try
+                    bool status = false;
+                    string[] dataBaseResult = new string[] { "*", "*", "*", "*", "*", "*" };
+                    if (IsOpenDoorDictionary.ContainsValue(true))                                         //是否有开闸数据在字典中
                     {
-                        dataBaseResult = ResultDictionary.Values.First(); 
-                        //没有开闸数据显示字典第一条
+                        OpenDoorAction?.BeginInvoke(In_IP, PORT, In_ControllerSN, OpendoorCallBack, null);//查询到数据开闸
+                        var firstKey = IsOpenDoorDictionary.FirstOrDefault(q => q.Value == true).Key;     //获取开闸字段对应LED显示的信息的键
+                        dataBaseResult = ResultDictionary[firstKey];                                      //对应VALUES 
+                        status = true;
                     }
-                    catch (Exception ex)
+                    else
                     {
-                        SetMessage?.Invoke("No Dictionary Data");
-                        _Log.logError.Error("No Dictionary Data",ex);
-                        return;
+                        try
+                        {
+                            dataBaseResult = ResultDictionary.Values.First();
+                            //没有开闸数据显示字典第一条
+                        }
+                        catch (Exception ex)
+                        {
+                            SetMessage?.Invoke("No Dictionary Data");
+                            _Log.logError.Error("No Dictionary Data", ex);
+                            return;
+                        }
+
+                        if(WorkIng_ReadID)
+                        {
+                            if (ReadForBooen)//读取身份证
+                            {
+                                CVRForReadAction?.BeginInvoke(0, this.ForDoneCallBack, null);
+                                ReadForBooen = false;
+                            }
+                        }
                     }
 
-                    if (ReadForBooen)//读取身份证
+                    string[] tmpIn = dataBaseResult[0].Split(' ');
+
+                    Rundata_InsertAction?.BeginInvoke(tmpIn[0], tmpIn[1], status ? 1 : 0, Passtime, null, null);//插入数据库
+
+                    ClearVar();//清除字典和回调状态
+                    DeleteScreen_DynamicAction?.Invoke(0);//删除显示屏
+                    AddScreen_DynamicAction?.Invoke(0);           //添加显示屏
+                    AddScreenDynamicAreaAction?.Invoke(0);        //添加动态区
+                    AddTextAction?.Invoke(dataBaseResult);//添加文本
+                    SendAction?.BeginInvoke(0, SendCallBack, "");
+
+                    string tmp = string.Empty;
+                    foreach (string v in dataBaseResult)
                     {
-                        CVRForReadAction?.BeginInvoke(0, this.ForDoneCallBack, null);
-                        ReadForBooen = false;
+                        tmp += v + ",";
                     }
+                    SetMessage?.Invoke(string.Format("LED Show {0}", tmp));
+                    _Log.logInfo.Info(string.Format("LED Show {0}", tmp));
                 }
-
-                string[] tmpIn = dataBaseResult[0].Split(' ');
-
-                Rundata_InsertAction?.BeginInvoke(tmpIn[0], tmpIn[1], status ? 1:0, Passtime,null,null);//插入数据库
-
-                ClearVar();//清除字典和回调状态
-                DeleteScreen_DynamicAction?.Invoke(0);//删除显示屏
-                AddScreen_DynamicAction(0);           //添加显示屏
-                AddScreenDynamicAreaAction(0);        //添加动态区
-                AddTextAction?.Invoke(dataBaseResult);//添加文本
-                SendAction?.BeginInvoke(0, SendCallBack, "");
-
-                string tmp = string.Empty;
-                foreach (string v in dataBaseResult)
-                {
-                    tmp += v + ",";
-                }
-                SetMessage?.Invoke(string.Format("LED Show {0}", tmp));
-                _Log.logInfo.Info(string.Format("LED Show {0}", tmp));
-
             }
         }
 
@@ -400,8 +409,8 @@ namespace ZBYGate_Data_Collection
                 OpenDoorAction?.BeginInvoke(In_IP, PORT, In_ControllerSN, OpendoorCallBack, null);//查询到数据开闸
             }
             DeleteScreen_DynamicAction?.Invoke(0);//删除显示屏
-            AddScreen_DynamicAction(0);           //添加显示屏
-            AddScreenDynamicAreaAction(0);        //添加动态区
+            AddScreen_DynamicAction?.Invoke(0);           //添加显示屏
+            AddScreenDynamicAreaAction?.Invoke(0);        //添加动态区
             AddTextAction?.Invoke(dataBaseResult);//添加文本
             SendAction?.BeginInvoke(0, SendCallBack, isOpenDoor);
 
@@ -483,7 +492,7 @@ namespace ZBYGate_Data_Collection
                 OpenDoorAction?.BeginInvoke(Out_IP, PORT, Out_ControllerSN, OpendoorCallBack, null);//出闸开闸
                 SetOutLedMessageAction?.BeginInvoke(string.Format("{0} {1}", ChLicesen, Plate_Local_End_Message),SetOutLedCallBack,null);//LED显示
                 Out_InsertDataBaseAction?.BeginInvoke(ChLicesen, ChTime,  1, InsertCallBack, null);//插入数据库
-                Rundata_updateAction?.BeginInvoke(ChIp, ChTime,null,null);
+                Rundata_updateAction?.BeginInvoke(ChLicesen, ChTime,null,null);
             }
             else
             {

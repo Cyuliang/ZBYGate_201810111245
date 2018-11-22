@@ -110,7 +110,7 @@ namespace ZBYGate_Data_Collection.Plate
         {
             if(TimeTextBox.InvokeRequired)
             {
-                TimeTextBox?.Invoke(new UpdatePlate(PlateResult), new object[] { ChIp, ChLicesen, ChColor, ChTime });
+                TimeTextBox.Invoke(new UpdatePlate(PlateResult), new object[] { ChIp, ChLicesen, ChColor, ChTime });
             }
             else
             {

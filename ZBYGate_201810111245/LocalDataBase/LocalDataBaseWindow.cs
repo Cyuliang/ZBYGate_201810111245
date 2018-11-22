@@ -44,7 +44,7 @@ namespace ZBYGate_Data_Collection.LocalDataBase
         {
             if (statusStrip1.InvokeRequired)
             {
-                statusStrip1?.Invoke(new UpdateUiInvok(SetStatusText), new object[] { Message });
+                statusStrip1.Invoke(new UpdateUiInvok(SetStatusText), new object[] { Message });
             }
             else
             {

@@ -50,7 +50,7 @@ namespace ZBYGate_Data_Collection.CVR
         {
             if (statusStrip1.InvokeRequired)
             {
-                statusStrip1?.Invoke(new UpdateUiInvok(SetStatusText), new object[] { Message });
+                statusStrip1.Invoke(new UpdateUiInvok(SetStatusText), new object[] { Message });
             }
             else
             {

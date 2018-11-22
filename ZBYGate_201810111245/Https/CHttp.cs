@@ -18,6 +18,11 @@ namespace ZBYGate_Data_Collection.Https
         private readonly string Http_NoStatus = Properties.Settings.Default.Http_NoStatus;
         private readonly string Http_Status = Properties.Settings.Default.Http_Status;
 
+        public CHttp()
+        {
+            System.Net.ServicePointManager.DefaultConnectionLimit = 50;
+        }
+
         /// <summary>
         /// 远程通讯处理
         /// </summary>
@@ -28,55 +33,59 @@ namespace ZBYGate_Data_Collection.Https
         /// <returns></returns>
         public string SetJosn( string Time, string Plate, string Container)
         {
+
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(http);
+            request.Proxy = null;
             request.Method = "POST";
             request.Timeout = HttpTimeOut;
             request.ReadWriteTimeout = HttpReadWriteTimeout;
             request.ContentType = "application/json";/*x-www-form-urlencoded";*/
             string Json = string.Format(@"{{""eqId"":""{0}"",""arrivedTime"":""{1}"",""truckNumber"":""{2}"",""tranNo"":""{3}""}}",
                 eqid, Time, Plate, Container);
+            SetMessage?.Invoke(string.Format("Send {0}", Json));
+
             byte[] Josntobyte = Encoding.UTF8.GetBytes(Json);
             request.ContentLength = Josntobyte.Length;
             Stream writer = null;
             try
             {
                 writer = request.GetRequestStream();
+                if (writer != null)
+                {
+                    writer.Write(Josntobyte, 0, Josntobyte.Length);
+                    writer.Close();
+                    SetMessage?.Invoke(string.Format("Post Data：{0}", Json));
+                    _Log.logInfo.Info(string.Format("Post Data：{0}", Json));
+
+                    HttpWebResponse respone;
+                    try
+                    {
+                        respone = (HttpWebResponse)request.GetResponse();
+                    }
+                    catch (WebException ex)
+                    {
+                        respone = ex.Response as HttpWebResponse;
+                        SetMessage?.Invoke("Post Data Error");
+                        _Log.logError.Error("Result Data Error", ex);
+                    }
+                    //HttpWebResponse response = (HttpWebResponse)webReq.GetResponse();
+                    //StreamReader sr = new StreamReader(response.GetResponseStream(), Encoding.Default);
+                    //string ret = sr.ReadToEnd();
+                    Stream s = respone.GetResponseStream();
+                    StreamReader sreader = new StreamReader(s);
+                    string postConent = sreader.ReadToEnd();
+                    sreader.Close();
+                    SetMessage(string.Format("Return Data：{0}", postConent));
+                    _Log.logInfo.Info(string.Format("Return Data：{0}", postConent));
+
+                    return postConent;
+                }
             }
             catch (Exception ex)
             {
-                SetMessage?.Invoke(string.Format("Send {0} {1}",Json,ex.ToString()));
+                request.Abort();                
                 _Log.logError.Error("Send Data Error", ex);
-            }
-            if (writer != null)
-            {
-                writer.Write(Josntobyte, 0, Josntobyte.Length);
-                writer.Close();
-                SetMessage?.Invoke(string.Format("Post Data：{0}", Json));
-                _Log.logInfo.Info(string.Format("Post Data：{0}", Json));
-
-                HttpWebResponse respone;
-                try
-                {
-                    respone = (HttpWebResponse)request.GetResponse();
-                }
-                catch (WebException ex)
-                {
-                    respone = ex.Response as HttpWebResponse;
-                    SetMessage?.Invoke("Post Data Error");
-                    _Log.logError.Error("Result Data Error", ex);
-                }
-                //HttpWebResponse response = (HttpWebResponse)webReq.GetResponse();
-                //StreamReader sr = new StreamReader(response.GetResponseStream(), Encoding.Default);
-                //string ret = sr.ReadToEnd();
-                Stream s = respone.GetResponseStream();
-                StreamReader sreader = new StreamReader(s);
-                string postConent = sreader.ReadToEnd();
-                sreader.Close();
-                SetMessage(string.Format("Return Data：{0}", postConent));
-                _Log.logInfo.Info(string.Format("Return Data：{0}", postConent));
-
-                return postConent;
-            }
+            }      
             return null;
         }
 
@@ -86,7 +95,7 @@ namespace ZBYGate_Data_Collection.Https
         /// <param name="result"></param>
         /// <returns></returns>
         public string[] JsonSplit(string result)
-        {
+        {           
             string[] ReturnData = new string[] {"*", "*" , "*" , "*" , "*" ,"*"};
 
             JsonPaner jp = JsonConvert.DeserializeObject<JsonPaner>(result);

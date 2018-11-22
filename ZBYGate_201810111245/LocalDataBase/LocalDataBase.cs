@@ -36,17 +36,17 @@ namespace ZBYGate_Data_Collection.LocalDataBase
             string plate = Plate;
             if (Plate == string.Empty||Plate==null)
             {
-                plate = "*";
+                plate = "NONE";
             }
             string container = Container;
             if (Container == string.Empty||Container==null)
             {
-                container = "*";
+                container = "NONE";
             }
             string cards = Cards;
             if (Cards == string.Empty||Cards==null)
             {
-                cards = "*";
+                cards = "NONE";
             }
             #endregion
 

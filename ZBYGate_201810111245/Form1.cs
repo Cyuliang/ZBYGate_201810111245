@@ -594,7 +594,7 @@ namespace ZBYGate_Data_Collection
             if (_LocalDataBaseWindow == null || _LocalDataBaseWindow.IsDisposed)
             {
                 _LocalDataBaseWindow = new LocalDataBase.LocalDataBaseWindow();
-                LocalDataWindowActiveInit();
+                //LocalDataWindowActiveInit();
             }
             SetTabPate("LocalTable", LocalTable, form: _LocalDataBaseWindow);
         }

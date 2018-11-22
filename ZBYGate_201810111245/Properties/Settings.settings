@@ -144,5 +144,8 @@ allowPublicKeyRetrieval=True;</Value>
     <Setting Name="Led_Log" Type="System.String" Scope="User">
       <Value Profile="(Default)">后台正在比对数据，请稍后!</Value>
     </Setting>
+    <Setting Name="WorkIng_ReadID" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
   </Settings>
 </SettingsFile>
