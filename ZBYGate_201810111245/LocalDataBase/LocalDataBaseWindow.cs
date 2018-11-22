@@ -44,7 +44,7 @@ namespace ZBYGate_Data_Collection.LocalDataBase
         {
             if (statusStrip1.InvokeRequired)
             {
-                statusStrip1.Invoke(new UpdateUiInvok(SetStatusText), new object[] { Message });
+                statusStrip1?.Invoke(new UpdateUiInvok(SetStatusText), new object[] { Message });
             }
             else
             {
@@ -76,7 +76,7 @@ namespace ZBYGate_Data_Collection.LocalDataBase
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void toolStripButton1_Click(object sender, EventArgs e)
+        private void ToolStripButton1_Click(object sender, EventArgs e)
         {
             int rowindex = dataGridView1.CurrentCell.RowIndex;
             ItemDataWindow dataItem = new ItemDataWindow();
@@ -91,7 +91,7 @@ namespace ZBYGate_Data_Collection.LocalDataBase
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void bindingNavigatorDeleteItem_Click(object sender, EventArgs e)
+        private void BindingNavigatorDeleteItem_Click(object sender, EventArgs e)
         {
             int rowindex = dataGridView1.CurrentCell.RowIndex;
             DialogResult but = MessageBox.Show(string.Format("Confirm deletion Plate={0}  Container={1}  Card={2} ? ", dataGridView1.Rows[rowindex].Cells[1].Value.ToString(), dataGridView1.Rows[rowindex].Cells[2].Value.ToString(), dataGridView1.Rows[rowindex].Cells[7].Value.ToString()), "提示", MessageBoxButtons.YesNo);
@@ -121,7 +121,7 @@ namespace ZBYGate_Data_Collection.LocalDataBase
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void toolStripButton3_Click(object sender, EventArgs e)
+        private void ToolStripButton3_Click(object sender, EventArgs e)
         {
             dataGridView1.DataSource = MySqlHelper.GetDataSet(MySqlHelper.Conn, System.Data.CommandType.Text, "select * from gate", null).Tables[0].DefaultView;
             ItemDataWindow dataItem = new ItemDataWindow();

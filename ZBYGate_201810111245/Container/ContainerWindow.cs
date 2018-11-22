@@ -43,7 +43,7 @@ namespace ZBYGate_Data_Collection.Container
         {
             if (statusStrip1.InvokeRequired)
             {
-                statusStrip1.Invoke(new UpdateUiInvok(SetStatusText), new object[] { Message });
+                statusStrip1?.Invoke(new UpdateUiInvok(SetStatusText), new object[] { Message });
             }
             else
             {
@@ -138,9 +138,8 @@ namespace ZBYGate_Data_Collection.Container
             int i = 1;
             foreach (object _Control in toolStrip1.Items)
             {
-                if (_Control is ToolStripButton)
+                if (_Control is ToolStripButton _ToolStripButton)
                 {
-                    ToolStripButton _ToolStripButton = (ToolStripButton)_Control;
                     _ToolStripButton.Tag = i;
                     i++;
                 }

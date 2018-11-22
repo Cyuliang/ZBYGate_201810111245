@@ -23,7 +23,9 @@ namespace ZBYGate_Data_Collection.LocalDataBase
         /// <returns></returns>
         public string[] SelectData(string Plate,string Container,string Cards)
         {
-            string cmdText = "SELECT *  FROM `hw`.`gate` WHERE Plate=@Plate UNION ALL SELECT *  FROM `hw`.`gate` WHERE Container=@Container UNION ALL SELECT *  FROM `hw`.`gate` WHERE Cards=@Cards";
+            string cmdText = "SELECT *  FROM `hw`.`gate` WHERE Plate=@Plate " +
+                                            "UNION ALL SELECT *  FROM `hw`.`gate` WHERE Container=@Container " +
+                                            "UNION ALL SELECT *  FROM `hw`.`gate` WHERE Cards=@Cards";
             MySqlParameter[] parameters = { new MySqlParameter("@Plate", MySqlDbType.VarChar),
                                         new MySqlParameter("@Container", MySqlDbType.VarChar),
                                         new MySqlParameter("@Cards",MySqlDbType.VarChar)};

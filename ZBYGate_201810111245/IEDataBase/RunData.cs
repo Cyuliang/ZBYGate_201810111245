@@ -51,5 +51,33 @@ namespace ZBYGate_Data_Collection.IEDataBase
             LocalDataBase.MySqlHelper.ExecuteNonQuery(LocalDataBase.MySqlHelper.Conn, CommandType.Text, Updatetext, null);
             _Log.logInfo.Info(Updatetext);
         }
+
+        /// <summary>
+        /// 插入闸口进数据
+        /// </summary>
+        /// <param name="Plate"></param>
+        /// <param name="Container"></param>
+        /// <param name="auto"></param>
+        /// <param name="dt"></param>
+        public void Rundata_Insert(string Plate,string Container,int auto,DateTime dt)
+        {
+            string Inserttext = string.Format("INSERT INTO `hw`.`rundata` (Plate,Container,InDatetime,Auto) VALUES('{0}','{1}','{2}','{3}')", Plate, Container, dt.ToUniversalTime().AddHours(8), auto);
+            LocalDataBase.MySqlHelper.ExecuteNonQuery(LocalDataBase.MySqlHelper.Conn, CommandType.Text, Inserttext, null);
+            SetMessage?.Invoke(Inserttext);
+            _Log.logInfo.Info(Inserttext);
+        }
+
+        /// <summary>
+        /// 插入闸口出数据
+        /// </summary>
+        /// <param name="Plate"></param>
+        /// <param name="dt"></param>
+        public void Rundata_update(string plate,DateTime dt)
+        {
+            //string Updatetext = string.Format("UPDATE  `hw`.`indata` SET Cards = '{0}', Auto='{1}' WHERE Time = '{2}'", Cards, auto, dt.ToUniversalTime().AddHours(8));
+            string Updatetext = string.Format("UPDATE `hw`.`rundata` SET OutDatetime='{0}' WHERE Plate='{1}' AND OutDatetime is null order by Id desc limit 1", dt.ToUniversalTime().AddHours(8), plate);
+            LocalDataBase.MySqlHelper.ExecuteNonQuery(LocalDataBase.MySqlHelper.Conn, CommandType.Text, Updatetext, null);
+            _Log.logInfo.Info(Updatetext);
+        }
     }
 }

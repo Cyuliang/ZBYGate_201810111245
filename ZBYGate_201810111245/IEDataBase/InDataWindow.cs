@@ -43,13 +43,13 @@ namespace ZBYGate_Data_Collection.IEDataBase
             {
                 if (PlateTextBox.Text != string.Empty && ContainerTextBox.Text != string.Empty)
                 {
-                    cmdText = string.Format("SELECT *  FROM hw.indata WHERE Plate='{0}' and Container='{1}'", PlateTextBox.Text, ContainerTextBox.Text);
+                    cmdText = string.Format("SELECT *  FROM hw.rundata WHERE Plate='{0}' and Container='{1}'", PlateTextBox.Text, ContainerTextBox.Text);
                 }
                 else
                 {
                     if (PlateTextBox.Text != string.Empty)
                     {
-                        cmdText = string.Format("SELECT *  FROM hw.indata WHERE Plate='{0}'", PlateTextBox.Text);
+                        cmdText = string.Format("SELECT *  FROM hw.rundata WHERE Plate='{0}'", PlateTextBox.Text);
                     }
                     else
                     {
@@ -67,7 +67,7 @@ namespace ZBYGate_Data_Collection.IEDataBase
             }
             if (TimeradioButton.Checked)
             {
-                cmdText = string.Format("SELECT *  FROM hw.indata WHERE  Time between '{0}' and '{1}'", dateTimePicker1.Value.ToString("yyyy-MM-dd HH:mm:ss"), dateTimePicker2.Value.ToString("yyyy-MM-dd HH:mm:ss"));
+                cmdText = string.Format("SELECT *  FROM hw.rundata WHERE  InDatetime between '{0}' and '{1}'", dateTimePicker1.Value.ToString("yyyy-MM-dd HH:mm:ss"), dateTimePicker2.Value.ToString("yyyy-MM-dd HH:mm:ss"));
             }
             MySqlDataReader reader = LocalDataBase.MySqlHelper.ExecuteReader(LocalDataBase.MySqlHelper.Conn, CommandType.Text, cmdText, null);
             bindingSource1.DataSource = reader;
@@ -96,7 +96,7 @@ namespace ZBYGate_Data_Collection.IEDataBase
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void toolStripButton1_Click(object sender, EventArgs e)
+        private void ToolStripButton1_Click(object sender, EventArgs e)
         {
             if (dataGridView1.Rows.Count > 0)
             {

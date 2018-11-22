@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace ZBYGate_Data_Collection
 {
-    class Working : IDisposable
+    class Working : IDisposable//远程服务器和本地数据库同步查询
     {
         private Log.CLog _Log = new Log.CLog();
 
@@ -28,7 +28,7 @@ namespace ZBYGate_Data_Collection
 
         #region//身份证读卡器
         public Action<int> CVRForReadAction;//定时循环读取身份证
-        private readonly string Working_NoNumberResult = Properties.Settings.Default.Working_NoNumberResult;
+        private readonly string Working_NoNumberResult = Properties.Settings.Default.Working_NoNumberResult;//没有身份证数据
         private bool ReadForBooen = true;//可以读取身份证
         #endregion
 
@@ -37,7 +37,7 @@ namespace ZBYGate_Data_Collection
         #endregion
 
         #region//开闸
-        public Action<string, int, string> OpenDoorAction;
+        public Action<string, int, string> OpenDoorAction;//开闸
         #endregion
 
         #region//LED显示
@@ -52,6 +52,8 @@ namespace ZBYGate_Data_Collection
         public Action<string, string, DateTime, int> In_InsertDataBaseAction;
         public Action<string, DateTime, int> Out_InsertDataBaseAction;
         public Action<string, DateTime, int> In_UpdateDataBaseAction;
+        public Action<string, string, int, DateTime> Rundata_InsertAction;
+        public Action<string, DateTime> Rundata_updateAction;
         public Action<string> SetOutLedMessageAction;
         #endregion
 
@@ -70,6 +72,12 @@ namespace ZBYGate_Data_Collection
         private readonly string Plate_local_Message = Properties.Settings.Default.Plate_Local_Message;
         private readonly string Led_Log = Properties.Settings.Default.Led_Log;
         private System.Threading.Timer _Timer = null;
+
+        private Dictionary<IAsyncResult, bool> IsOpenDoorDictionary=new Dictionary<IAsyncResult, bool>();//开闸字典
+        private Dictionary<IAsyncResult, string[]> ResultDictionary=new Dictionary<IAsyncResult, string[]>();//处理结果字典
+        private IAsyncResult IAsyncResultHttp = null;
+        private IAsyncResult IAsyncResultData = null;
+        private IAsyncResult IAsyncResultJson = null;
         #endregion
 
         public Working()
@@ -148,12 +156,9 @@ namespace ZBYGate_Data_Collection
                 string[] Head = { Lpn, Container };                                                //组合显示车牌和箱号
                 if (HttpSwitch)                                                                    //是否查询远端服务器
                 {
-                    HttpPostAction?.BeginInvoke(Passtime.ToString("yyyyMMddhhmmss"), Lpn, Container, SelectHttpCallBack, Head);
+                    IAsyncResultHttp = HttpPostAction?.BeginInvoke(Passtime.ToString("yyyyMMddhhmmss"), Lpn, Container, SelectHttpCallBack, Head);
                 }
-                else
-                {
-                    SelectDataBase?.BeginInvoke(Lpn, Container, "", this.SelectDataBaseCallBack, Head);//查询数据库    
-                }
+                IAsyncResultData = SelectDataBase?.BeginInvoke(Lpn, Container, "", this.SelectDataBaseCallBack, Head);//查询数据库    
             }
             else//没有识别到数据
             {
@@ -172,44 +177,41 @@ namespace ZBYGate_Data_Collection
         /// <param name="ar"></param>
         private void SelectHttpCallBack(IAsyncResult ar)
         {
-            var Head = (string[])ar.AsyncState;
-            var HttpResult = HttpPostAction.EndInvoke(ar);//回调返回数据
-            //HttpResult = @"{{""error_code"":""AE0000"",""error_desc"":""The request handled successful."",""result"":{{""resultList"":""Y"",""status"":"""",""visito"":"""",""ledgename"":"""",""platform"":"""",""truckNumber"":""粤B050CS"",""tranNo"":"""",""arrivedTime"":""2018 - 11 - 12 17:10:30""} } ";
-            if (HttpResult!=null)                          //http请求数据回调函数
+            bool IsOpenDoorH = false;                                               //是否开闸
+            var Head = (string[])ar.AsyncState;                                     //车牌和箱号
+            if (IAsyncResultData != null)
             {
-                HttpJsonSplitAction?.BeginInvoke(HttpResult,HttpResultSplit,Head);                  //查询远端服务器
+                IAsyncResultData.AsyncWaitHandle.WaitOne();                         //等待数据库查询完成
             }
-            else
-            {
-                SelectDataBase?.BeginInvoke(Head[0], Head[1],"", this.SelectDataBaseCallBack, Head);//查询数据库    
-            }
-        }
+            var HttpResult = HttpPostAction.EndInvoke(ar);                          ////http请求数据回调函数返回数据  
 
-        /// <summary>
-        /// 分割http数据回调函数
-        /// </summary>
-        /// <param name="ar"></param>
-        private void HttpResultSplit(IAsyncResult ar)
-        {
-            bool IsOpenDoorH = false;
-            var Head = (string[])ar.AsyncState;
-            var LedShowDataResult = HttpJsonSplitAction.EndInvoke(ar); //入闸LED回调传递参数     
-            if(LedShowDataResult[1]=="Y")                              //是否开闸
+            //HttpResult = @"{""error_code"":""AE0000"",""error_desc"":""The request handled successful."",""result"":{""resultList"":""N"",""status"":""已预约"",""visito"":""TMT"",""ledgename"":""松山湖"",""platform"":""活态"",""truckNumber"":""粤B050CS"",""tranNo"":""12345"",""arrivedTime"":""2018 - 11 - 12 17:10:30""}}";
+            if (HttpResult != null)                                                 
             {
-                IsOpenDoorH = true;
-
-                if (IsOpenDoorH)                             //是否开闸
+                var LedShowDataResult = HttpJsonSplitAction?.Invoke(HttpResult);    //分析Json数据
+                SetMessage?.Invoke("分析远端服务器返回数据完成");
+                if (LedShowDataResult[1] == "Y")                                    //是否开闸
                 {
-                    OpenDoorAction?.BeginInvoke(In_IP, PORT, In_ControllerSN, OpendoorCallBack, null);//查询到数据开闸
+                    IsOpenDoorH = true;
+                    LedShowDataResult[1] = "准时";                                  //替换字段
                 }
-
-                LedShow(LedShowDataResult, IsOpenDoorH);            //推送LED
+                if (IAsyncResultHttp != null)
+                {
+                    if (!ResultDictionary.ContainsKey(IAsyncResultHttp))
+                    {
+                        ResultDictionary.Add(IAsyncResultHttp, LedShowDataResult);  //添加显示字典
+                    }
+                    if (!IsOpenDoorDictionary.ContainsKey(IAsyncResultHttp))
+                    {
+                        IsOpenDoorDictionary.Add(IAsyncResultHttp, IsOpenDoorH);   //添加开闸字典
+                    }
+                }
+                LedShow();                                                         //最后处理数据
             }
             else
             {
-                SelectDataBase?.BeginInvoke(Head[0], Head[1], "", this.SelectDataBaseCallBack, Head);//查询数据库    
+                IAsyncResultHttp = null;                                           //没有返回结果置空异步状态
             }
-            SetMessage?.Invoke("查询远端服务器回调函数完成");
         }
 
         /// <summary>
@@ -218,38 +220,109 @@ namespace ZBYGate_Data_Collection
         /// <param name="ar"></param>
         private void SelectDataBaseCallBack(IAsyncResult ar)
         {
-            bool IsOpenDoorD = false;                             //是否开闸
-            var Head = (string[])ar.AsyncState;                    //入闸LED回调传递参数    
-            var LedShowDataResult = SelectDataBase.EndInvoke(ar);//回调返回数据
-            if(LedShowDataResult.All(string.IsNullOrEmpty))      //数据库记录为空
+            bool IsOpenDoorD = false;                                             //是否开闸
+            var Head = (string[])ar.AsyncState;                                   //车牌和箱号   
+            if (IAsyncResultHttp != null)
             {
-                LedShowDataResult = new string[] { string.Format("{0} {1}",Head[0],Head[1]), "*", "*", "*", "*", Working_NoDataBaseResult };
-                LedShow(LedShowDataResult, IsOpenDoorD);            //推送LED
+                IAsyncResultHttp.AsyncWaitHandle.WaitOne();                       //等待远端服务器查询完成
+            }
+            var LedShowDataResult = SelectDataBase.EndInvoke(ar);                 //查询本地数据库回调返回数据
 
-                //Plate = Head[0];//车牌
-                //Con = Head[1];//集装箱
-                if (ReadForBooen)//读取身份证
+            SetMessage?.Invoke("查询数据库回调函数完成");
+
+            if (LedShowDataResult.All(string.IsNullOrEmpty))                      //数据库记录为空
+            {
+                LedShowDataResult = new string[] { string.Format("{0} {1}", Head[0], Head[1]), "*", "*", "*", "*", Working_NoDataBaseResult };
+            }
+            else                                                                  //查询到数据库记录
+            {
+                LedShowDataResult[0] = string.Format("{0} {1}", Head[0], Head[1]);//设置显示识别到的箱号和车牌
+                LedShowDataResult[1] = "准时";                                    //准时字段
+                LedShowDataResult[5] = Http_Status;                               //提示进闸字段
+                IsOpenDoorD = true;
+            }
+            if(IAsyncResultData!=null)
+            {
+                if (!ResultDictionary.ContainsKey(IAsyncResultData))
                 {
-                    CVRForReadAction?.BeginInvoke(0, this.ForDoneCallBack, null);
-                    ReadForBooen = false;
+                    ResultDictionary.Add(IAsyncResultData, LedShowDataResult);
+                }
+                if (!IsOpenDoorDictionary.ContainsKey(IAsyncResultData))
+                {
+                    IsOpenDoorDictionary.Add(IAsyncResultData, IsOpenDoorD);
                 }
             }
-            else//查询到数据库记录
-            {
-                LedShowDataResult[0] = string.Format("{0} {1}", Head[0], Head[1]);       //设置显示识别到的箱号和车牌
-                LedShowDataResult[1] = "准时";     //准时字段
-                LedShowDataResult[5] = Http_Status;//提示进闸p
-                IsOpenDoorD = true;
+            LedShow();
+        }
 
-                if (IsOpenDoorD)                             //是否开闸
+        //查询本地数据库和远端服务器同步执行处理LED显示
+        private void LedShow()
+        {
+            if (IsOpenDoorDictionary.Count == 2 || IAsyncResultHttp == null)                          //本地和远端处理完成或远端返回空
+            {
+                bool status = false;
+                string[] dataBaseResult = new string[] { "*", "*", "*", "*", "*", "*" };
+                if (IsOpenDoorDictionary.ContainsValue(true))                                         //是否有开闸数据在字典中
                 {
                     OpenDoorAction?.BeginInvoke(In_IP, PORT, In_ControllerSN, OpendoorCallBack, null);//查询到数据开闸
+                    var firstKey = IsOpenDoorDictionary.FirstOrDefault(q => q.Value == true).Key;     //获取开闸字段对应LED显示的信息的键
+                    dataBaseResult = ResultDictionary[firstKey];                                      //对应VALUES 
+                    status = true;
+                }
+                else                                                                                  
+                {
+                    try
+                    {
+                        dataBaseResult = ResultDictionary.Values.First(); 
+                        //没有开闸数据显示字典第一条
+                    }
+                    catch (Exception ex)
+                    {
+                        SetMessage?.Invoke("No Dictionary Data");
+                        _Log.logError.Error("No Dictionary Data",ex);
+                        return;
+                    }
+
+                    if (ReadForBooen)//读取身份证
+                    {
+                        CVRForReadAction?.BeginInvoke(0, this.ForDoneCallBack, null);
+                        ReadForBooen = false;
+                    }
                 }
 
-                LedShow(LedShowDataResult, IsOpenDoorD);            //推送LED
+                string[] tmpIn = dataBaseResult[0].Split(' ');
+
+                Rundata_InsertAction?.BeginInvoke(tmpIn[0], tmpIn[1], status ? 1:0, Passtime,null,null);//插入数据库
+
+                ClearVar();//清除字典和回调状态
+                DeleteScreen_DynamicAction?.Invoke(0);//删除显示屏
+                AddScreen_DynamicAction(0);           //添加显示屏
+                AddScreenDynamicAreaAction(0);        //添加动态区
+                AddTextAction?.Invoke(dataBaseResult);//添加文本
+                SendAction?.BeginInvoke(0, SendCallBack, "");
+
+                string tmp = string.Empty;
+                foreach (string v in dataBaseResult)
+                {
+                    tmp += v + ",";
+                }
+                SetMessage?.Invoke(string.Format("LED Show {0}", tmp));
+                _Log.logInfo.Info(string.Format("LED Show {0}", tmp));
+
             }
-            //LedShow(LedShowDataResult, IsOpenDoorD);            //推送LED
-            SetMessage?.Invoke("查询数据库回调函数完成");
+        }
+
+        /// <summary>
+        /// 清除变量
+        /// </summary>
+        private void ClearVar()
+        {
+            IsOpenDoorDictionary.Clear();//开闸字典
+            ResultDictionary.Clear();//处理结果字典
+
+            IAsyncResultJson = null;
+            IAsyncResultHttp = null;
+            IAsyncResultData = null;
         }
 
         /// <summary>
@@ -293,23 +366,25 @@ namespace ZBYGate_Data_Collection
             if (LedShowDataResult.All(string.IsNullOrEmpty))      //数据库记录为空
             {
                 LedShowDataResult = new string[] { string.Format("{0} {1}", Head[0], Head[1]), "*", "*", "*", "*", Working_NoNumberResult };
-                LedShow(LedShowDataResult, IsOpenDoorD);            //推送LED
+                //LedShow(LedShowDataResult, IsOpenDoorD);            //推送LED
             }
             else//查询到数据库记录
             {
+                In_UpdateDataBaseAction?.BeginInvoke(LedShowDataResult[0],Passtime,0,null,null);
                 LedShowDataResult[0] = string.Format("{0} {1}", Head[0], Head[1]);       //设置显示识别到的箱号和车牌
                 LedShowDataResult[1] = "准时";     //准时字段
                 LedShowDataResult[5] = Http_Status;//提示进闸
                 IsOpenDoorD = true;
 
-                if (IsOpenDoorD)                             //是否开闸
-                {
-                    OpenDoorAction?.BeginInvoke(In_IP, PORT, In_ControllerSN, OpendoorCallBack, null);//查询到数据开闸
-                }
+                //if (IsOpenDoorD)                             //是否开闸
+                //{
+                //    OpenDoorAction?.BeginInvoke(In_IP, PORT, In_ControllerSN, OpendoorCallBack, null);//查询到数据开闸
+                //}
 
-                LedShow(LedShowDataResult, IsOpenDoorD);            //推送LED
+                //LedShow(LedShowDataResult, IsOpenDoorD);            //推送LED
             }
-            //LedShow(LedShowDataResult, IsOpenDoorD);            //推送LED
+
+            LedShow(LedShowDataResult, IsOpenDoorD);            //推送LED
             SetMessage?.Invoke("查询身份证回调函数完成");
         }
 
@@ -320,6 +395,10 @@ namespace ZBYGate_Data_Collection
         /// <param name=""></param>
         private void LedShow(string[] dataBaseResult,bool isOpenDoor)
         {
+            if (isOpenDoor)                             //是否开闸
+            {
+                OpenDoorAction?.BeginInvoke(In_IP, PORT, In_ControllerSN, OpendoorCallBack, null);//查询到数据开闸
+            }
             DeleteScreen_DynamicAction?.Invoke(0);//删除显示屏
             AddScreen_DynamicAction(0);           //添加显示屏
             AddScreenDynamicAreaAction(0);        //添加动态区
@@ -335,21 +414,21 @@ namespace ZBYGate_Data_Collection
             _Log.logInfo.Info(string.Format("LED Show {0}", tmp));
         }
 
-        /// <summary>
-        /// 车辆进闸提示显示
-        /// </summary>
-        /// <param name=""></param>
-        private void LedShow(string[] Result)
-        {
-            bool IsOpenDoor = false;
-            DeleteScreen_DynamicAction?.Invoke(0);//删除显示屏
-            AddScreen_DynamicAction(0);           //添加显示屏
-            AddScreenDynamicAreaAction(1);        //添加动态区
-            AddTextAction?.Invoke(Result);//添加文本
-            SendAction?.BeginInvoke(0, SendCallBack, IsOpenDoor);
+        ///// <summary>
+        ///// 车辆进闸提示显示
+        ///// </summary>
+        ///// <param name=""></param>
+        //private void LedShow(string[] Result)
+        //{
+        //    bool IsOpenDoor = false;
+        //    DeleteScreen_DynamicAction?.Invoke(0);//删除显示屏
+        //    AddScreen_DynamicAction(0);           //添加显示屏
+        //    AddScreenDynamicAreaAction(1);        //添加动态区
+        //    AddTextAction?.Invoke(Result);        //添加文本
+        //    SendAction?.BeginInvoke(0, SendCallBack, IsOpenDoor);
 
-            SetMessage?.Invoke(string.Format("LED Show {0}", Result[0]));
-        }
+        //    SetMessage?.Invoke(string.Format("LED Show {0}", Result[0]));
+        //}
 
         /// <summary>
         /// 推送信息完成
@@ -357,12 +436,12 @@ namespace ZBYGate_Data_Collection
         /// <param name="ar"></param>
         private void SendCallBack(IAsyncResult ar)
         {
-            var IsOpenDoor = (bool)ar.AsyncState;       //开闸回调传递参数
+            //var IsOpenDoor = (bool)ar.AsyncState;       //开闸回调传递参数
             SetMessage?.Invoke("LED信息推送回调完成");
-            if (IsOpenDoor)                             //是否开闸
-            {
-                OpenDoorAction?.BeginInvoke(In_IP, PORT, In_ControllerSN, OpendoorCallBack, null);//查询到数据开闸
-            }
+            //if (IsOpenDoor)                             //是否开闸
+            //{
+            //    OpenDoorAction?.BeginInvoke(In_IP, PORT, In_ControllerSN, OpendoorCallBack, null);//查询到数据开闸
+            //}
         }
 
         /// <summary>
@@ -404,6 +483,7 @@ namespace ZBYGate_Data_Collection
                 OpenDoorAction?.BeginInvoke(Out_IP, PORT, Out_ControllerSN, OpendoorCallBack, null);//出闸开闸
                 SetOutLedMessageAction?.BeginInvoke(string.Format("{0} {1}", ChLicesen, Plate_Local_End_Message),SetOutLedCallBack,null);//LED显示
                 Out_InsertDataBaseAction?.BeginInvoke(ChLicesen, ChTime,  1, InsertCallBack, null);//插入数据库
+                Rundata_updateAction?.BeginInvoke(ChIp, ChTime,null,null);
             }
             else
             {

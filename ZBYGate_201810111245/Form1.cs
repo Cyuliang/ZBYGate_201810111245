@@ -91,6 +91,9 @@ namespace ZBYGate_Data_Collection
             _Working.SelectDataBase += _LocalDataBase.SelectData;//本地数据库查询
             _Working.In_InsertDataBaseAction += _RunData.In_Insert;//入闸数据库写入
             _Working.Out_InsertDataBaseAction += _RunData.Out_Insert;//出闸数据写入
+            _Working.Rundata_InsertAction += _RunData.Rundata_Insert;
+            _Working.Rundata_updateAction += _RunData.Rundata_update;
+
             _Working.In_UpdateDataBaseAction += _RunData.In_Update;//更新入闸身份证信息
 
             _Working.DeleteScreen_DynamicAction += _LED.DeleteScreen_Dynamic;//删除显示屏
@@ -202,7 +205,7 @@ namespace ZBYGate_Data_Collection
         {
             if (MainlistBox.InvokeRequired)
             {
-                MainlistBox.Invoke(new UpdateUiInvok(GetMessage), new object[] { Message });
+                MainlistBox?.Invoke(new UpdateUiInvok(GetMessage), new object[] { Message });
             }
             else
             {
@@ -346,7 +349,7 @@ namespace ZBYGate_Data_Collection
         {
             if (statusStrip2.InvokeRequired)
             {
-                statusStrip2.Invoke(new UpdateUiBInvok(ContainerStatus), new object[] { status });
+                statusStrip2?.Invoke(new UpdateUiBInvok(ContainerStatus), new object[] { status });
             }
             else
             {
@@ -388,7 +391,7 @@ namespace ZBYGate_Data_Collection
         {
             if (statusStrip2.InvokeRequired)
             {
-                statusStrip2.Invoke(new UpdateStatus(PlateStatus), new object[] { Ip,status });
+                statusStrip2?.Invoke(new UpdateStatus(PlateStatus), new object[] { Ip,status });
             }
             else
             {
@@ -515,7 +518,7 @@ namespace ZBYGate_Data_Collection
         {
             if (statusStrip2.InvokeRequired)
             {
-                statusStrip2.Invoke(new UpdateUiUInvok(GateStatus), new object[] { Status, SN });
+                statusStrip2?.Invoke(new UpdateUiUInvok(GateStatus), new object[] { Status, SN });
             }
             else
             {

@@ -102,7 +102,7 @@
       <Value Profile="(Default)">5</Value>
     </Setting>
     <Setting Name="LocalDataBase_Conn" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">Database='hw';Data Source='192.168.1.108';User Id='gate';Password='123456';charset='utf8';pooling=true;SslMode=none;
+      <Value Profile="(Default)">Database='hw';Data Source='localhost';User Id='gate';Password='123456';charset='utf8';pooling=true;SslMode=none;
 allowPublicKeyRetrieval=True;</Value>
     </Setting>
     <Setting Name="Working_NoOCRresult" Type="System.String" Scope="User">
@@ -115,10 +115,10 @@ allowPublicKeyRetrieval=True;</Value>
       <Value Profile="(Default)">http://10.87.216.31:19090/ProsGardenCar</Value>
     </Setting>
     <Setting Name="Http_HttpTimeOut" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">1500</Value>
+      <Value Profile="(Default)">1000</Value>
     </Setting>
     <Setting Name="Http_HttpReadWriteTimeout" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">1500</Value>
+      <Value Profile="(Default)">1000</Value>
     </Setting>
     <Setting Name="Http_eqId" Type="System.String" Scope="User">
       <Value Profile="(Default)">SPPLS01</Value>

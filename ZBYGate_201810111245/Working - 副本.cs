@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace ZBYGate_Data_Collection
 {
-    class Working : IDisposable
+    class Working_ : IDisposable//按顺序执行查询
     {
         private Log.CLog _Log = new Log.CLog();
 
@@ -72,12 +72,7 @@ namespace ZBYGate_Data_Collection
         private System.Threading.Timer _Timer = null;
         #endregion
 
-        #region
-        private IAsyncResult HttpIAsyncResult = null;
-        private IAsyncResult DataIAsyncResult = null;
-        #endregion
-
-        public Working()
+        public Working_()
         {
             //LED初始化
             _Timer = new System.Threading.Timer(OutLedDefaultShowCallBack, null, TimeSpan.FromSeconds(6), TimeSpan.FromSeconds(0));
@@ -155,7 +150,10 @@ namespace ZBYGate_Data_Collection
                 {
                     HttpPostAction?.BeginInvoke(Passtime.ToString("yyyyMMddhhmmss"), Lpn, Container, SelectHttpCallBack, Head);
                 }
-                SelectDataBase?.BeginInvoke(Lpn, Container, "", this.SelectDataBaseCallBack, Head);//查询数据库    
+                else
+                {
+                    SelectDataBase?.BeginInvoke(Lpn, Container, "", this.SelectDataBaseCallBack, Head);//查询数据库    
+                }
             }
             else//没有识别到数据
             {
@@ -176,11 +174,14 @@ namespace ZBYGate_Data_Collection
         {
             var Head = (string[])ar.AsyncState;
             var HttpResult = HttpPostAction.EndInvoke(ar);//回调返回数据
-            HttpIAsyncResult = ar;
             //HttpResult = @"{{""error_code"":""AE0000"",""error_desc"":""The request handled successful."",""result"":{{""resultList"":""Y"",""status"":"""",""visito"":"""",""ledgename"":"""",""platform"":"""",""truckNumber"":""粤B050CS"",""tranNo"":"""",""arrivedTime"":""2018 - 11 - 12 17:10:30""} } ";
             if (HttpResult!=null)                          //http请求数据回调函数
             {
                 HttpJsonSplitAction?.BeginInvoke(HttpResult,HttpResultSplit,Head);                  //查询远端服务器
+            }
+            else
+            {
+                SelectDataBase?.BeginInvoke(Head[0], Head[1],"", this.SelectDataBaseCallBack, Head);//查询数据库    
             }
         }
 
@@ -192,25 +193,22 @@ namespace ZBYGate_Data_Collection
         {
             bool IsOpenDoorH = false;
             var Head = (string[])ar.AsyncState;
-            var LedShowDataResult = HttpJsonSplitAction.EndInvoke(ar); //入闸LED回调传递参数  
+            var LedShowDataResult = HttpJsonSplitAction.EndInvoke(ar); //入闸LED回调传递参数     
+            if(LedShowDataResult[1]=="Y")                              //是否开闸
+            {
+                IsOpenDoorH = true;
 
-            
-            //tmp
-            LedShowDataResult = new string[] { string.Format("{0} {1}", Head[0], Head[1]), "*", "*", "*", "*", Working_NoDataBaseResult };
-            LedShow(LedShowDataResult, IsOpenDoorH);            //推送LED
-            //
+                if (IsOpenDoorH)                             //是否开闸
+                {
+                    OpenDoorAction?.BeginInvoke(In_IP, PORT, In_ControllerSN, OpendoorCallBack, null);//查询到数据开闸
+                }
 
-            //if (LedShowDataResult[1]=="Y")                              //是否开闸
-            //{
-            //    IsOpenDoorH = true;
-
-            //    if (IsOpenDoorH)                             //是否开闸
-            //    {
-            //        OpenDoorAction?.BeginInvoke(In_IP, PORT, In_ControllerSN, OpendoorCallBack, null);//查询到数据开闸
-            //    }
-
-            //    LedShow(LedShowDataResult, IsOpenDoorH);            //推送LED
-            //}
+                LedShow(LedShowDataResult, IsOpenDoorH);            //推送LED
+            }
+            else
+            {
+                SelectDataBase?.BeginInvoke(Head[0], Head[1], "", this.SelectDataBaseCallBack, Head);//查询数据库    
+            }
             SetMessage?.Invoke("查询远端服务器回调函数完成");
         }
 
@@ -223,7 +221,6 @@ namespace ZBYGate_Data_Collection
             bool IsOpenDoorD = false;                             //是否开闸
             var Head = (string[])ar.AsyncState;                    //入闸LED回调传递参数    
             var LedShowDataResult = SelectDataBase.EndInvoke(ar);//回调返回数据
-            DataIAsyncResult = ar;
             if(LedShowDataResult.All(string.IsNullOrEmpty))      //数据库记录为空
             {
                 LedShowDataResult = new string[] { string.Format("{0} {1}",Head[0],Head[1]), "*", "*", "*", "*", Working_NoDataBaseResult };
@@ -281,7 +278,7 @@ namespace ZBYGate_Data_Collection
         {
             string number = System.Text.Encoding.GetEncoding("GB2312").GetString(arg5).Replace("\0", "").Trim();//身份证号码
             string[] Head = { Plate, Con };
-            //SelectDataBase?.BeginInvoke("", "", number, this.SelectIDCallBack, Head);//查询身份证数据库    
+            SelectDataBase?.BeginInvoke("", "", number, this.SelectIDCallBack, Head);//查询身份证数据库    
         }
 
         /// <summary>
@@ -323,8 +320,6 @@ namespace ZBYGate_Data_Collection
         /// <param name=""></param>
         private void LedShow(string[] dataBaseResult,bool isOpenDoor)
         {
-            HttpIAsyncResult.AsyncWaitHandle.WaitOne();
-            DataIAsyncResult.AsyncWaitHandle.WaitOne();
             DeleteScreen_DynamicAction?.Invoke(0);//删除显示屏
             AddScreen_DynamicAction(0);           //添加显示屏
             AddScreenDynamicAreaAction(0);        //添加动态区

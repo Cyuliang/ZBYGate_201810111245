@@ -55,7 +55,7 @@ namespace ZBYGate_Data_Collection.Plate
         {
             if (statusStrip1.InvokeRequired)
             {
-                statusStrip1.Invoke(new UpdateUiInvok(SetStatusText), new object[] { Message });
+                statusStrip1?.Invoke(new UpdateUiInvok(SetStatusText), new object[] { Message });
             }
             else
             {
@@ -110,7 +110,7 @@ namespace ZBYGate_Data_Collection.Plate
         {
             if(TimeTextBox.InvokeRequired)
             {
-                TimeTextBox.Invoke(new UpdatePlate(PlateResult), new object[] { ChIp, ChLicesen, ChColor, ChTime });
+                TimeTextBox?.Invoke(new UpdatePlate(PlateResult), new object[] { ChIp, ChLicesen, ChColor, ChTime });
             }
             else
             {
@@ -129,7 +129,7 @@ namespace ZBYGate_Data_Collection.Plate
         {
             if (pictureBox2.InvokeRequired)
             {
-                pictureBox2.Invoke(new UpdateImageInvok(DataJpeg), new object[] { jpeg });
+                pictureBox2?.Invoke(new UpdateImageInvok(DataJpeg), new object[] { jpeg });
             }
             else
             {
@@ -150,7 +150,7 @@ namespace ZBYGate_Data_Collection.Plate
         {            
             if (pictureBox1.InvokeRequired)
             {
-                pictureBox1.Invoke(new UpdateImageInvok(JpegCallBack), new object[] { jpeg });
+                pictureBox1?.Invoke(new UpdateImageInvok(JpegCallBack), new object[] { jpeg });
             }
             else
             {

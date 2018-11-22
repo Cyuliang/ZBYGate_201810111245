@@ -322,8 +322,8 @@ namespace ZBYGate_Data_Collection.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Database=\'hw\';Data Source=\'192.168.1.108\';User Id=\'gate\';Password=\'123456\';charse" +
-            "t=\'utf8\';pooling=true;SslMode=none;\r\nallowPublicKeyRetrieval=True;")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Database=\'hw\';Data Source=\'localhost\';User Id=\'gate\';Password=\'123456\';charset=\'u" +
+            "tf8\';pooling=true;SslMode=none;\r\nallowPublicKeyRetrieval=True;")]
         public string LocalDataBase_Conn {
             get {
                 return ((string)(this["LocalDataBase_Conn"]));
@@ -368,7 +368,7 @@ namespace ZBYGate_Data_Collection.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("1500")]
+        [global::System.Configuration.DefaultSettingValueAttribute("1000")]
         public int Http_HttpTimeOut {
             get {
                 return ((int)(this["Http_HttpTimeOut"]));
@@ -380,7 +380,7 @@ namespace ZBYGate_Data_Collection.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("1500")]
+        [global::System.Configuration.DefaultSettingValueAttribute("1000")]
         public int Http_HttpReadWriteTimeout {
             get {
                 return ((int)(this["Http_HttpReadWriteTimeout"]));

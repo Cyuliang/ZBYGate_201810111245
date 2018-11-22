@@ -50,7 +50,7 @@ namespace ZBYGate_Data_Collection.CVR
         {
             if (statusStrip1.InvokeRequired)
             {
-                statusStrip1.Invoke(new UpdateUiInvok(SetStatusText), new object[] { Message });
+                statusStrip1?.Invoke(new UpdateUiInvok(SetStatusText), new object[] { Message });
             }
             else
             {
@@ -84,7 +84,7 @@ namespace ZBYGate_Data_Collection.CVR
         {
             if(textBox1.InvokeRequired)
             {
-                textBox1.Invoke(new UpdateCVR(FillData), new object[] { name, sex,peopleNation,birthday,number,address,signdate,validtermOfStart,validtermOfEnd });
+                textBox1?.Invoke(new UpdateCVR(FillData), new object[] { name, sex,peopleNation,birthday,number,address,signdate,validtermOfStart,validtermOfEnd });
             }
             else
             {
@@ -107,7 +107,7 @@ namespace ZBYGate_Data_Collection.CVR
         {
             if(pictureBoxPhoto.InvokeRequired)
             {
-                pictureBoxPhoto.Invoke(new UpdateCVRImage(FillDataBmp), new object[] { imgData, length });
+                pictureBoxPhoto?.Invoke(new UpdateCVRImage(FillDataBmp), new object[] { imgData, length });
             }
             else
             {

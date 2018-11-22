@@ -203,6 +203,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resource1.resx</DependentUpon>
     </Compile>
+    <Compile Include="Working - 副本.cs" />
     <Compile Include="Working.cs" />
     <EmbeddedResource Include="Container\ContainerWindow.resx">
       <DependentUpon>ContainerWindow.cs</DependentUpon>
