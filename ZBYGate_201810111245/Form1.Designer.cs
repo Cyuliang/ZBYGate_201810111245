@@ -237,19 +237,19 @@
             // 服务端ToolStripMenuItem
             // 
             this.服务端ToolStripMenuItem.Name = "服务端ToolStripMenuItem";
-            this.服务端ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.服务端ToolStripMenuItem.Size = new System.Drawing.Size(112, 22);
             this.服务端ToolStripMenuItem.Text = "服务端";
             // 
             // 客户端ToolStripMenuItem
             // 
             this.客户端ToolStripMenuItem.Name = "客户端ToolStripMenuItem";
-            this.客户端ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.客户端ToolStripMenuItem.Size = new System.Drawing.Size(112, 22);
             this.客户端ToolStripMenuItem.Text = "客户端";
             // 
             // hTTPToolStripMenuItem
             // 
             this.hTTPToolStripMenuItem.Name = "hTTPToolStripMenuItem";
-            this.hTTPToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.hTTPToolStripMenuItem.Size = new System.Drawing.Size(112, 22);
             this.hTTPToolStripMenuItem.Text = "HTTP";
             this.hTTPToolStripMenuItem.Click += new System.EventHandler(this.HttpWindowShow_Click);
             // 

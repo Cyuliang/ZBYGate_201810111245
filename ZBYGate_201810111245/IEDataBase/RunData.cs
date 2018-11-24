@@ -61,7 +61,15 @@ namespace ZBYGate_Data_Collection.IEDataBase
         /// <param name="dt"></param>
         public void Rundata_Insert(string Plate,string Container,int auto,DateTime dt)
         {
-            string Inserttext = string.Format("INSERT INTO `hw`.`rundata` (Plate,Container,InDatetime,Auto) VALUES('{0}','{1}','{2}','{3}')", Plate, Container, dt.ToUniversalTime().AddHours(8), auto);
+            string Inserttext = string.Empty;
+            if (string.IsNullOrEmpty(Plate))
+            {
+                Inserttext = string.Format("INSERT INTO `hw`.`rundata` (Container,InDatetime,Auto) VALUES('{0}','{1}','{2}')", Container, dt.ToUniversalTime().AddHours(8), auto);                
+            }
+            else if (string.IsNullOrEmpty(Container))
+            {
+                Inserttext = string.Format("INSERT INTO `hw`.`rundata` (Plate,InDatetime,Auto) VALUES('{0}','{1}','{2}')", Plate, dt.ToUniversalTime().AddHours(8), auto);
+            }
             LocalDataBase.MySqlHelper.ExecuteNonQuery(LocalDataBase.MySqlHelper.Conn, CommandType.Text, Inserttext, null);
             SetMessage?.Invoke(Inserttext);
             _Log.logInfo.Info(Inserttext);

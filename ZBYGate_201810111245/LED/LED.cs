@@ -90,6 +90,7 @@ namespace ZBYGate_Data_Collection.LED
         private readonly string[] nAreaHeights;
 
         private readonly string[] nAreaLogShow;//提示区
+        private string[] Head =new string[]{ "车牌/柜号：", "是否准时：", "供应商：", "备案/预约：", "停靠区域/货台：", "处理结果：" };//显示头
 
         public LED()
         {
@@ -216,8 +217,8 @@ namespace ZBYGate_Data_Collection.LED
                 else
                 {
                     for (int i = 0; i < nDYAreaID; i++)
-                    {
-                        nResult = SafeNativeMethods.AddScreenDynamicArea(nScreenNo, i, 2, nTimeOut, 0, "", 0,
+                    {                        
+                        nResult = SafeNativeMethods.AddScreenDynamicArea(nScreenNo, i, 2, nTimeOut, 0, "", 1/*异步节目暂停播放*/,
                                      int.Parse(nAreaXs[i]), int.Parse(nAreaYs[i]), int.Parse(nAreaWidths[i]), int.Parse(nAreaHeights[i]),
                                      255, 0, 255, 7, 6, 1);
                         GetErrorMessage(string.Format("执行AddScreenDynamicArea函数,添加 {0} X:{1} Y:{2} W:{3} H:{4} 动态区域",
@@ -242,7 +243,7 @@ namespace ZBYGate_Data_Collection.LED
             {
                 try
                 {
-                    nResult = SafeNativeMethods.AddScreenDynamicAreaText(nScreenNo, i, str, 0, 0, "宋体", nFontSize, 0, nFontColor, 2, 8, nShowTime);
+                    nResult = SafeNativeMethods.AddScreenDynamicAreaText(nScreenNo, i, Head[i]+str, 0, 0, "宋体", nFontSize, 0, nFontColor, 2, 8, nShowTime);
                     GetErrorMessage(string.Format("执行AddScreenDynamicAreaText函数,添加 {0} 区域，文本 {1}", i, str), nResult);
                     i++;
                 }

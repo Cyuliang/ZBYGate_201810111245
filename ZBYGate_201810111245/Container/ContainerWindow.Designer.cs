@@ -290,7 +290,7 @@
             // StatusLabel
             // 
             this.StatusLabel.Name = "StatusLabel";
-            this.StatusLabel.Size = new System.Drawing.Size(662, 17);
+            this.StatusLabel.Size = new System.Drawing.Size(693, 17);
             this.StatusLabel.Spring = true;
             this.StatusLabel.TextChanged += new System.EventHandler(this.StatusLabel_TextChanged);
             // 
