@@ -265,6 +265,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <None Include="SysSetup.ini" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -358,6 +359,22 @@
     <None Include="Resources\集装箱彩色.png" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="AxInterop.VeconclientProj.dll" />
+    <Content Include="borlndmm.dll" />
+    <Content Include="Google.Protobuf.dll" />
+    <Content Include="Interop.VeconclientProj.dll" />
+    <Content Include="LedDynamicArea.dll" />
+    <Content Include="log4net.dll" />
+    <Content Include="MySql.Data.dll" />
+    <Content Include="MySql.Web.dll" />
+    <Content Include="n3kAdrtB.dll" />
+    <Content Include="Newtonsoft.Json.dll" />
+    <Content Include="sdtapi.dll" />
+    <Content Include="Termb.dll" />
+    <Content Include="TransNet.dll" />
+    <Content Include="WltRS.dll" />
+    <Content Include="WTY.dll" />
+    <Content Include="ZBYGate Data Collection.exe" />
     <None Include="Resources\身份证.png" />
     <None Include="Resources\初始化.png" />
     <None Include="Resources\读取.png" />
@@ -384,6 +401,8 @@
     <None Include="Resources\添加 %281%29.png" />
     <None Include="Resources\编辑.png" />
     <None Include="Resources\测试.png" />
+    <Content Include="Newtonsoft.Json.xml" />
+    <Content Include="VeconClientProj.ocx" />
     <Content Include="Zby.ico" />
   </ItemGroup>
   <ItemGroup>
