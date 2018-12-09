@@ -77,6 +77,7 @@ namespace ZBYGate_Data_Collection.LED
         //添加文本
         private readonly int nFontSize = Properties.Settings.Default.LED_nFontSize;
         private readonly int nFontColor = Properties.Settings.Default.LED_nFontColor;
+        private readonly int ResultFontColor = Properties.Settings.Default.LED_ResultFontColor;
         private readonly int nShowTime = Properties.Settings.Default.LED_nShowTime;
 
         //发送信息
@@ -239,11 +240,17 @@ namespace ZBYGate_Data_Collection.LED
         {
             int nResult = -1;
             int i = 0;
+            int nColor = nFontColor;
+
             foreach (string str in pTexts)
             {
                 try
                 {
-                    nResult = SafeNativeMethods.AddScreenDynamicAreaText(nScreenNo, i, Head[i]+str, 0, 0, "宋体", nFontSize, 0, nFontColor, 2, 8, nShowTime);
+                    if (i==5)
+                    {
+                        nColor = ResultFontColor;
+                    }
+                    nResult = SafeNativeMethods.AddScreenDynamicAreaText(nScreenNo, i, Head[i]+str, 0, 0, "宋体", nFontSize, 0, nColor, 2, 8, nShowTime);
                     GetErrorMessage(string.Format("执行AddScreenDynamicAreaText函数,添加 {0} 区域，文本 {1}", i, str), nResult);
                     i++;
                 }

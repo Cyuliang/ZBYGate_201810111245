@@ -144,8 +144,17 @@ allowPublicKeyRetrieval=True;</Value>
     <Setting Name="Led_Log" Type="System.String" Scope="User">
       <Value Profile="(Default)">后台正在比对数据，请稍后!</Value>
     </Setting>
-    <Setting Name="WorkIng_ReadID" Type="System.Boolean" Scope="User">
+    <Setting Name="WorkIng_ReadCards" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="LED_ResultFontColor" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">16711680</Value>
+    </Setting>
+    <Setting Name="Working_Select_Logic" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">1</Value>
+    </Setting>
+    <Setting Name="Http_HttpNull" Type="System.String" Scope="User">
+      <Value Profile="(Default)">查询远端服务器失败</Value>
     </Setting>
   </Settings>
 </SettingsFile>

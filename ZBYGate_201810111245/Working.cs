@@ -9,6 +9,8 @@ namespace ZBYGate_Data_Collection
     {
         private Log.CLog _Log = new Log.CLog();
 
+        private int Select_Logic = Properties.Settings.Default.Working_Select_Logic;//处理数据逻辑
+
         #region//集装箱
         private string Containernumber = string.Empty;//集装箱号
         private string NewLpn = string.Empty;//空车车牌
@@ -71,7 +73,8 @@ namespace ZBYGate_Data_Collection
         private readonly string Plate_Local_End_Message = Properties.Settings.Default.Plate_Local_End_Message;
         private readonly string Plate_local_Message = Properties.Settings.Default.Plate_Local_Message;
         private readonly string Led_Log = Properties.Settings.Default.Led_Log;
-        private readonly bool WorkIng_ReadID = Properties.Settings.Default.WorkIng_ReadID;
+        private readonly bool WorkIng_ReadID = Properties.Settings.Default.WorkIng_ReadCards;
+        private readonly string Http_HttpNull = Properties.Settings.Default.Http_HttpNull;
         private System.Threading.Timer _Timer = null;
 
         private Dictionary<IAsyncResult, bool> IsOpenDoorDictionary=new Dictionary<IAsyncResult, bool>();//开闸字典
@@ -155,11 +158,27 @@ namespace ZBYGate_Data_Collection
             if (Lpn != null || Container != null)//字段其中一个不为空就查询服务器
             {
                 string[] Head = { Lpn, Container };                                                //组合显示车牌和箱号
-                IAsyncResultData = SelectDataBase?.BeginInvoke(Lpn, Container, "", SelectDataBaseCallBack, Head);//查询数据库    
-                if (HttpSwitch)                                                                    //是否查询远端服务器
+
+                switch (Select_Logic)
                 {
-                    IAsyncResultHttp = HttpPostAction?.BeginInvoke(Passtime.ToString("yyyyMMddhhmmss"), Lpn, Container, SelectHttpCallBack, Head);
+                    case 0://同步查询
+                        IAsyncResultData = SelectDataBase?.BeginInvoke(Lpn, Container, "", SelectDataBaseCallBack, Head);//查询数据库    
+                        if (HttpSwitch)                                                                                  //是否查询远端服务器
+                        {
+                            IAsyncResultHttp = HttpPostAction?.BeginInvoke(Passtime.ToString("yyyyMMddhhmmss"), Lpn, Container, SelectHttpCallBack, Head);
+                        }
+                        break;
+                    case 1://顺序查询
+                        IAsyncResultData = SelectDataBase?.BeginInvoke(Lpn, Container, "", One_SelectDataBaseCallBack, Head);//查询数据库    
+                        break;
+                    default://判断查询逻辑
+                        if(Select_Logic!=0||Select_Logic!=1)
+                        {
+                            SetMessage?.Invoke("没有设置处理逻辑 Working_Select_Logic is 0 or 1");
+                        }
+                        break;
                 }
+
             }
             else//没有识别到数据
             {
@@ -170,6 +189,75 @@ namespace ZBYGate_Data_Collection
             NewLpn = string.Empty;
             UpdateLpn = string.Empty;
             Containernumber = string.Empty;
+        }
+
+        /// <summary>
+        /// 1优先查询数据库
+        /// </summary>
+        /// <param name="ar"></param>
+        private void One_SelectDataBaseCallBack(IAsyncResult ar)
+        {
+            bool IsOpenDoorD = false;                                             //是否开闸
+            var Head = (string[])ar.AsyncState;                                   //车牌和箱号   
+            var LedShowDataResult = SelectDataBase.EndInvoke(ar);                 //查询本地数据库回调返回数据
+            SetMessage?.Invoke("查询数据库回调函数完成");
+
+            if (LedShowDataResult.All(string.IsNullOrEmpty))                      //数据库记录为空
+            {                                                                     //查询远端数据库
+                IAsyncResultHttp = HttpPostAction?.BeginInvoke(Passtime.ToString("yyyyMMddhhmmss"), Head[0], Head[1], Tow_SelectHttpCallBack, Head);
+            }
+            else                                                                  //查询到数据库记录
+            {
+                LedShowDataResult[0] = string.Format("{0} {1}", Head[0], Head[1]);//设置显示识别到的箱号和车牌
+                LedShowDataResult[1] = "准时";                                    //准时字段
+                LedShowDataResult[5] = Http_Status;                               //提示进闸字段
+                IsOpenDoorD = true;
+                LedShow(LedShowDataResult, IsOpenDoorD);
+            }
+
+        }
+
+        /// <summary>
+        /// 2随后查询远端数据库
+        /// </summary>
+        /// <param name="ar"></param>
+        private void Tow_SelectHttpCallBack(IAsyncResult ar)
+        {
+            bool IsOpenDoorH = false;                                               //是否开闸
+            var Head = (string[])ar.AsyncState;                                     //车牌和箱号
+            var HttpResult = HttpPostAction.EndInvoke(ar);                          ////http请求数据回调函数返回数据  
+            SetMessage?.Invoke("分析远端服务器返回数据完成");
+
+            //HttpResult = @"{""error_code"":""AE0000"",""error_desc"":""The request handled successful."",""result"":{""resultList"":""N"",""status"":""已预约"",""visito"":""TMT"",""ledgename"":""松山湖"",""platform"":""活态"",""truckNumber"":""粤B050CS"",""tranNo"":""12345"",""arrivedTime"":""2018 - 11 - 12 17:10:30""}}";
+            if (HttpResult != null)
+            {
+                var LedShowDataResult = HttpJsonSplitAction?.Invoke(HttpResult);    //分析Json数据
+                
+                if (LedShowDataResult[1] == "Y")                                    //是否开闸
+                {
+                    IsOpenDoorH = true;
+                    LedShowDataResult[1] = "准时";                                  //替换字段
+                }
+                LedShow(LedShowDataResult,IsOpenDoorH);                             //最后处理数据
+
+                if(LedShowDataResult[1]=="N")                                       //没有数据刷身份证
+                {
+                    if (WorkIng_ReadID)
+                    {
+                        if (ReadForBooen)//读取身份证
+                        {
+                            CVRForReadAction?.BeginInvoke(0, this.ForDoneCallBack, null);
+                            ReadForBooen = false;
+                        }
+                    }
+                }
+
+            }
+            else
+            {
+                var LedShowDataResult = new string[] { string.Format("{0} {1}", Head[0], Head[1]), "*", "*", "*", "*", Http_HttpNull };
+                LedShow(LedShowDataResult, IsOpenDoorH);
+            }
         }
 
         /// <summary>
