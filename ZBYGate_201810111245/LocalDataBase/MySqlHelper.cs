@@ -158,7 +158,42 @@ namespace ZBYGate_Data_Collection.LocalDataBase
             }
         }
 
+        /// <summary>
+        /// 返回MySqlDataAdapter
+        /// </summary>
+        /// <param name="connectionString">一个有效的连接字符串</param>
+        /// <param name="cmdType">命令类型(存储过程, 文本, 等等)</param>
+        /// <param name="cmdText">存储过程名称或者sql命令语句</param>
+        /// <param name="commandParameters">执行命令所用参数的集合</param>
+        /// <returns></returns>
+        public static MySqlDataAdapter GetDataAdapter(string connectionString, CommandType cmdType, string cmdText, params MySqlParameter[] commandParameters)
+        {
+            //创建一个MySqlCommand对象
+            MySqlCommand cmd = new MySqlCommand();
+            //创建一个MySqlConnection对象
+            MySqlConnection conn = new MySqlConnection(connectionString);
 
+            //在这里我们用一个try/catch结构执行sql文本命令/存储过程，因为如果这个方法产生一个异常我们要关闭连接，因为没有读取器存在，
+
+            try
+            {
+                //调用 PrepareCommand 方法，对 MySqlCommand 对象设置参数
+                PrepareCommand(cmd, conn, null, cmdType, cmdText, commandParameters);
+                //调用 MySqlCommand  的 ExecuteReader 方法
+                MySqlDataAdapter adapter = new MySqlDataAdapter
+                {
+                    SelectCommand = cmd
+                };
+                //清除参数
+                cmd.Parameters.Clear();
+                conn.Close();
+                return adapter;
+            }
+            catch
+            {
+                throw;
+            }
+        }
 
         /// <summary>
         /// 用指定的数据库连接字符串执行一个命令并返回一个数据集的第一列

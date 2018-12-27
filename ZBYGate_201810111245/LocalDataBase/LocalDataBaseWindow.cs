@@ -14,6 +14,9 @@ namespace ZBYGate_Data_Collection.LocalDataBase
 {
     public partial class LocalDataBaseWindow : Form
     {
+        //private MySqlDataAdapter adapter;      
+        //private MySqlCommandBuilder Builder;
+
         private Log.CLog _Log = new Log.CLog();
         private delegate void UpdateUiInvok(string Message);//跨线程更新UI
 
@@ -28,12 +31,20 @@ namespace ZBYGate_Data_Collection.LocalDataBase
 
         private void Init()
         {
-            dataSet1 = MySqlHelper.GetDataSet(MySqlHelper.Conn, System.Data.CommandType.Text, "select * from hw.gate", null);
-            bindingSource1.DataSource = dataSet1.Tables[0];
+            //adapter  = MySqlHelper.GetDataAdapter(MySqlHelper.Conn, System.Data.CommandType.Text, "select * from hw.gate", null);
+            ////Builder = new MySqlCommandBuilder(adapter);
+            //adapter.Fill(dataSet1);
+            //adapter.Update(dataSet1);
+            //bindingSource1.DataSource = dataSet1.Tables[0];
+            //bindingNavigator1.BindingSource = bindingSource1;
+            //dataGridView1.DataSource = bindingSource1;
+            //dataGridView1.Columns[0].Visible = false;
+
+            dataGridView1.DataSource = MySqlHelper.GetDataSet(MySqlHelper.Conn, System.Data.CommandType.Text, "select * from gate", null).Tables[0].DefaultView;
+
+            bindingSource1.DataSource = dataGridView1.DataSource;
             bindingNavigator1.BindingSource = bindingSource1;
             dataGridView1.DataSource = bindingSource1;
-
-            //dataGridView1.Columns[0].Visible = false;
         }
 
         /// <summary>
@@ -81,8 +92,15 @@ namespace ZBYGate_Data_Collection.LocalDataBase
             int rowindex = dataGridView1.CurrentCell.RowIndex;
             ItemDataWindow dataItem = new ItemDataWindow();
             dataItem.UpdataUi(int.Parse(dataGridView1.Rows[rowindex].Cells[0].Value.ToString()));
+            dataItem.Text = "本地数据库-【编辑数据】";
             dataItem.ShowDialog();
-            Init();
+            //adapter.Update(dataSet1);
+            dataGridView1.DataSource = MySqlHelper.GetDataSet(MySqlHelper.Conn, System.Data.CommandType.Text, "select * from gate", null).Tables[0].DefaultView;
+
+            bindingSource1.DataSource = dataGridView1.DataSource;
+            bindingNavigator1.BindingSource = bindingSource1;
+            dataGridView1.DataSource = bindingSource1;
+
             dataGridView1.CurrentCell = dataGridView1.Rows[rowindex].Cells[1];
         }
 
@@ -101,9 +119,16 @@ namespace ZBYGate_Data_Collection.LocalDataBase
                 {
                     string drop = string.Format("DELETE FROM `hw`.`gate` WHERE (`Id` = '{0}')", dataGridView1.Rows[rowindex].Cells[0].Value.ToString());
                     MySqlHelper.ExecuteNonQuery(MySqlHelper.Conn, System.Data.CommandType.Text, drop, null);
-                    Init();
+
+                    //adapter.Update(dataSet1);
+
+                    dataGridView1.DataSource = MySqlHelper.GetDataSet(MySqlHelper.Conn, System.Data.CommandType.Text, "select * from gate", null).Tables[0].DefaultView;
+
+                    bindingSource1.DataSource = dataGridView1.DataSource;
+                    bindingNavigator1.BindingSource = bindingSource1;
+                    dataGridView1.DataSource = bindingSource1;
+
                     _Log.logInfo.Info(drop);
-                    //MessageBox.Show("Delete Success!");
                 }
                 catch (Exception ex)
                 {
@@ -123,10 +148,16 @@ namespace ZBYGate_Data_Collection.LocalDataBase
         /// <param name="e"></param>
         private void ToolStripButton3_Click(object sender, EventArgs e)
         {
-            dataGridView1.DataSource = MySqlHelper.GetDataSet(MySqlHelper.Conn, System.Data.CommandType.Text, "select * from gate", null).Tables[0].DefaultView;
             ItemDataWindow dataItem = new ItemDataWindow();
+            dataItem.Text="本地数据库-【添加数据】";
             dataItem.ShowDialog();
-            Init();
+            //adapter.Update(dataSet1);
+            dataGridView1.DataSource = MySqlHelper.GetDataSet(MySqlHelper.Conn, System.Data.CommandType.Text, "select * from gate", null).Tables[0].DefaultView;
+
+            bindingSource1.DataSource = dataGridView1.DataSource;
+            bindingNavigator1.BindingSource = bindingSource1;
+            dataGridView1.DataSource = bindingSource1;
+
             dataGridView1.CurrentCell = dataGridView1.Rows[dataGridView1.Rows.Count - 1].Cells[1];
         }
 

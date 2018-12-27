@@ -22,6 +22,7 @@ namespace ZBYGate_Data_Collection.LocalDataBase
         public ItemDataWindow()
         {
             InitializeComponent();
+
             dateTimePicker1.Format = DateTimePickerFormat.Custom;
             dateTimePicker1.CustomFormat = "yyyy-MM-dd";
         }
@@ -30,7 +31,7 @@ namespace ZBYGate_Data_Collection.LocalDataBase
         /// </summary>
         /// <param name="index">查询ID</param>
         public void UpdataUi(int index)
-        {
+        {            
             SelectIndex = index;
             string cmdText = string.Format("SELECT *  FROM `hw`.`gate` WHERE Id={0}", index);
             MySqlDataReader reader = MySqlHelper.ExecuteReader(MySqlHelper.Conn, CommandType.Text, cmdText, null);
@@ -66,6 +67,22 @@ namespace ZBYGate_Data_Collection.LocalDataBase
         /// <param name="e"></param>
         private void Button1_Click(object sender, EventArgs e)
         {
+            string Plate = string.Empty;
+            if(textBox1.Text!=string.Empty)
+            {
+                Plate = textBox1.Text.Replace(" ", "");
+            }
+            string Container = string.Empty;
+            if(textBox2.Text!=string.Empty)
+            {
+                Container = textBox2.Text.Replace(" ", "");
+            }
+            string Cards = string.Empty;
+            if (textBox3.Text != string.Empty)
+            {
+                Cards = textBox3.Text.Replace(" ", "");
+            }
+
             int onTime = 0;
             if (radioButton1.Checked)
             {
@@ -74,14 +91,14 @@ namespace ZBYGate_Data_Collection.LocalDataBase
             if (SelectIndex != -1)
             {
                 string Updatetext = string.Format("UPDATE `hw`.`gate` SET `Plate` = '{0}',  `Container`='{1}',`Supplier`='{2}', `Appointment`='{3}', `Parked`='{4}', `Ontime`='{5}', `Cards`='{6}', `Truetime`='{7}' WHERE (`Id` = '{8}')",
-    textBox1.Text, textBox2.Text, textBox4.Text, textBox5.Text, textBox6.Text, onTime, textBox3.Text, dateTimePicker1.Value.ToShortDateString(), SelectIndex);
+                            Plate, Container, textBox4.Text, textBox5.Text, textBox6.Text, onTime, Cards, dateTimePicker1.Value.ToShortDateString(), SelectIndex);
                 MySqlHelper.ExecuteNonQuery(MySqlHelper.Conn, CommandType.Text, Updatetext, null);
                 log.logInfo.Info("Update Data Success");
             }
             else
             {
                 string cmdText = string.Format("INSERT INTO `hw`.`gate` (`Plate`, `Container`, `Supplier`, `Appointment`, `Parked`, `Ontime`, `Cards`, `Truetime`) VALUES('{0}', '{1}', '{2}', '{3}', '{4}', '{5}', '{6}', '{7}')",
-    textBox1.Text, textBox2.Text, textBox4.Text, textBox5.Text, textBox6.Text, onTime, textBox3.Text, dateTimePicker1.Value.ToShortDateString());
+                            Plate, Container, textBox4.Text, textBox5.Text, textBox6.Text, onTime, Cards, dateTimePicker1.Value.ToShortDateString());
                 MySqlHelper.ExecuteNonQuery(MySqlHelper.Conn, CommandType.Text, cmdText, null);
                 log.logInfo.Info("Insert into Data Success");
             }

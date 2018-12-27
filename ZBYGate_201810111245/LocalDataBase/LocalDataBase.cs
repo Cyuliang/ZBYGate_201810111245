@@ -1,14 +1,10 @@
 ﻿using MySql.Data.MySqlClient;
 using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ZBYGate_Data_Collection.LocalDataBase
 {
-    //防止数据库过大，照成数据查询缓慢》》》》》》》》》》》》》》》》》》》》》》》》暂时未处理
+    //防止数据库过大，照成数据查询缓慢，暂时未处理
     class LocalDataBase
     {
         public Action<string> SetMessage;//状态回显

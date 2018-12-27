@@ -44,14 +44,14 @@
             this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton3 = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
+            this.FindTextBox = new System.Windows.Forms.ToolStripTextBox();
+            this.FindButton = new System.Windows.Forms.ToolStripButton();
             this.dataSet1 = new System.Data.DataSet();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.StatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.bindingSource1 = new System.Windows.Forms.BindingSource(this.components);
-            this.FindTextBox = new System.Windows.Forms.ToolStripTextBox();
-            this.FindButton = new System.Windows.Forms.ToolStripButton();
             ((System.ComponentModel.ISupportInitialize)(this.bindingNavigator1)).BeginInit();
             this.bindingNavigator1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataSet1)).BeginInit();
@@ -191,6 +191,24 @@
             this.toolStripButton1.ToolTipText = "编辑数据";
             this.toolStripButton1.Click += new System.EventHandler(this.ToolStripButton1_Click);
             // 
+            // FindTextBox
+            // 
+            this.FindTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.FindTextBox.Name = "FindTextBox";
+            this.FindTextBox.Size = new System.Drawing.Size(100, 25);
+            this.FindTextBox.ToolTipText = "输入要查找的数据";
+            // 
+            // FindButton
+            // 
+            this.FindButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.FindButton.Image = ((System.Drawing.Image)(resources.GetObject("FindButton.Image")));
+            this.FindButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.FindButton.Name = "FindButton";
+            this.FindButton.Size = new System.Drawing.Size(23, 22);
+            this.FindButton.Text = "toolStripButton1";
+            this.FindButton.ToolTipText = "查找数据";
+            this.FindButton.Click += new System.EventHandler(this.FindButton_Click);
+            // 
             // dataSet1
             // 
             this.dataSet1.DataSetName = "NewDataSet";
@@ -223,35 +241,21 @@
             // 
             this.dataGridView1.AllowUserToAddRows = false;
             this.dataGridView1.AllowUserToDeleteRows = false;
-            this.dataGridView1.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
+            this.dataGridView1.AllowUserToOrderColumns = true;
+            this.dataGridView1.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridView1.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
             this.dataGridView1.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dataGridView1.GridColor = System.Drawing.Color.Chartreuse;
             this.dataGridView1.Location = new System.Drawing.Point(0, 25);
+            this.dataGridView1.MultiSelect = false;
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
             this.dataGridView1.RowTemplate.Height = 23;
+            this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGridView1.Size = new System.Drawing.Size(800, 403);
             this.dataGridView1.TabIndex = 2;
-            // 
-            // FindTextBox
-            // 
-            this.FindTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.FindTextBox.Name = "FindTextBox";
-            this.FindTextBox.Size = new System.Drawing.Size(100, 25);
-            this.FindTextBox.ToolTipText = "输入要查找的数据";
-            // 
-            // FindButton
-            // 
-            this.FindButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.FindButton.Image = ((System.Drawing.Image)(resources.GetObject("FindButton.Image")));
-            this.FindButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.FindButton.Name = "FindButton";
-            this.FindButton.Size = new System.Drawing.Size(23, 22);
-            this.FindButton.Text = "toolStripButton1";
-            this.FindButton.ToolTipText = "查找数据";
-            this.FindButton.Click += new System.EventHandler(this.FindButton_Click);
             // 
             // LocalDataBaseWindow
             // 
