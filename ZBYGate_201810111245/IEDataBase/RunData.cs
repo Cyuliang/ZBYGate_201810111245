@@ -70,6 +70,10 @@ namespace ZBYGate_Data_Collection.IEDataBase
             {
                 Inserttext = string.Format("INSERT INTO `hw`.`rundata` (Plate,InDatetime,Auto) VALUES('{0}','{1}','{2}')", Plate, dt.ToUniversalTime().AddHours(8), auto);
             }
+            else
+            {
+                Inserttext = string.Format("INSERT INTO `hw`.`rundata` (Plate,Container,InDatetime,Auto) VALUES('{0}','{1}','{2}'.'{3}')", Plate, Container, dt.ToUniversalTime().AddHours(8), auto);
+            }
             LocalDataBase.MySqlHelper.ExecuteNonQuery(LocalDataBase.MySqlHelper.Conn, CommandType.Text, Inserttext, null);
             SetMessage?.Invoke(Inserttext);
             _Log.logInfo.Info(Inserttext);
@@ -82,7 +86,7 @@ namespace ZBYGate_Data_Collection.IEDataBase
         /// <param name="dt"></param>
         public void Rundata_update(string plate,DateTime dt)
         {
-            string Selecttext = string.Format("SELECT Id FROM  `hw`.`indata` WHERE Plate='{0}' order by Id desc limit 1", plate);
+            string Selecttext = string.Format("SELECT Id FROM  `hw`.`rundata` WHERE Plate='{0}' order by Id desc limit 1", plate);
             var result = LocalDataBase.MySqlHelper.ExecuteScalar(LocalDataBase.MySqlHelper.Conn, CommandType.Text, Selecttext, null);
             int ID = int.Parse(result.GetType().ToString());
             //string Updatetext = string.Format("UPDATE  `hw`.`indata` SET Cards = '{0}', Auto='{1}' WHERE Time = '{2}'", Cards, auto, dt.ToUniversalTime().AddHours(8));
