@@ -387,9 +387,6 @@ namespace ZBYGate_Data_Collection
                         }
                     }
 
-                    string[] tmpIn = dataBaseResult[0].Split(' ');
-
-                    Rundata_InsertAction?.BeginInvoke(tmpIn[0], tmpIn[1], status ? 1 : 0, Passtime, null, null);//插入数据库
 
                     ClearVar();//清除字典和回调状态
                     DeleteScreen_DynamicAction?.Invoke(0);//删除显示屏
@@ -397,6 +394,11 @@ namespace ZBYGate_Data_Collection
                     AddScreenDynamicAreaAction?.Invoke(0);        //添加动态区
                     AddTextAction?.Invoke(dataBaseResult);//添加文本
                     SendAction?.BeginInvoke(0, SendCallBack, "");
+
+                    string[] tmpIn = dataBaseResult[0].Split(' ');
+
+                    Rundata_InsertAction?.BeginInvoke(tmpIn[0], tmpIn[1], status ? 1 : 0, Passtime, null, null);//插入数据库
+
 
                     string tmp = string.Empty;
                     foreach (string v in dataBaseResult)
@@ -501,6 +503,9 @@ namespace ZBYGate_Data_Collection
             AddScreenDynamicAreaAction?.Invoke(0);        //添加动态区
             AddTextAction?.Invoke(dataBaseResult);//添加文本
             SendAction?.BeginInvoke(0, SendCallBack, isOpenDoor);
+
+            string[] tmpIn = dataBaseResult[0].Split(' ');
+            Rundata_InsertAction?.BeginInvoke(tmpIn[0], tmpIn[1], isOpenDoor ? 1 : 0, Passtime, null, null);//插入数据库
 
             string tmp = string.Empty;
             foreach (string v in dataBaseResult)

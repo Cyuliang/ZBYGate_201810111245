@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MySql.Data.MySqlClient;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -86,13 +87,22 @@ namespace ZBYGate_Data_Collection.IEDataBase
         /// <param name="dt"></param>
         public void Rundata_update(string plate,DateTime dt)
         {
-            string Selecttext = string.Format("SELECT Id FROM  `hw`.`rundata` WHERE Plate='{0}' order by Id desc limit 1", plate);
-            var result = LocalDataBase.MySqlHelper.ExecuteScalar(LocalDataBase.MySqlHelper.Conn, CommandType.Text, Selecttext, null);
-            int ID = int.Parse(result.GetType().ToString());
-            //string Updatetext = string.Format("UPDATE  `hw`.`indata` SET Cards = '{0}', Auto='{1}' WHERE Time = '{2}'", Cards, auto, dt.ToUniversalTime().AddHours(8));
-            string Updatetext = string.Format("UPDATE `hw`.`rundata` SET OutDatetime='{0}' WHERE Plate='{1}' AND Id=ID AND OutDatetime is null order by Id desc limit 1", dt.ToUniversalTime().AddHours(8), plate);
-            LocalDataBase.MySqlHelper.ExecuteNonQuery(LocalDataBase.MySqlHelper.Conn, CommandType.Text, Updatetext, null);
-            _Log.logInfo.Info(Updatetext);
+            if(plate!=string.Empty)
+            {
+                int ID = 0;
+                string Selecttext = string.Format("SELECT * FROM  `hw`.`rundata` WHERE Plate='{0}' order by Id desc limit 1", plate);
+                MySqlDataReader reader = LocalDataBase.MySqlHelper.ExecuteReader(LocalDataBase.MySqlHelper.Conn, CommandType.Text, Selecttext, null);
+                if(reader.Read())
+                {
+                    ID = int.Parse(reader[0].ToString());
+                }
+                //var result = LocalDataBase.MySqlHelper.ExecuteScalar(LocalDataBase.MySqlHelper.Conn, CommandType.Text, Selecttext, null);
+                //int ID = int.Parse(result.GetType().ToString());
+                //string Updatetext = string.Format("UPDATE  `hw`.`indata` SET Cards = '{0}', Auto='{1}' WHERE Time = '{2}'", Cards, auto, dt.ToUniversalTime().AddHours(8));
+                string Updatetext = string.Format("UPDATE `hw`.`rundata` SET OutDatetime='{0}' WHERE Plate='{1}' AND Id=ID AND OutDatetime is null order by Id desc limit 1", dt.ToUniversalTime().AddHours(8), plate);
+                LocalDataBase.MySqlHelper.ExecuteNonQuery(LocalDataBase.MySqlHelper.Conn, CommandType.Text, Updatetext, null);
+                _Log.logInfo.Info(Updatetext);
+            }
         }
     }
 }
