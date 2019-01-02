@@ -1,11 +1,6 @@
 ﻿using MySql.Data.MySqlClient;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -29,6 +24,7 @@ namespace ZBYGate_Data_Collection.IEDataBase
             dateTimePicker2.Format = DateTimePickerFormat.Custom;
             dateTimePicker2.ShowUpDown = true;
             dateTimePicker2.Value = DateTime.Now.Date.AddHours(23).AddMinutes(59).AddSeconds(59);
+
             DataradioButton.Checked = true;
         }
 
@@ -45,6 +41,73 @@ namespace ZBYGate_Data_Collection.IEDataBase
                     dataGridView1.CurrentCell = dataGridView1.Rows[i].Cells[index];
                     break;
                 }
+            }
+        }  
+
+        /// <summary>
+        ///查询数据
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void FindButton_Click_1(object sender, EventArgs e)
+        {
+            string cmdText = string.Empty;
+            if (DataradioButton.Checked)
+            {
+                if (PlateTextBox.Text == string.Empty)
+                {
+                    MessageBox.Show("请输入要查询的数据！");
+                    return;
+                }
+                else
+                {
+                    cmdText = string.Format("SELECT *  FROM hw.outdata WHERE Plate='{0}'", PlateTextBox.Text);
+                }
+            }
+            if (TimeradioButton.Checked)
+            {
+                cmdText = string.Format("SELECT *  FROM hw.outdata WHERE  Time between '{0}' and '{1}'", dateTimePicker1.Value.ToString("yyyy-MM-dd HH:mm:ss"), dateTimePicker2.Value.ToString("yyyy-MM-dd HH:mm:ss"));
+            }
+
+            MySqlDataReader reader = LocalDataBase.MySqlHelper.ExecuteReader(LocalDataBase.MySqlHelper.Conn, CommandType.Text, cmdText, null);
+            bindingSource1.DataSource = reader;
+            bindingNavigator1.BindingSource = bindingSource1;
+            dataGridView1.DataSource = bindingSource1;
+            reader.Close();
+        }
+
+        /// <summary>
+        /// 导出excel
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void toolStripButton1_Click_1(object sender, EventArgs e)
+        {
+            if (dataGridView1.Rows.Count > 0)
+            {
+                string saveFileName = "";
+                //bool fileSaved = false;  
+                SaveFileDialog saveDialog = new SaveFileDialog
+                {
+                    DefaultExt = "xls",
+                    Filter = "Excel文件|*.xls",
+                    FileName = string.Format("OutData_{0:yyyyMMddHHmmss}.xls", DateTime.Now)
+                };
+                saveDialog.ShowDialog();
+                saveFileName = saveDialog.FileName;
+                if (saveFileName.IndexOf(":") < 0)
+                {
+                    return; //被点了取消   
+                }
+                else
+                {
+                    var t1 = new Task(TaskMethod, saveFileName, TaskCreationOptions.LongRunning);
+                    t1.Start();
+                }
+            }
+            else
+            {
+                MessageBox.Show("报表为空,无表格需要导出", "提示", MessageBoxButtons.OK);
             }
         }
 
@@ -84,7 +147,7 @@ namespace ZBYGate_Data_Collection.IEDataBase
                             worksheet.Cells[r + 2, i + 1] = dataGridView1.Rows[r].Cells[i].Value;
                         }
                     }
-                    System.Windows.Forms.Application.DoEvents();
+                    Application.DoEvents();
                 }
                 worksheet.Columns.EntireColumn.AutoFit();//列宽自适应  
                                                          //   if (Microsoft.Office.Interop.cmbxType.Text != "Notification")  
@@ -116,71 +179,6 @@ namespace ZBYGate_Data_Collection.IEDataBase
                 GC.Collect();//强行销毁   
                              // if (fileSaved && System.IO.File.Exists(saveFileName)) System.Diagnostics.Process.Start(saveFileName); //打开EXCEL  
                 MessageBox.Show("导出文件成功", "提示", MessageBoxButtons.OK);
-            }
-        }
-
-        /// <summary>
-        ///查询数据
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void FindButton_Click_1(object sender, EventArgs e)
-        {
-            string cmdText = string.Empty;
-            if (DataradioButton.Checked)
-            {
-                cmdText = string.Format("SELECT *  FROM hw.outdata WHERE Plate='{0}'", PlateTextBox.Text);
-            }
-            if (TimeradioButton.Checked)
-            {
-                cmdText = string.Format("SELECT *  FROM hw.outdata WHERE  Time between '{0}' and '{1}'", dateTimePicker1.Value.ToString("yyyy-MM-dd HH:mm:ss"), dateTimePicker2.Value.ToString("yyyy-MM-dd HH:mm:ss"));
-            }
-            if(DataradioButton.Checked)
-            {
-                if(PlateTextBox.Text==string.Empty)
-                {
-                    MessageBox.Show("请输入要查询的数据！");
-                    return;
-                }
-            }
-            MySqlDataReader reader = LocalDataBase.MySqlHelper.ExecuteReader(LocalDataBase.MySqlHelper.Conn, CommandType.Text, cmdText, null);
-            bindingSource1.DataSource = reader;
-            bindingNavigator1.BindingSource = bindingSource1;
-            dataGridView1.DataSource = bindingSource1;
-        }
-
-        /// <summary>
-        /// 导出excel
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void toolStripButton1_Click_1(object sender, EventArgs e)
-        {
-            if (dataGridView1.Rows.Count > 0)
-            {
-                string saveFileName = "";
-                //bool fileSaved = false;  
-                SaveFileDialog saveDialog = new SaveFileDialog
-                {
-                    DefaultExt = "xls",
-                    Filter = "Excel文件|*.xls",
-                    FileName = string.Format("OutData_{0:yyyyMMddHHmmss}.xls", DateTime.Now)
-                };
-                saveDialog.ShowDialog();
-                saveFileName = saveDialog.FileName;
-                if (saveFileName.IndexOf(":") < 0)
-                {
-                    return; //被点了取消   
-                }
-                else
-                {
-                    var t1 = new Task(TaskMethod, saveFileName, TaskCreationOptions.LongRunning);
-                    t1.Start();
-                }
-            }
-            else
-            {
-                MessageBox.Show("报表为空,无表格需要导出", "提示", MessageBoxButtons.OK);
             }
         }
     }

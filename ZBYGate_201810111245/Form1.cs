@@ -6,6 +6,34 @@ namespace ZBYGate_Data_Collection
 {
     public partial class Form1 : Form
     {
+        private System.Diagnostics.Stopwatch RunTimeWatch = new System.Diagnostics.Stopwatch();
+        private System.Threading.Timer _RunTimer;
+        private delegate void UpdateRunTimeTextDelegate();
+
+        /// <summary>
+        /// 系统运行时长
+        /// </summary>
+        /// <param name="state"></param>
+        private void RunTimeCallBacll(object state)
+        {
+            SetRunTimeText();
+        }
+
+        private void  SetRunTimeText()
+        {
+            if (statusStrip2.InvokeRequired)
+            {
+                statusStrip2.Invoke(new UpdateRunTimeTextDelegate(SetRunTimeText), new object[] {  });
+            }
+            else
+            {
+                TimeSpan time = RunTimeWatch.Elapsed;
+                toolStripStatusLabel14.Text = ((int)time.TotalHours).ToString();
+                toolStripStatusLabel15.Text = (((int)time.TotalMinutes)%60).ToString();
+                toolStripStatusLabel16.Text = (((int)time.TotalSeconds)%60).ToString();
+            }
+        }
+
         #region Table页面
         private TabPage ContainerTable = new TabPage("集装箱");
         private TabPage PlateTable = new TabPage("电子车牌");
@@ -25,6 +53,7 @@ namespace ZBYGate_Data_Collection
 
         #region//初始变量初始化
         //private volatile bool ReadForBooen=true;
+        private Log.CLog _Log = new Log.CLog();
         #endregion
 
         #region//界面委托
@@ -80,13 +109,17 @@ namespace ZBYGate_Data_Collection
         {
             InitializeComponent();
 
+            RunTimeWatch.Start();
+            _RunTimer = new System.Threading.Timer(RunTimeCallBacll, RunTimeWatch, TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(1));
+  
+
             #region//系统动作初始化
-            _Plate.PlateDataCallBack += _Working.PlateResult;//出闸车牌识别结果
+            _Plate.PlateDataCallBackAction += _Working.PlateResult;//出闸车牌识别结果
             _Working.SetOutLedMessageAction += _Plate.RS485Send;//发送出闸LED信息
 
-            _Container.CombinResult += _Working.ContainerResult;//集装箱结果
-            _Container.NewLPNEvent += _Working.NewLpnResult;//空车车牌结果
-            _Container.UpdateLPNEvent += _Working.UpdateLpnResult;//重车车牌结果
+            _Container.CombinResultAction += _Working.ContainerResult;//集装箱结果
+            _Container.NewLPNEventAction += _Working.NewLpnResult;//空车车牌结果
+            _Container.UpdateLPNEventAction += _Working.UpdateLpnResult;//重车车牌结果
 
             _Working.SelectDataBase += _LocalDataBase.SelectData;//本地数据库查询
             _Working.In_InsertDataBaseAction += _RunData.In_Insert;//入闸数据库写入
@@ -118,13 +151,13 @@ namespace ZBYGate_Data_Collection
             #endregion
 
             #region//箱号识别委托订阅
-            _Container.SetMessage += GetMessage;
+            _Container.SetMessageAction += GetMessage;
             _Container.GetStatusAction += ContainerStatus;
             #endregion
 
             #region//车牌委托订阅
-            _Plate.SetMessage += GetMessage;
-            _Plate.PlateCallBack += PlateStatus;
+            _Plate.SetMessageAction += GetMessage;
+            _Plate.PlateCallBackAction += PlateStatus;
             #endregion
 
             #region//身份证委托订阅
@@ -133,7 +166,7 @@ namespace ZBYGate_Data_Collection
 
             #region//道闸委托订阅
             _Gate.NewState += _Gate_NewState;
-            _Gate.SetMessage += GetMessage;
+            _Gate.SetMessageAction += GetMessage;
             #endregion
 
             #region//显示屏委托订阅
@@ -141,15 +174,15 @@ namespace ZBYGate_Data_Collection
             #endregion
 
             #region//本地数据库委托
-            _LocalDataBase.SetMessage += GetMessage;
+            _LocalDataBase.SetMessageAction += GetMessage;
             #endregion
 
             #region//出入闸数据库委托
-            _RunData.SetMessage += GetMessage;
+            _RunData.SetMessageAction += GetMessage;
             #endregion
 
             #region//Https 委托
-            _CHttp.SetMessage += GetMessage;
+            _CHttp.SetMessageAction += GetMessage;
             #endregion
         }
 
@@ -178,7 +211,15 @@ namespace ZBYGate_Data_Collection
         /// <param name="e"></param>
         private void Form1_FormClosed(object sender, FormClosedEventArgs e)
         {
-            System.Environment.Exit(0);
+            RunTimeWatch.Stop();
+            TimeSpan time = RunTimeWatch.Elapsed;
+
+            string HH = ((int)time.TotalHours).ToString();
+            string MM = (((int)time.TotalMinutes)%60).ToString();
+            string SS = (((int)time.TotalSeconds)%60).ToString();
+            _Log.logDebug.Debug(string.Format("系统运行时长：{0}小时{1}分钟{2}秒", HH,MM,SS));
+
+            Environment.Exit(0);
         }
 
         #endregion
@@ -211,6 +252,7 @@ namespace ZBYGate_Data_Collection
             {
                 MainlistBox.Items.Add(string.Format("ID：{0,3} {1} Message：[{2}]", MainlistBox.Items.Count + 1, DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"), Message));
                 MainlistBox.SelectedIndex = MainlistBox.Items.Count - 1;
+                _Log.logDebug.Debug(Message);
             }
         }
 
@@ -332,10 +374,10 @@ namespace ZBYGate_Data_Collection
         /// </summary>
         private void ContainerWindowActiveInit()
         {
-            _Container.NewLPNEvent += _ContainerWindow.NewLPN;
-            _Container.UpdateLPNEvent += _ContainerWindow.UpdateLPN;
-            _Container.CombinResult += _ContainerWindow.CombinResult;
-            _Container.SetMessage += _ContainerWindow.SetStatusText;
+            _Container.NewLPNEventAction += _ContainerWindow.NewLPN;
+            _Container.UpdateLPNEventAction += _ContainerWindow.UpdateLPN;
+            _Container.CombinResultAction += _ContainerWindow.CombinResult;
+            _Container.SetMessageAction += _ContainerWindow.SetStatusText;
             _ContainerWindow.ContainerLinkAction += _Container.LinkC;
             _ContainerWindow.ContainerAbortAction += _Container.CloseC;
             _ContainerWindow.ContainerLastRAction += _Container.LastR;            
@@ -411,10 +453,10 @@ namespace ZBYGate_Data_Collection
         /// </summary>
         private void PlateWindowActiveInit()
         {
-            _Plate.PlateDataCallBack += _PlateWindow.PlateResult;
-            _Plate.DataJpegCallBack += _PlateWindow.DataJpeg;
-            _Plate.JpegCallBack += _PlateWindow.JpegCallBack;
-            _Plate.SetMessage += _PlateWindow.SetStatusText;
+            _Plate.PlateDataCallBackAction += _PlateWindow.PlateResult;
+            _Plate.DataJpegCallBackAction += _PlateWindow.DataJpeg;
+            _Plate.JpegCallBackAction += _PlateWindow.JpegCallBack;
+            _Plate.SetMessageAction += _PlateWindow.SetStatusText;
             _PlateWindow.PlateLinkAction += _Plate.CallbackFuntion;
             _PlateWindow.PlateAbortAction += _Plate.QuitDevice;
             _PlateWindow.PlateTiggerAction += _Plate.SetTrigger;
@@ -453,7 +495,7 @@ namespace ZBYGate_Data_Collection
             _CVRWindow.CVRForReadAction += _CVR.AuthenticateFor;
             _CVRWindow.CVRWhileReadAction += _CVR.AuthenticateWhile;
             _CVRWindow.CVRCloseAction += _CVR.CloseComm;
-            _CVRWindow.CVRSetCVRvolatile += _CVR.GetStarted;
+            _CVRWindow.CVRSetCVRvolatileAction += _CVR.GetStarted;
         }
 
         #endregion
@@ -480,7 +522,7 @@ namespace ZBYGate_Data_Collection
         /// </summary>
         private void GateWindowActiveInit()
         {
-            _Gate.SetMessage += _GateWindow.SetStatusText;
+            _Gate.SetMessageAction += _GateWindow.SetStatusText;
             _GateWindow.GateOpenDoorAction += _Gate.OpenDoor;
         }
 
@@ -605,7 +647,7 @@ namespace ZBYGate_Data_Collection
         private void LocalDataWindowActiveInit()
         {
             //string[] message= _LocalDataBase.SelectData("123", "", "");
-            _LocalDataBase.SetMessage += _LocalDataBaseWindow.SetStatusText;
+            _LocalDataBase.SetMessageAction += _LocalDataBaseWindow.SetStatusText;
         }
 
         #endregion

@@ -342,7 +342,7 @@
             this.toolStripButton5.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton5.Name = "toolStripButton5";
             this.toolStripButton5.Size = new System.Drawing.Size(29, 29);
-            this.toolStripButton5.Text = "LastR";
+            this.toolStripButton5.Text = "LastResult";
             this.toolStripButton5.ToolTipText = "获取最后一次结果";
             this.toolStripButton5.Click += new System.EventHandler(this.ToolstripButton_Click);
             // 

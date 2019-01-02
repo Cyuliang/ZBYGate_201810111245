@@ -9,7 +9,7 @@ namespace ZBYGate_Data_Collection.Https
     class CHttp
     {
         private Log.CLog _Log = new Log.CLog();
-        public Action<string> SetMessage;
+        public Action<string> SetMessageAction;
 
         private readonly string http = Properties.Settings.Default.Http_www;
         private readonly string eqid = Properties.Settings.Default.Http_eqId;
@@ -20,7 +20,7 @@ namespace ZBYGate_Data_Collection.Https
 
         public CHttp()
         {
-            System.Net.ServicePointManager.DefaultConnectionLimit = 50;
+            ServicePointManager.DefaultConnectionLimit = 50;
         }
 
         /// <summary>
@@ -42,7 +42,7 @@ namespace ZBYGate_Data_Collection.Https
             request.ContentType = "application/json";/*x-www-form-urlencoded";*/
             string Json = string.Format(@"{{""eqId"":""{0}"",""arrivedTime"":""{1}"",""truckNumber"":""{2}"",""tranNo"":""{3}""}}",
                 eqid, Time, Plate, Container);
-            SetMessage?.Invoke(string.Format("Send {0}", Json));
+            SetMessageAction?.Invoke(string.Format("Send {0}", Json));
 
             byte[] Josntobyte = Encoding.UTF8.GetBytes(Json);
             request.ContentLength = Josntobyte.Length;
@@ -54,7 +54,7 @@ namespace ZBYGate_Data_Collection.Https
                 {
                     writer.Write(Josntobyte, 0, Josntobyte.Length);
                     writer.Close();
-                    SetMessage?.Invoke(string.Format("Post Data：{0}", Json));
+                    SetMessageAction?.Invoke(string.Format("Post Data：{0}", Json));
                     _Log.logInfo.Info(string.Format("Post Data：{0}", Json));
 
                     HttpWebResponse respone;
@@ -65,7 +65,7 @@ namespace ZBYGate_Data_Collection.Https
                     catch (WebException ex)
                     {
                         respone = ex.Response as HttpWebResponse;
-                        SetMessage?.Invoke("Post Data Error");
+                        SetMessageAction?.Invoke("Post Data Error");
                         _Log.logError.Error("Result Data Error", ex);
                     }
                     //HttpWebResponse response = (HttpWebResponse)webReq.GetResponse();
@@ -75,7 +75,7 @@ namespace ZBYGate_Data_Collection.Https
                     StreamReader sreader = new StreamReader(s);
                     string postConent = sreader.ReadToEnd();
                     sreader.Close();
-                    SetMessage(string.Format("Return Data：{0}", postConent));
+                    SetMessageAction(string.Format("Return Data：{0}", postConent));
                     _Log.logInfo.Info(string.Format("Return Data：{0}", postConent));
 
                     return postConent;

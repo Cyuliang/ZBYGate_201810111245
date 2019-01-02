@@ -71,6 +71,17 @@
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
+            this.toolStripStatusLabel6 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabel7 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabel8 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabel9 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabel10 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabel11 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabel12 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabel13 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabel14 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabel15 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabel16 = new System.Windows.Forms.ToolStripStatusLabel();
             this.statusStrip1.SuspendLayout();
             this.statusStrip2.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -104,9 +115,20 @@
             this.statusStrip2.BackColor = System.Drawing.Color.Coral;
             this.statusStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabel2,
+            this.toolStripStatusLabel6,
             this.toolStripStatusLabel3,
+            this.toolStripStatusLabel7,
             this.toolStripStatusLabel4,
-            this.toolStripStatusLabel5});
+            this.toolStripStatusLabel8,
+            this.toolStripStatusLabel5,
+            this.toolStripStatusLabel9,
+            this.toolStripStatusLabel10,
+            this.toolStripStatusLabel14,
+            this.toolStripStatusLabel11,
+            this.toolStripStatusLabel15,
+            this.toolStripStatusLabel12,
+            this.toolStripStatusLabel16,
+            this.toolStripStatusLabel13});
             this.statusStrip2.Location = new System.Drawing.Point(0, 406);
             this.statusStrip2.Name = "statusStrip2";
             this.statusStrip2.Size = new System.Drawing.Size(800, 22);
@@ -332,34 +354,33 @@
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel1.Controls.Add(this.tabControl1, 0, 0);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 57);
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(30, 25);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 1;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 349F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(800, 349);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(770, 381);
             this.tableLayoutPanel1.TabIndex = 6;
             // 
             // tabControl1
             // 
-            this.tabControl1.Alignment = System.Windows.Forms.TabAlignment.Left;
             this.tabControl1.Controls.Add(this.MainPage);
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl1.Location = new System.Drawing.Point(3, 3);
             this.tabControl1.Multiline = true;
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(794, 343);
+            this.tabControl1.Size = new System.Drawing.Size(764, 375);
             this.tabControl1.TabIndex = 0;
             this.tabControl1.SelectedIndexChanged += new System.EventHandler(this.TabControl1_SelectedIndexChanged);
             // 
             // MainPage
             // 
             this.MainPage.Controls.Add(this.MainlistBox);
-            this.MainPage.Location = new System.Drawing.Point(22, 4);
+            this.MainPage.Location = new System.Drawing.Point(4, 22);
             this.MainPage.Name = "MainPage";
             this.MainPage.Padding = new System.Windows.Forms.Padding(3);
-            this.MainPage.Size = new System.Drawing.Size(768, 335);
+            this.MainPage.Size = new System.Drawing.Size(756, 349);
             this.MainPage.TabIndex = 0;
             this.MainPage.Text = "Main";
             this.MainPage.UseVisualStyleBackColor = true;
@@ -373,18 +394,19 @@
             this.MainlistBox.ItemHeight = 12;
             this.MainlistBox.Location = new System.Drawing.Point(3, 3);
             this.MainlistBox.Name = "MainlistBox";
-            this.MainlistBox.Size = new System.Drawing.Size(762, 329);
+            this.MainlistBox.Size = new System.Drawing.Size(750, 343);
             this.MainlistBox.TabIndex = 0;
             this.MainlistBox.SelectedIndexChanged += new System.EventHandler(this.MainlistBox_SelectedIndexChanged);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 32);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(27, 6);
             // 
             // toolStrip1
             // 
             this.toolStrip1.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.toolStrip1.Dock = System.Windows.Forms.DockStyle.Left;
             this.toolStrip1.ImageScalingSize = new System.Drawing.Size(25, 25);
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripButton1,
@@ -392,7 +414,7 @@
             this.toolStripSeparator1});
             this.toolStrip1.Location = new System.Drawing.Point(0, 25);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(800, 32);
+            this.toolStrip1.Size = new System.Drawing.Size(30, 381);
             this.toolStrip1.TabIndex = 5;
             this.toolStrip1.Text = "toolStrip1";
             // 
@@ -402,7 +424,7 @@
             this.toolStripButton1.Image = global::ZBYGate_Data_Collection.Resource1.cloase;
             this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton1.Name = "toolStripButton1";
-            this.toolStripButton1.Size = new System.Drawing.Size(29, 29);
+            this.toolStripButton1.Size = new System.Drawing.Size(27, 29);
             this.toolStripButton1.Text = "toolStripButton1";
             this.toolStripButton1.ToolTipText = "关闭页面";
             this.toolStripButton1.Click += new System.EventHandler(this.CloseTabPageButton_Click);
@@ -413,10 +435,89 @@
             this.toolStripButton2.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton2.Image")));
             this.toolStripButton2.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton2.Name = "toolStripButton2";
-            this.toolStripButton2.Size = new System.Drawing.Size(29, 29);
+            this.toolStripButton2.Size = new System.Drawing.Size(27, 29);
             this.toolStripButton2.Text = "toolStripButton2";
             this.toolStripButton2.ToolTipText = "清除日志";
             this.toolStripButton2.Click += new System.EventHandler(this.MainlistBoxClear_Click);
+            // 
+            // toolStripStatusLabel6
+            // 
+            this.toolStripStatusLabel6.Name = "toolStripStatusLabel6";
+            this.toolStripStatusLabel6.Size = new System.Drawing.Size(11, 17);
+            this.toolStripStatusLabel6.Text = "|";
+            // 
+            // toolStripStatusLabel7
+            // 
+            this.toolStripStatusLabel7.Name = "toolStripStatusLabel7";
+            this.toolStripStatusLabel7.Size = new System.Drawing.Size(11, 17);
+            this.toolStripStatusLabel7.Text = "|";
+            // 
+            // toolStripStatusLabel8
+            // 
+            this.toolStripStatusLabel8.Name = "toolStripStatusLabel8";
+            this.toolStripStatusLabel8.Size = new System.Drawing.Size(11, 17);
+            this.toolStripStatusLabel8.Text = "|";
+            // 
+            // toolStripStatusLabel9
+            // 
+            this.toolStripStatusLabel9.Name = "toolStripStatusLabel9";
+            this.toolStripStatusLabel9.Size = new System.Drawing.Size(11, 17);
+            this.toolStripStatusLabel9.Text = "|";
+            // 
+            // toolStripStatusLabel10
+            // 
+            this.toolStripStatusLabel10.ForeColor = System.Drawing.Color.White;
+            this.toolStripStatusLabel10.Name = "toolStripStatusLabel10";
+            this.toolStripStatusLabel10.Size = new System.Drawing.Size(83, 17);
+            this.toolStripStatusLabel10.Text = "系统运行时常:";
+            // 
+            // toolStripStatusLabel11
+            // 
+            this.toolStripStatusLabel11.ForeColor = System.Drawing.Color.Green;
+            this.toolStripStatusLabel11.Name = "toolStripStatusLabel11";
+            this.toolStripStatusLabel11.Size = new System.Drawing.Size(32, 17);
+            this.toolStripStatusLabel11.Text = "小时";
+            // 
+            // toolStripStatusLabel12
+            // 
+            this.toolStripStatusLabel12.ForeColor = System.Drawing.Color.Green;
+            this.toolStripStatusLabel12.Name = "toolStripStatusLabel12";
+            this.toolStripStatusLabel12.Size = new System.Drawing.Size(32, 17);
+            this.toolStripStatusLabel12.Text = "分钟";
+            // 
+            // toolStripStatusLabel13
+            // 
+            this.toolStripStatusLabel13.ForeColor = System.Drawing.Color.Green;
+            this.toolStripStatusLabel13.Name = "toolStripStatusLabel13";
+            this.toolStripStatusLabel13.Size = new System.Drawing.Size(32, 17);
+            this.toolStripStatusLabel13.Text = "秒钟";
+            // 
+            // toolStripStatusLabel14
+            // 
+            this.toolStripStatusLabel14.BackColor = System.Drawing.Color.Yellow;
+            this.toolStripStatusLabel14.ForeColor = System.Drawing.Color.Blue;
+            this.toolStripStatusLabel14.Name = "toolStripStatusLabel14";
+            this.toolStripStatusLabel14.Size = new System.Drawing.Size(108, 17);
+            this.toolStripStatusLabel14.Spring = true;
+            this.toolStripStatusLabel14.Text = "00";
+            // 
+            // toolStripStatusLabel15
+            // 
+            this.toolStripStatusLabel15.BackColor = System.Drawing.Color.Yellow;
+            this.toolStripStatusLabel15.ForeColor = System.Drawing.Color.Blue;
+            this.toolStripStatusLabel15.Name = "toolStripStatusLabel15";
+            this.toolStripStatusLabel15.Size = new System.Drawing.Size(108, 17);
+            this.toolStripStatusLabel15.Spring = true;
+            this.toolStripStatusLabel15.Text = "00";
+            // 
+            // toolStripStatusLabel16
+            // 
+            this.toolStripStatusLabel16.BackColor = System.Drawing.Color.Yellow;
+            this.toolStripStatusLabel16.ForeColor = System.Drawing.Color.Blue;
+            this.toolStripStatusLabel16.Name = "toolStripStatusLabel16";
+            this.toolStripStatusLabel16.Size = new System.Drawing.Size(108, 17);
+            this.toolStripStatusLabel16.Spring = true;
+            this.toolStripStatusLabel16.Text = "00";
             // 
             // Form1
             // 
@@ -491,6 +592,17 @@
         private System.Windows.Forms.ToolStripButton toolStripButton2;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStrip toolStrip1;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel6;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel7;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel8;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel9;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel10;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel14;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel11;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel15;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel12;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel16;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel13;
     }
 }
 

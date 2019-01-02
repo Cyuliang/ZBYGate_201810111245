@@ -12,25 +12,23 @@ namespace ZBYGate_Data_Collection.CVR
         public Action<int> CVRCloseAction;//关闭读取
         public Action<int> CVRWhileReadAction;//循环读取
         public Action<int> CVRForReadAction;//定时读取
-        public Action<bool> CVRSetCVRvolatile;//设置定时读取状态
+        public Action<bool> CVRSetCVRvolatileAction;//设置定时读取状态
 
-        private delegate void UpdateUiInvok(string Message);//跨线程更新UI
         private volatile bool ReadForBooen = true;//定时循环状态
-
-        private System.Threading.Timer _Timer = null;
+        private System.Threading.Timer _Timer;
 
         #region//更新UI
-        private delegate void UpdateCVR(byte[] name, byte[] sex, byte[] peopleNation, byte[] birthday, byte[] number, byte[] address, byte[] signdate, byte[] validtermOfStart, byte[] validtermOfEnd);
-        private delegate void UpdateCVRImage(byte[] imgData, int length);
+        private delegate void UpdateUiDelegate(string Message);//跨线程更新UI
+        private delegate void UpdateCVRDelegate(byte[] name, byte[] sex, byte[] peopleNation, byte[] birthday, byte[] number, byte[] address, byte[] signdate, byte[] validtermOfStart, byte[] validtermOfEnd);
+        private delegate void UpdateCVRImageDelegate(byte[] imgData, int length);
         #endregion
 
         public CVRWindow()
         {
             InitializeComponent();
+            SetObjectTag();
 
             _Timer = new System.Threading.Timer(ClearText, null, TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(0));
-
-            SetObjectTag();
         }
 
         /// <summary>
@@ -50,7 +48,7 @@ namespace ZBYGate_Data_Collection.CVR
         {
             if (statusStrip1.InvokeRequired)
             {
-                statusStrip1.Invoke(new UpdateUiInvok(SetStatusText), new object[] { Message });
+                statusStrip1.Invoke(new UpdateUiDelegate(SetStatusText), new object[] { Message });
             }
             else
             {
@@ -84,7 +82,7 @@ namespace ZBYGate_Data_Collection.CVR
         {
             if(textBox1.InvokeRequired)
             {
-                textBox1?.Invoke(new UpdateCVR(FillData), new object[] { name, sex,peopleNation,birthday,number,address,signdate,validtermOfStart,validtermOfEnd });
+                textBox1?.Invoke(new UpdateCVRDelegate(FillData), new object[] { name, sex,peopleNation,birthday,number,address,signdate,validtermOfStart,validtermOfEnd });
             }
             else
             {
@@ -107,7 +105,7 @@ namespace ZBYGate_Data_Collection.CVR
         {
             if(pictureBoxPhoto.InvokeRequired)
             {
-                pictureBoxPhoto?.Invoke(new UpdateCVRImage(FillDataBmp), new object[] { imgData, length });
+                pictureBoxPhoto?.Invoke(new UpdateCVRImageDelegate(FillDataBmp), new object[] { imgData, length });
             }
             else
             {
@@ -120,6 +118,7 @@ namespace ZBYGate_Data_Collection.CVR
                 pictureBoxPhoto.Image = myImage;
                 myStream.Seek(0, SeekOrigin.Begin);
                 myStream.SetLength(0);
+                myStream.Close();
             }
         }
 
@@ -145,12 +144,12 @@ namespace ZBYGate_Data_Collection.CVR
                 case 4:
                     if(_ToolStripButton.Checked)
                     {
-                        CVRSetCVRvolatile?.Invoke(true);
+                        CVRSetCVRvolatileAction?.Invoke(true);
                         CVRWhileReadAction?.BeginInvoke(0, new AsyncCallback(CallWhileDone), null);
                     }
                     else//取消选中停止循环
                     {
-                        CVRSetCVRvolatile?.Invoke(false);
+                        CVRSetCVRvolatileAction?.Invoke(false);
                     }
                     break;
                 case 5:

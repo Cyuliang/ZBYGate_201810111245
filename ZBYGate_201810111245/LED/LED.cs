@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ZBYGate_Data_Collection.Log;
 
 namespace ZBYGate_Data_Collection.LED

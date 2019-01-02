@@ -1,11 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace ZBYGate_Data_Collection.Gate
@@ -14,14 +7,13 @@ namespace ZBYGate_Data_Collection.Gate
     {
         public Action<string, int, string> GateOpenDoorAction;
 
-        private delegate void UpdateUiInvok(string Message);//跨线程更新UI
+        private delegate void UpdateUiDelegate(string Message);//跨线程更新UI
 
-        private System.Threading.Timer _Timer = null;
+        private System.Threading.Timer _Timer;
 
         public GateWindow()
         {
             InitializeComponent();
-
             SetObjectTag();
 
             _Timer = new System.Threading.Timer(ClearText, null, TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(0));
@@ -87,7 +79,7 @@ namespace ZBYGate_Data_Collection.Gate
         {
             if (statusStrip1.InvokeRequired)
             {
-                statusStrip1.Invoke(new UpdateUiInvok(SetStatusText), new object[] { Message });
+                statusStrip1.Invoke(new UpdateUiDelegate(SetStatusText), new object[] { Message });
             }
             else
             {

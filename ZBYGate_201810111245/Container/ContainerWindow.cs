@@ -6,24 +6,27 @@ namespace ZBYGate_Data_Collection.Container
 {
     public partial class ContainerWindow : Form
     {
+        #region//委托
         public Action<int> ContainerLinkAction;//链接箱号服务端
         public Action<int> ContainerAbortAction;//断开链接
         public Action<int> ContainerLastRAction;//获取最后一次结果
+        private delegate void UpdateUiDelegate(string Message);//跨线程更新UI
+        #endregion
 
-        private delegate void UpdateUiInvok(string Message);//跨线程更新UI
-        private int Gate = 0;
+        #region//对象
+        private int LaneNum = Properties.Settings.Default.Container_Num;
+        #endregion
 
-        private System.Threading.Timer _Timer = null;
+        #region//变量
+        private System.Threading.Timer _Timer;
+        #endregion
 
         public ContainerWindow()
         {
             InitializeComponent();
-
             SetObjectTag();
 
             _Timer = new System.Threading.Timer(ClearText, null, TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(0));
-
-            Gate = Properties.Settings.Default.Container_Num;
         }
 
         /// <summary>
@@ -43,7 +46,7 @@ namespace ZBYGate_Data_Collection.Container
         {
             if (statusStrip1.InvokeRequired)
             {
-                statusStrip1.Invoke(new UpdateUiInvok(SetStatusText), new object[] { Message });
+                statusStrip1.Invoke(new UpdateUiDelegate(SetStatusText), new object[] { Message });
             }
             else
             {
@@ -125,7 +128,7 @@ namespace ZBYGate_Data_Collection.Container
                     ContainerAbortAction?.Invoke(0);                    
                     break;
                 case 3:
-                    ContainerLastRAction?.Invoke(Gate);
+                    ContainerLastRAction?.Invoke(LaneNum);
                     break;
             }
         }

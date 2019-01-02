@@ -1,11 +1,6 @@
 ﻿using MySql.Data.MySqlClient;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -20,6 +15,7 @@ namespace ZBYGate_Data_Collection.IEDataBase
             InitializeComponent();
 
             InData_ = this;
+
             dateTimePicker1.CustomFormat = "yyyy-MM-dd HH:mm:ss";
             dateTimePicker1.Format = DateTimePickerFormat.Custom;
             dateTimePicker1.ShowUpDown = true;
@@ -28,6 +24,7 @@ namespace ZBYGate_Data_Collection.IEDataBase
             dateTimePicker2.Format = DateTimePickerFormat.Custom;
             dateTimePicker2.ShowUpDown = true;
             dateTimePicker2.Value = DateTime.Now.Date.AddHours(23).AddMinutes(59).AddSeconds(59);
+
             DataradioButton.Checked = true;
         }
 
@@ -73,6 +70,7 @@ namespace ZBYGate_Data_Collection.IEDataBase
             bindingSource1.DataSource = reader;
             bindingNavigator1.BindingSource = bindingSource1;
             dataGridView1.DataSource = bindingSource1;
+            reader.Close();
         }
 
         /// <summary>
@@ -161,7 +159,7 @@ namespace ZBYGate_Data_Collection.IEDataBase
                             worksheet.Cells[r + 2, i + 1] = dataGridView1.Rows[r].Cells[i].Value;
                         }
                     }
-                    System.Windows.Forms.Application.DoEvents();
+                    Application.DoEvents();
                 }
                 worksheet.Columns.EntireColumn.AutoFit();//列宽自适应  
                                                          //   if (Microsoft.Office.Interop.cmbxType.Text != "Notification")  

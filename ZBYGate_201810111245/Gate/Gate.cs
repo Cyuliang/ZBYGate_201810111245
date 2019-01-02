@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using WG3000_COMM.Core;
 
 namespace ZBYGate_Data_Collection.Gate
@@ -12,7 +9,7 @@ namespace ZBYGate_Data_Collection.Gate
         private Log.CLog _Log = new Log.CLog();
         private System.Threading.Timer GetTimer;
 
-        public Action<string> SetMessage;
+        public Action<string> SetMessageAction;
 
         /// <summary>
         /// 控制器监听类
@@ -116,12 +113,12 @@ namespace ZBYGate_Data_Collection.Gate
                 if(wgMjController1.RemoteOpenDoorIP(1)>0)
                 {
                     _Log.logInfo.Info(string.Format("Open {0} Door Success",SN));
-                    SetMessage?.Invoke(string.Format("Open {0} Door Success", SN));
+                    SetMessageAction?.Invoke(string.Format("Open {0} Door Success", SN));
                 }
                 else
                 {
                     _Log.logInfo.Info(string.Format("Open {0} Door Failed",SN));
-                    SetMessage?.Invoke(string.Format("Open {0} Door Failed", SN));
+                    SetMessageAction?.Invoke(string.Format("Open {0} Door Failed", SN));
                 }
             }
         }

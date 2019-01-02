@@ -1,11 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace ZBYGate_Data_Collection.LED
@@ -19,17 +12,17 @@ namespace ZBYGate_Data_Collection.LED
         public Action<int> SendAction;//推送消息
         public Action<int> UnintAction;//卸载动态库
 
-        private delegate void UpdateUiInvok(string Message);//跨线程更新UI
+        private delegate void UpdateUiDelegate(string Message);//跨线程更新UI
 
-        private System.Threading.Timer _Timer = null;
+        private System.Threading.Timer _Timer;
 
         public LEDWindow()
         {
             InitializeComponent();
+            SetObjectTag(true);
 
             _Timer = new System.Threading.Timer(ClearText, null, TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(0));
 
-            SetObjectTag(true);
             IpTextBox.Text = Properties.Settings.Default.LED_pSocketIP;
             PortTextBox.Text = Properties.Settings.Default.LED_nSocketPort.ToString();
         }
@@ -85,7 +78,7 @@ namespace ZBYGate_Data_Collection.LED
         {
             if (statusStrip1.InvokeRequired)
             {
-                statusStrip1.Invoke(new UpdateUiInvok(SetStatusText), new object[] { Message });
+                statusStrip1.Invoke(new UpdateUiDelegate(SetStatusText), new object[] { Message });
             }
             else
             {

@@ -1,16 +1,11 @@
-﻿using MySql.Data.MySqlClient;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ZBYGate_Data_Collection.IEDataBase
 {
     class RunData
     {
-        public Action<string> SetMessage;//状态回显
+        public Action<string> SetMessageAction;//状态回显
         private Log.CLog _Log = new Log.CLog();
 
         /// <summary>
@@ -21,9 +16,17 @@ namespace ZBYGate_Data_Collection.IEDataBase
         /// <param name="dt"></param>
         public void In_Insert(string lpn,string container,DateTime dt,int auto)
         {
+            if(string.IsNullOrEmpty(lpn))
+            {
+                lpn = "*";
+            }
+            if(string.IsNullOrEmpty(container))
+            {
+                container = "*";
+            }
             string Inserttext = string.Format("INSERT INTO `hw`.`indata` (Plate,Container,Time,Auto) VALUES('{0}','{1}','{2}','{3}')", lpn,container, dt.ToUniversalTime().AddHours(8), auto);
             LocalDataBase.MySqlHelper.ExecuteNonQuery(LocalDataBase.MySqlHelper.Conn, CommandType.Text, Inserttext, null);
-            SetMessage?.Invoke(Inserttext);
+            SetMessageAction?.Invoke(Inserttext);
             _Log.logInfo.Info(Inserttext);
         }
 
@@ -36,7 +39,7 @@ namespace ZBYGate_Data_Collection.IEDataBase
         {
             string Inserttext = string.Format("INSERT INTO `hw`.`outdata` (Plate,Time,Auto) VALUES('{0}','{1}','{2}')", lpn, dt.ToUniversalTime().AddHours(8), auto);
             LocalDataBase.MySqlHelper.ExecuteNonQuery(LocalDataBase.MySqlHelper.Conn, CommandType.Text, Inserttext, null);
-            SetMessage?.Invoke(Inserttext);
+            SetMessageAction?.Invoke(Inserttext);
             _Log.logInfo.Info(Inserttext);
         }
 
@@ -50,11 +53,12 @@ namespace ZBYGate_Data_Collection.IEDataBase
         {
             string Updatetext = string.Format("UPDATE  `hw`.`indata` SET Cards = '{0}', Auto='{1}' WHERE Time = '{2}'", Cards,auto, dt.ToUniversalTime().AddHours(8));
             LocalDataBase.MySqlHelper.ExecuteNonQuery(LocalDataBase.MySqlHelper.Conn, CommandType.Text, Updatetext, null);
+            SetMessageAction?.Invoke(Updatetext);
             _Log.logInfo.Info(Updatetext);
         }
 
         /// <summary>
-        /// 插入闸口进数据
+        /// 写入rundata闸口数据库进数据
         /// </summary>
         /// <param name="Plate"></param>
         /// <param name="Container"></param>
@@ -76,31 +80,32 @@ namespace ZBYGate_Data_Collection.IEDataBase
                 Inserttext = string.Format("INSERT INTO `hw`.`rundata` (Plate,Container,InDatetime,Auto) VALUES('{0}','{1}','{2}'.'{3}')", Plate, Container, dt.ToUniversalTime().AddHours(8), auto);
             }
             LocalDataBase.MySqlHelper.ExecuteNonQuery(LocalDataBase.MySqlHelper.Conn, CommandType.Text, Inserttext, null);
-            SetMessage?.Invoke(Inserttext);
+            SetMessageAction?.Invoke(Inserttext);
             _Log.logInfo.Info(Inserttext);
         }
 
         /// <summary>
-        /// 插入闸口出数据
+        /// 写入RUNDATA闸口数据库出数据
         /// </summary>
         /// <param name="Plate"></param>
         /// <param name="dt"></param>
         public void Rundata_update(string plate,DateTime dt)
         {
-            if(plate!=string.Empty)
+            string Updatetext = string.Empty;
+            if (!string.IsNullOrWhiteSpace(plate))
             {
-                int ID = 0;
                 string Selecttext = string.Format("SELECT * FROM  `hw`.`rundata` WHERE Plate='{0}' order by Id desc limit 1", plate);
-                MySqlDataReader reader = LocalDataBase.MySqlHelper.ExecuteReader(LocalDataBase.MySqlHelper.Conn, CommandType.Text, Selecttext, null);
-                if(reader.Read())
+                object Id = LocalDataBase.MySqlHelper.ExecuteScalar(LocalDataBase.MySqlHelper.Conn, CommandType.Text, Selecttext, null);
+                if(Id==null)
                 {
-                    ID = int.Parse(reader[0].ToString());
+                    SetMessageAction?.Invoke("没有找到入闸数据");
                 }
-                //var result = LocalDataBase.MySqlHelper.ExecuteScalar(LocalDataBase.MySqlHelper.Conn, CommandType.Text, Selecttext, null);
-                //int ID = int.Parse(result.GetType().ToString());
-                //string Updatetext = string.Format("UPDATE  `hw`.`indata` SET Cards = '{0}', Auto='{1}' WHERE Time = '{2}'", Cards, auto, dt.ToUniversalTime().AddHours(8));
-                string Updatetext = string.Format("UPDATE `hw`.`rundata` SET OutDatetime='{0}' WHERE Plate='{1}' AND Id=ID AND OutDatetime is null order by Id desc limit 1", dt.ToUniversalTime().AddHours(8), plate);
+                else
+                {
+                    Updatetext = string.Format("UPDATE `hw`.`rundata` SET OutDatetime='{0}' WHERE Plate='{1}' AND Id='{2}' AND OutDatetime is null", dt.ToUniversalTime().AddHours(8), plate,Int32.Parse(Id.ToString()));
+                }
                 LocalDataBase.MySqlHelper.ExecuteNonQuery(LocalDataBase.MySqlHelper.Conn, CommandType.Text, Updatetext, null);
+                SetMessageAction?.Invoke(Updatetext);
                 _Log.logInfo.Info(Updatetext);
             }
         }

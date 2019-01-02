@@ -7,7 +7,7 @@ namespace ZBYGate_Data_Collection.LocalDataBase
     //防止数据库过大，照成数据查询缓慢，暂时未处理
     class LocalDataBase
     {
-        public Action<string> SetMessage;//状态回显
+        public Action<string> SetMessageAction;//状态回显
         private Log.CLog _Log = new Log.CLog();
 
         /// <summary>
@@ -53,7 +53,7 @@ namespace ZBYGate_Data_Collection.LocalDataBase
             string tmp = string.Format("SELECT *  FROM `hw`.`gate` FORCE INDEX('PLATE') WHERE Plate={0} " +
                                        "UNION ALL SELECT * FROM `hw`.`gate` WHERE Container ={1} " +
                                        "UNION ALL SELECT * FROM `hw`.`gate` WHERE Cards={2}", plate,container, cards);
-            SetMessage?.Invoke(tmp);
+            SetMessageAction?.Invoke(tmp);
             _Log.logInfo.Info(tmp);
 
             using (MySqlDataReader reader = MySqlHelper.ExecuteReader(MySqlHelper.Conn, CommandType.Text, cmdText, parameters))
@@ -79,7 +79,7 @@ namespace ZBYGate_Data_Collection.LocalDataBase
                     ResultTrup[5] = reader["Cards"].ToString();
 
 
-                    SetMessage?.Invoke(Result);
+                    SetMessageAction?.Invoke(Result);
                     _Log.logInfo.Info(Result);
                     break;                    
                 }

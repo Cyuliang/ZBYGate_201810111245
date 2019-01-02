@@ -5,17 +5,19 @@ namespace ZBYGate_Data_Collection.CVR
 {
     class CVR
     {
+        #region//对象
         private CLog _Log = new CLog();
-        private volatile bool STATE;
+        #endregion
 
+        #region//变量
+        private volatile bool STATE=false;
+        #endregion
+
+        #region//委托
         public Action<byte[], byte[], byte[], byte[], byte[], byte[], byte[], byte[], byte[]> FillDataActive;
         public Action<byte[], int> FillDataBmpActive;
         public Action<string> SetMessageAction;
-
-        public CVR()
-        {
-            STATE = false;
-        }
+        #endregion
 
         /// <summary>
         /// 初始化
@@ -32,8 +34,8 @@ namespace ZBYGate_Data_Collection.CVR
                 }
                 else
                 {
-                    _Log.logWarn.Warn("CVR InitComm Fail");
-                    SetMessageAction?.Invoke("CVR InitComm Fail");
+                    _Log.logWarn.Warn("CVR InitComm Faile");
+                    SetMessageAction?.Invoke("CVR InitComm Faile");
                 }
             }
             catch (Exception ex)
@@ -70,8 +72,8 @@ namespace ZBYGate_Data_Collection.CVR
                 }
                 else
                 {
-                    _Log.logWarn.Warn("CVR Authenticate error");
-                    SetMessageAction?.Invoke("CVR Authenticate error");
+                    _Log.logWarn.Warn("CVR Authenticate Faile");
+                    SetMessageAction?.Invoke("CVR Authenticate Faile");
                 }
             }
             catch (Exception ex)
@@ -99,17 +101,25 @@ namespace ZBYGate_Data_Collection.CVR
             int j = 0;
             while (STATE)
             {
-                int authenticate = SafeNativeMethods.CVR_Authenticate();
-                if (authenticate == 1)
+                try
                 {
-                    int readContent = SafeNativeMethods.CVR_Read_FPContent();
-                    if (readContent == 1)
+                    int authenticate = SafeNativeMethods.CVR_Authenticate();
+                    if (authenticate == 1)
                     {
-                        _Log.logInfo.Info("CVR While Read Cards Success");
-                        SetMessageAction?.Invoke("CVR While Read Cards Success");
-                        FillData();
+                        int readContent = SafeNativeMethods.CVR_Read_FPContent();
+                        if (readContent == 1)
+                        {
+                            _Log.logInfo.Info("CVR While Read Cards Success");
+                            SetMessageAction?.Invoke("CVR While Read Cards Success");
+                            FillData();
+                        }
                     }
                 }
+                catch (Exception ex)
+                {
+                    _Log.logError.Error("无限读卡出错",ex);
+                }
+
                 j++;
                 System.Threading.Thread.Sleep(2000);
                 SetMessageAction?.Invoke(string.Format("CVR While Read Cards {0:d}次",j));
@@ -126,23 +136,31 @@ namespace ZBYGate_Data_Collection.CVR
             int j = 0;
             while (j < Properties.Settings.Default.CVR_Read_While && (!STATE))
             {
-                int authenticate = SafeNativeMethods.CVR_Authenticate();
-                if (authenticate == 1)
+                try
                 {
-                    int readContent = SafeNativeMethods.CVR_Read_FPContent();
-                    if (readContent == 1)
+                    int authenticate = SafeNativeMethods.CVR_Authenticate();
+                    if (authenticate == 1)
                     {
-                        _Log.logInfo.Info("CVR Read For Cards Success");
-                        SetMessageAction?.Invoke("CVR Read For Cards Success");
-                        FillData();
-                        break;
+                        int readContent = SafeNativeMethods.CVR_Read_FPContent();
+                        if (readContent == 1)
+                        {
+                            _Log.logInfo.Info("CVR Read For Cards Success");
+                            SetMessageAction?.Invoke("CVR Read For Cards Success");
+                            FillData();
+                            break;
+                        }
                     }
                 }
+                catch (Exception ex)
+                {
+                    _Log.logError.Error("定时读卡出错",ex);
+                }
+
                 j++;
                 System.Threading.Thread.Sleep(2000);
-                SetMessageAction?.Invoke(string.Format("Wait CVR For Read Cards {0:d}次",j));
+                SetMessageAction?.Invoke(string.Format("CVR Wait For Read Cards {0:d}次", j));
             }
-            SetMessageAction?.Invoke("While CVR For Read Success");
+            SetMessageAction?.Invoke("CVR While For Read Success");
         }
 
         /// <summary>
@@ -150,15 +168,24 @@ namespace ZBYGate_Data_Collection.CVR
         /// </summary>
         public void CloseComm(int i)
         {
-            if (SafeNativeMethods.CVR_CloseComm() == 1)
+            try
             {
-                _Log.logInfo.Info("CVR Close Success");
-                SetMessageAction?.Invoke("CVR Close Success");
+                if (SafeNativeMethods.CVR_CloseComm() == 1)
+                {
+                    _Log.logInfo.Info("CVR Close Success");
+                    SetMessageAction?.Invoke("CVR Close Success");
+                }
+                else
+                {
+                    _Log.logWarn.Warn("CVR Close Error");
+                    SetMessageAction?.Invoke("CVR Close Error");
+                }
             }
-            else
+            catch (Exception ex)
             {
-                SetMessageAction?.Invoke("CVR Close Error");
+                _Log.logError.Error("关闭串口错误",ex);
             }
+
         }
 
         /// <summary>

@@ -9,8 +9,9 @@ namespace ZBYGate_Data_Collection.CVR
     [SuppressUnmanagedCodeSecurityAttribute]
     internal class SafeNativeMethods
     {
+        //声明外部的标准动态库, 跟Win32API是一样的
         [DllImport("Termb.dll", EntryPoint = "CVR_InitComm", CharSet = CharSet.Ansi, SetLastError = false)]
-        public static extern int CVR_InitComm(int Port);//声明外部的标准动态库, 跟Win32API是一样的
+        public static extern int CVR_InitComm(int Port);
 
 
         [DllImport("Termb.dll", EntryPoint = "CVR_Authenticate", CharSet = CharSet.Ansi, SetLastError = false)]
