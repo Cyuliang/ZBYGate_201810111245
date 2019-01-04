@@ -711,5 +711,24 @@ namespace ZBYGate_Data_Collection
 
 
         #endregion
+
+        private void notifyIcon1_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            //this.Visible = true;//这个也可以            
+            //this.Show();
+            this.WindowState = FormWindowState.Normal;
+            this.notifyIcon1.Visible = false;
+        }
+
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            DialogResult result = MessageBox.Show("确认关闭程序吗？", "提示", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (result == DialogResult.No)
+            {
+                e.Cancel = true;
+                this.WindowState = FormWindowState.Minimized;
+                this.notifyIcon1.Visible = true;
+            }
+        }
     }
 }
