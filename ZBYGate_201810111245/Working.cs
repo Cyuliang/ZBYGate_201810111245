@@ -8,7 +8,6 @@ namespace ZBYGate_Data_Collection
     class Working : IDisposable//远程服务器和本地数据库同步查询
     {
         private Log.CLog _Log = new Log.CLog();
-
         private int Select_Logic = Properties.Settings.Default.Working_Select_Logic;//处理数据逻辑
 
         #region//集装箱
@@ -113,6 +112,7 @@ namespace ZBYGate_Data_Collection
         {
             NewLpn = obj.lPN;
             Plate = obj.lPN;
+            Passtime = obj.triggerTime;
             Analysis();
         }
 
@@ -124,6 +124,7 @@ namespace ZBYGate_Data_Collection
         {
             UpdateLpn = obj.lPN;
             Plate = obj.lPN;
+            Passtime = obj.triggerTime;
             Analysis();
         }
 
@@ -213,6 +214,11 @@ namespace ZBYGate_Data_Collection
                 LedShowDataResult[5] = Http_Status;                               //提示进闸字段
                 IsOpenDoorD = true;
                 LedShow(LedShowDataResult, IsOpenDoorD);
+
+                //查询到清空字段
+                NewLpn = string.Empty;
+                UpdateLpn = string.Empty;
+                Containernumber = string.Empty;
             }
 
         }
@@ -258,6 +264,11 @@ namespace ZBYGate_Data_Collection
                 var LedShowDataResult = new string[] { string.Format("{0} {1}", Head[0], Head[1]), "*", "*", "*", "*", Http_HttpNull };
                 LedShow(LedShowDataResult, IsOpenDoorH);
             }
+
+            //最后清空字段
+            NewLpn = string.Empty;
+            UpdateLpn = string.Empty;
+            Containernumber = string.Empty;
         }
 
         /// <summary>
