@@ -191,6 +191,12 @@
     </Compile>
     <Compile Include="LocalDataBase\MySqlHelper.cs" />
     <Compile Include="Log\CLog.cs" />
+    <Compile Include="PasswordForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PasswordForm.Designer.cs">
+      <DependentUpon>PasswordForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Plate\NativeMethods.cs" />
     <Compile Include="Plate\Plate.cs" />
     <Compile Include="Plate\PlateWindow.cs">
@@ -237,6 +243,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="LocalDataBase\LocalDataBaseWindow.resx">
       <DependentUpon>LocalDataBaseWindow.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PasswordForm.resx">
+      <DependentUpon>PasswordForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Plate\PlateWindow.resx">
       <DependentUpon>PlateWindow.cs</DependentUpon>

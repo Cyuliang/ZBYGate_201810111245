@@ -156,5 +156,8 @@ allowPublicKeyRetrieval=True;</Value>
     <Setting Name="Http_HttpNull" Type="System.String" Scope="User">
       <Value Profile="(Default)">查询远端服务器失败</Value>
     </Setting>
+    <Setting Name="Exit_Password" Type="System.String" Scope="User">
+      <Value Profile="(Default)">123</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

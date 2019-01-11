@@ -722,13 +722,35 @@ namespace ZBYGate_Data_Collection
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            DialogResult result = MessageBox.Show("确认关闭程序吗？", "提示", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            if (result == DialogResult.No)
+            PasswordForm _PasswordForm = new PasswordForm();
+            _PasswordForm.PasswordAction += Exit_Password;
+            _PasswordForm.ShowDialog();
+            if(EXIT)
+            {
+                e.Cancel = false;
+            }
+            else
             {
                 e.Cancel = true;
-                this.WindowState = FormWindowState.Minimized;
-                this.notifyIcon1.Visible = true;
             }
+
+            //DialogResult result = MessageBox.Show("确认关闭程序吗？", "提示", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            //if (result == DialogResult.No)
+            //{
+            //    e.Cancel = true;
+            //    this.WindowState = FormWindowState.Minimized;
+            //    this.notifyIcon1.Visible = true;
+            //}
+        }
+
+        private bool EXIT = false;
+        /// <summary>
+        /// 密码正确关闭程序
+        /// </summary>
+        /// <param name="obj"></param>
+        private void Exit_Password(bool obj)
+        {
+            EXIT = obj;
         }
     }
 }
