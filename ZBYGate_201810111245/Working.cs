@@ -59,7 +59,8 @@ namespace ZBYGate_Data_Collection
         #endregion
 
         #region//HTTP
-        public Func<string, string, string, string> HttpPostAction;//远程查询数据
+        public Func<string, string, string, string> HttpPostInAction;//远程查询数据
+        public Action<string, string> HttpPostOutAction;//出闸远端交换数据
         public Func<string, string[]> HttpJsonSplitAction;//解析Json
         #endregion
 
@@ -166,7 +167,7 @@ namespace ZBYGate_Data_Collection
                         IAsyncResultData = SelectDataBase?.BeginInvoke(Lpn, Container, "", SelectDataBaseCallBack, Head);//查询数据库    
                         if (HttpSwitch)                                                                                  //是否查询远端服务器
                         {
-                            IAsyncResultHttp = HttpPostAction?.BeginInvoke(Passtime.ToString("yyyyMMddhhmmss"), Lpn, Container, SelectHttpCallBack, Head);
+                            IAsyncResultHttp = HttpPostInAction?.BeginInvoke(Passtime.ToString("yyyyMMddhhmmss"), Lpn, Container, SelectHttpCallBack, Head);
                         }
                         break;
                     case 1://顺序查询
@@ -205,7 +206,7 @@ namespace ZBYGate_Data_Collection
 
             if (LedShowDataResult.All(string.IsNullOrEmpty))                      //数据库记录为空
             {                                                                     //查询远端数据库
-                IAsyncResultHttp = HttpPostAction?.BeginInvoke(Passtime.ToString("yyyyMMddhhmmss"), Head[0], Head[1], Tow_SelectHttpCallBack, Head);
+                IAsyncResultHttp = HttpPostInAction?.BeginInvoke(Passtime.ToString("yyyyMMddhhmmss"), Head[0], Head[1], Tow_SelectHttpCallBack, Head);
             }
             else                                                                  //查询到数据库记录
             {
@@ -231,7 +232,7 @@ namespace ZBYGate_Data_Collection
         {
             bool IsOpenDoorH = false;                                               //是否开闸
             var Head = (string[])ar.AsyncState;                                     //车牌和箱号
-            var HttpResult = HttpPostAction.EndInvoke(ar);                          ////http请求数据回调函数返回数据  
+            var HttpResult = HttpPostInAction.EndInvoke(ar);                          ////http请求数据回调函数返回数据  
             SetMessage?.Invoke("分析远端服务器返回数据完成");
 
             //HttpResult = @"{""error_code"":""AE0000"",""error_desc"":""The request handled successful."",""result"":{""resultList"":""N"",""status"":""已预约"",""visito"":""TMT"",""ledgename"":""松山湖"",""platform"":""活态"",""truckNumber"":""粤B050CS"",""tranNo"":""12345"",""arrivedTime"":""2018 - 11 - 12 17:10:30""}}";
@@ -280,7 +281,7 @@ namespace ZBYGate_Data_Collection
             bool IsOpenDoorH = false;                                               //是否开闸
             var Head = (string[])ar.AsyncState;                                     //车牌和箱号
 
-            var HttpResult = HttpPostAction.EndInvoke(ar);                          ////http请求数据回调函数返回数据  
+            var HttpResult = HttpPostInAction.EndInvoke(ar);                          ////http请求数据回调函数返回数据  
             if (IAsyncResultData != null)
             {
                 IAsyncResultData.AsyncWaitHandle.WaitOne();                         //等待数据库查询完成
@@ -597,6 +598,7 @@ namespace ZBYGate_Data_Collection
                 SetOutLedMessageAction?.BeginInvoke(string.Format("{0} {1}", ChLicesen, Plate_Local_End_Message),SetOutLedCallBack,null);//LED显示
                 Out_InsertDataBaseAction?.BeginInvoke(ChLicesen, ChTime,  1, InsertCallBack, null);//插入数据库
                 Rundata_updateAction?.BeginInvoke(ChLicesen, ChTime,null,null);
+                HttpPostOutAction(ChTime.ToString("yyyyMMddhhmmss"), ChLicesen);//发送出闸数据到远端服务器
             }
             else
             {

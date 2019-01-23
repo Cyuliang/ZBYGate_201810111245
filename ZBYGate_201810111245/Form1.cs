@@ -142,8 +142,9 @@ namespace ZBYGate_Data_Collection
 
             _Working.SetMessage += GetMessage;//动作日志
 
-            _Working.HttpPostAction += _CHttp.SetJosn;//查询远端服务器
+            _Working.HttpPostInAction += _CHttp.SetInJosn;//查询远端服务器
             _Working.HttpJsonSplitAction += _CHttp.JsonSplit;
+            _Working.HttpPostOutAction += _CHttp.SetOutJosn;//出闸远端交换数据
             #endregion
 
             #region //控件状态初始化
@@ -705,7 +706,7 @@ namespace ZBYGate_Data_Collection
         /// </summary>
         private void HttpWindowActiveInit()
         {
-            _HttpWindow.SetJsonAction += _CHttp.SetJosn;
+            _HttpWindow.SetJsonAction += _CHttp.SetInJosn;
             _HttpWindow.JsonSplitAction += _CHttp.JsonSplit;
         }
 
