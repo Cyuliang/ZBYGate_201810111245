@@ -209,5 +209,7 @@ namespace ZBYGate_Data_Collection.Https
         public string truckNumber;
         public string tranNo;
         public string arrivedTime;
+        //public string status1;
+        //public string sysdate;
     }  
 }

@@ -239,15 +239,19 @@ namespace ZBYGate_Data_Collection
             if (HttpResult != null)
             {
                 var LedShowDataResult = HttpJsonSplitAction?.Invoke(HttpResult);    //分析Json数据
-                
+
+                LedShowDataResult[0] = string.Format("{0} {1}", Head[0], Head[1]);//设置显示识别到的箱号和车牌
+                                                                                  //防止JOSN返回数据错误，退换回车牌和箱号
+
                 if (LedShowDataResult[1] == "Y")                                    //是否开闸
                 {
                     IsOpenDoorH = true;
                     LedShowDataResult[1] = "准时";                                  //替换字段
                 }
-                LedShow(LedShowDataResult,IsOpenDoorH);                             //最后处理数据
+                
+                LedShow(LedShowDataResult,IsOpenDoorH);                             //暂时不处理身份证，显示数据
 
-                if(LedShowDataResult[1]=="N")                                       //没有数据刷身份证
+                if(LedShowDataResult[1]=="N")                                       //没有数据，读取身份证
                 {
                     if (WorkIng_ReadID)
                     {
