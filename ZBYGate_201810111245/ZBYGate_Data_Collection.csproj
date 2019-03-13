@@ -125,6 +125,12 @@
     <Compile Include="Container\ContainerWindow.Designer.cs">
       <DependentUpon>ContainerWindow.cs</DependentUpon>
     </Compile>
+    <Compile Include="CreateData.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CreateData.Designer.cs">
+      <DependentUpon>CreateData.cs</DependentUpon>
+    </Compile>
     <Compile Include="CVR\CVR.cs" />
     <Compile Include="CVR\CVRSDK.cs" />
     <Compile Include="CVR\CVRWindow.cs">
@@ -216,6 +222,9 @@
     <Compile Include="Working.cs" />
     <EmbeddedResource Include="Container\ContainerWindow.resx">
       <DependentUpon>ContainerWindow.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CreateData.resx">
+      <DependentUpon>CreateData.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="CVR\CVRWindow.resx">
       <DependentUpon>CVRWindow.cs</DependentUpon>

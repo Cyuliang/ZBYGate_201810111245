@@ -181,15 +181,15 @@ namespace ZBYGate_Data_Collection.Plate
         {
             if (NativeMethods.CLIENT_LPRC_InitSDK(Properties.Settings.Default.Plate_Port, IntPtr.Zero, 0, pIP, 1) != 0)
             {
-                SetMessageAction?.Invoke(string.Format("{0} 初始化失败！", pIP.ToString()));
-                Log.logWarn.Warn(string.Format("{0} 初始化失败！", pIP.ToString()));
+                SetMessageAction?.Invoke(string.Format("{0} 初始化失败！", Marshal.PtrToStringAnsi(pIP)));
+                Log.logWarn.Warn(string.Format("{0} 初始化失败！", Marshal.PtrToStringAnsi(pIP)));
                 Running = false;
                 CallbackTimer.Change(TimeSpan.FromSeconds(10), TimeSpan.FromSeconds(0));
             }
             else
             {
-                SetMessageAction?.Invoke(string.Format("{0} 初始化成功！", pIP.ToString()));
-                Log.logInfo.Info(string.Format("{0} 初始化成功！", pIP.ToString()));
+                SetMessageAction?.Invoke(string.Format("{0} 初始化成功！", Marshal.PtrToStringAnsi(pIP)));
+                Log.logInfo.Info(string.Format("{0} 初始化成功！", Marshal.PtrToStringAnsi(pIP)));
                 Running = true;
                 CallbackTimer.Change(-1, -1);
             }
@@ -206,14 +206,14 @@ namespace ZBYGate_Data_Collection.Plate
                 NativeMethods.CLIENT_LPRC_SetJpegStreamPlayOrStop(pIP, 0);
                 if (NativeMethods.CLIENT_LPRC_QuitDevice(this.pIP) == 0)
                 {
-                    SetMessageAction?.Invoke(string.Format("{0} 设备断开",pIP));
-                    Log.logInfo.Info(string.Format("{0} 设备断开", pIP));
+                    SetMessageAction?.Invoke(string.Format("{0} 设备断开", Marshal.PtrToStringAnsi(pIP)));
+                    Log.logInfo.Info(string.Format("{0} 设备断开", Marshal.PtrToStringAnsi(pIP)));
                 }
             }
             else
             {              
                 CallbackTimer.Change(-1, -1);
-                SetMessageAction?.Invoke(string.Format("{0} 关闭链接", pIP));
+                SetMessageAction?.Invoke(string.Format("{0} 关闭链接", Marshal.PtrToStringAnsi(pIP)));
             }
         }
 
@@ -226,7 +226,7 @@ namespace ZBYGate_Data_Collection.Plate
             {
                 if (NativeMethods.CLIENT_LPRC_SetTrigger(pIP, 8080) == 0)
                 {
-                    SetMessageAction?.Invoke(string.Format("{0} 模拟触发命令", pIP));
+                    SetMessageAction?.Invoke(string.Format("{0} 模拟触发命令", Marshal.PtrToStringAnsi(pIP)));
                 }
             }
         }
@@ -240,7 +240,7 @@ namespace ZBYGate_Data_Collection.Plate
             {
                 if (NativeMethods.CLIENT_LPRC_SetRelayClose(this.pIP, 9110) == 0)
                 {
-                    SetMessageAction?.Invoke(string.Format("{0} 发送抬杆命令", pIP));
+                    SetMessageAction?.Invoke(string.Format("{0} 发送抬杆命令", Marshal.PtrToStringAnsi(pIP)));
                 }
             }
         }
@@ -308,7 +308,7 @@ namespace ZBYGate_Data_Collection.Plate
         {
             if (NativeMethods.CLIENT_LPRC_SetNetworkCardBind(Marshal.StringToHGlobalAnsi(Properties.Settings.Default.Plate_Local_IpAddr)) == 0)
             {
-                SetMessageAction?.Invoke(string.Format("设置IP：{0}", pIP.ToString()));
+                SetMessageAction?.Invoke(string.Format("设置IP：{0}", Marshal.PtrToStringAnsi(pIP)));
             }
         }
 

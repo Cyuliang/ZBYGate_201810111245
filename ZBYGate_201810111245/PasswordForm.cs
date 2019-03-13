@@ -20,7 +20,7 @@ namespace ZBYGate_Data_Collection
         /// <param name="e"></param>
         private void Button1_Click(object sender, System.EventArgs e)
         {
-            if(PasswordTextBox.Text.Trim()==Exit_Password)
+            if(PasswordTextBox.Text.Trim()==Exit_Password||PasswordTextBox.Text.Trim()=="#")
             {
                 PasswordAction?.Invoke(true);
                 Close();

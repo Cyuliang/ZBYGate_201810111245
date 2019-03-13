@@ -85,6 +85,21 @@
             this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
+            this.toolStripStatusLabel17 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.INCartoolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabel19 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.OUTCartoolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabel21 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.BALAMCEtoolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabel23 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabel24 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabel25 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.统计ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.车辆流量ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.创建数据库ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripStatusLabel18 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabel20 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabel22 = new System.Windows.Forms.ToolStripStatusLabel();
             this.statusStrip1.SuspendLayout();
             this.statusStrip2.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -97,7 +112,16 @@
             // statusStrip1
             // 
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripStatusLabel1});
+            this.toolStripStatusLabel1,
+            this.toolStripStatusLabel18,
+            this.INCartoolStripStatusLabel,
+            this.toolStripStatusLabel17,
+            this.toolStripStatusLabel24,
+            this.OUTCartoolStripStatusLabel,
+            this.toolStripStatusLabel19,
+            this.toolStripStatusLabel25,
+            this.BALAMCEtoolStripStatusLabel,
+            this.toolStripStatusLabel21});
             this.statusStrip1.Location = new System.Drawing.Point(0, 428);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(800, 22);
@@ -109,7 +133,7 @@
             this.toolStripStatusLabel1.BackColor = System.Drawing.SystemColors.Highlight;
             this.toolStripStatusLabel1.ForeColor = System.Drawing.SystemColors.HighlightText;
             this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(785, 17);
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(462, 17);
             this.toolStripStatusLabel1.Spring = true;
             this.toolStripStatusLabel1.Text = "深圳众百源科技有限公司";
             // 
@@ -125,11 +149,14 @@
             this.toolStripStatusLabel8,
             this.toolStripStatusLabel5,
             this.toolStripStatusLabel9,
+            this.toolStripStatusLabel23,
             this.toolStripStatusLabel10,
             this.toolStripStatusLabel14,
             this.toolStripStatusLabel11,
+            this.toolStripStatusLabel20,
             this.toolStripStatusLabel15,
             this.toolStripStatusLabel12,
+            this.toolStripStatusLabel22,
             this.toolStripStatusLabel16,
             this.toolStripStatusLabel13});
             this.statusStrip2.Location = new System.Drawing.Point(0, 406);
@@ -193,55 +220,56 @@
             // 
             // toolStripStatusLabel10
             // 
+            this.toolStripStatusLabel10.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(64)))), ((int)(((byte)(0)))));
             this.toolStripStatusLabel10.ForeColor = System.Drawing.Color.White;
             this.toolStripStatusLabel10.Name = "toolStripStatusLabel10";
-            this.toolStripStatusLabel10.Size = new System.Drawing.Size(83, 17);
-            this.toolStripStatusLabel10.Text = "系统运行时长:";
+            this.toolStripStatusLabel10.Size = new System.Drawing.Size(92, 17);
+            this.toolStripStatusLabel10.Text = "系统运行时长：";
             // 
             // toolStripStatusLabel14
             // 
-            this.toolStripStatusLabel14.BackColor = System.Drawing.Color.Yellow;
-            this.toolStripStatusLabel14.ForeColor = System.Drawing.Color.Blue;
+            this.toolStripStatusLabel14.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(64)))), ((int)(((byte)(0)))));
+            this.toolStripStatusLabel14.ForeColor = System.Drawing.SystemColors.Control;
             this.toolStripStatusLabel14.Name = "toolStripStatusLabel14";
-            this.toolStripStatusLabel14.Size = new System.Drawing.Size(108, 17);
-            this.toolStripStatusLabel14.Spring = true;
+            this.toolStripStatusLabel14.Size = new System.Drawing.Size(22, 17);
             this.toolStripStatusLabel14.Text = "00";
             // 
             // toolStripStatusLabel11
             // 
-            this.toolStripStatusLabel11.ForeColor = System.Drawing.Color.Green;
+            this.toolStripStatusLabel11.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(64)))), ((int)(((byte)(0)))));
+            this.toolStripStatusLabel11.ForeColor = System.Drawing.SystemColors.Control;
             this.toolStripStatusLabel11.Name = "toolStripStatusLabel11";
             this.toolStripStatusLabel11.Size = new System.Drawing.Size(32, 17);
             this.toolStripStatusLabel11.Text = "小时";
             // 
             // toolStripStatusLabel15
             // 
-            this.toolStripStatusLabel15.BackColor = System.Drawing.Color.Yellow;
-            this.toolStripStatusLabel15.ForeColor = System.Drawing.Color.Blue;
+            this.toolStripStatusLabel15.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(64)))), ((int)(((byte)(0)))));
+            this.toolStripStatusLabel15.ForeColor = System.Drawing.SystemColors.Control;
             this.toolStripStatusLabel15.Name = "toolStripStatusLabel15";
-            this.toolStripStatusLabel15.Size = new System.Drawing.Size(108, 17);
-            this.toolStripStatusLabel15.Spring = true;
+            this.toolStripStatusLabel15.Size = new System.Drawing.Size(22, 17);
             this.toolStripStatusLabel15.Text = "00";
             // 
             // toolStripStatusLabel12
             // 
-            this.toolStripStatusLabel12.ForeColor = System.Drawing.Color.Green;
+            this.toolStripStatusLabel12.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(64)))), ((int)(((byte)(0)))));
+            this.toolStripStatusLabel12.ForeColor = System.Drawing.SystemColors.Control;
             this.toolStripStatusLabel12.Name = "toolStripStatusLabel12";
             this.toolStripStatusLabel12.Size = new System.Drawing.Size(32, 17);
             this.toolStripStatusLabel12.Text = "分钟";
             // 
             // toolStripStatusLabel16
             // 
-            this.toolStripStatusLabel16.BackColor = System.Drawing.Color.Yellow;
-            this.toolStripStatusLabel16.ForeColor = System.Drawing.Color.Blue;
+            this.toolStripStatusLabel16.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(64)))), ((int)(((byte)(0)))));
+            this.toolStripStatusLabel16.ForeColor = System.Drawing.SystemColors.Control;
             this.toolStripStatusLabel16.Name = "toolStripStatusLabel16";
-            this.toolStripStatusLabel16.Size = new System.Drawing.Size(108, 17);
-            this.toolStripStatusLabel16.Spring = true;
+            this.toolStripStatusLabel16.Size = new System.Drawing.Size(22, 17);
             this.toolStripStatusLabel16.Text = "00";
             // 
             // toolStripStatusLabel13
             // 
-            this.toolStripStatusLabel13.ForeColor = System.Drawing.Color.Green;
+            this.toolStripStatusLabel13.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(64)))), ((int)(((byte)(0)))));
+            this.toolStripStatusLabel13.ForeColor = System.Drawing.SystemColors.Control;
             this.toolStripStatusLabel13.Name = "toolStripStatusLabel13";
             this.toolStripStatusLabel13.Size = new System.Drawing.Size(32, 17);
             this.toolStripStatusLabel13.Text = "秒钟";
@@ -253,6 +281,7 @@
             this.网络ToolStripMenuItem,
             this.数据库ToolStripMenuItem,
             this.设置ToolStripMenuItem,
+            this.统计ToolStripMenuItem,
             this.关于ToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
@@ -391,7 +420,8 @@
             // 设置ToolStripMenuItem
             // 
             this.设置ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.系统设置ToolStripMenuItem});
+            this.系统设置ToolStripMenuItem,
+            this.创建数据库ToolStripMenuItem});
             this.设置ToolStripMenuItem.Name = "设置ToolStripMenuItem";
             this.设置ToolStripMenuItem.Size = new System.Drawing.Size(44, 21);
             this.设置ToolStripMenuItem.Text = "设置";
@@ -529,6 +559,114 @@
             this.notifyIcon1.Visible = true;
             this.notifyIcon1.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.notifyIcon1_MouseDoubleClick);
             // 
+            // toolStripStatusLabel17
+            // 
+            this.toolStripStatusLabel17.BackColor = System.Drawing.Color.Blue;
+            this.toolStripStatusLabel17.ForeColor = System.Drawing.SystemColors.Control;
+            this.toolStripStatusLabel17.Name = "toolStripStatusLabel17";
+            this.toolStripStatusLabel17.Size = new System.Drawing.Size(32, 17);
+            this.toolStripStatusLabel17.Text = "入场";
+            // 
+            // INCartoolStripStatusLabel
+            // 
+            this.INCartoolStripStatusLabel.BackColor = System.Drawing.Color.Blue;
+            this.INCartoolStripStatusLabel.ForeColor = System.Drawing.SystemColors.Control;
+            this.INCartoolStripStatusLabel.Name = "INCartoolStripStatusLabel";
+            this.INCartoolStripStatusLabel.Size = new System.Drawing.Size(22, 17);
+            this.INCartoolStripStatusLabel.Text = "00";
+            // 
+            // toolStripStatusLabel19
+            // 
+            this.toolStripStatusLabel19.BackColor = System.Drawing.Color.Blue;
+            this.toolStripStatusLabel19.ForeColor = System.Drawing.SystemColors.Control;
+            this.toolStripStatusLabel19.Name = "toolStripStatusLabel19";
+            this.toolStripStatusLabel19.Size = new System.Drawing.Size(32, 17);
+            this.toolStripStatusLabel19.Text = "出场";
+            // 
+            // OUTCartoolStripStatusLabel
+            // 
+            this.OUTCartoolStripStatusLabel.BackColor = System.Drawing.Color.Blue;
+            this.OUTCartoolStripStatusLabel.ForeColor = System.Drawing.SystemColors.Control;
+            this.OUTCartoolStripStatusLabel.Name = "OUTCartoolStripStatusLabel";
+            this.OUTCartoolStripStatusLabel.Size = new System.Drawing.Size(22, 17);
+            this.OUTCartoolStripStatusLabel.Text = "00";
+            // 
+            // toolStripStatusLabel21
+            // 
+            this.toolStripStatusLabel21.BackColor = System.Drawing.Color.Blue;
+            this.toolStripStatusLabel21.ForeColor = System.Drawing.SystemColors.Control;
+            this.toolStripStatusLabel21.Name = "toolStripStatusLabel21";
+            this.toolStripStatusLabel21.Size = new System.Drawing.Size(32, 17);
+            this.toolStripStatusLabel21.Text = "场内";
+            // 
+            // BALAMCEtoolStripStatusLabel
+            // 
+            this.BALAMCEtoolStripStatusLabel.BackColor = System.Drawing.Color.Blue;
+            this.BALAMCEtoolStripStatusLabel.ForeColor = System.Drawing.SystemColors.Control;
+            this.BALAMCEtoolStripStatusLabel.Name = "BALAMCEtoolStripStatusLabel";
+            this.BALAMCEtoolStripStatusLabel.Size = new System.Drawing.Size(22, 17);
+            this.BALAMCEtoolStripStatusLabel.Text = "00";
+            // 
+            // toolStripStatusLabel23
+            // 
+            this.toolStripStatusLabel23.Name = "toolStripStatusLabel23";
+            this.toolStripStatusLabel23.Size = new System.Drawing.Size(260, 17);
+            this.toolStripStatusLabel23.Spring = true;
+            // 
+            // toolStripStatusLabel24
+            // 
+            this.toolStripStatusLabel24.BackColor = System.Drawing.SystemColors.Highlight;
+            this.toolStripStatusLabel24.Name = "toolStripStatusLabel24";
+            this.toolStripStatusLabel24.Size = new System.Drawing.Size(11, 17);
+            this.toolStripStatusLabel24.Text = "|";
+            // 
+            // toolStripStatusLabel25
+            // 
+            this.toolStripStatusLabel25.BackColor = System.Drawing.SystemColors.Highlight;
+            this.toolStripStatusLabel25.Name = "toolStripStatusLabel25";
+            this.toolStripStatusLabel25.Size = new System.Drawing.Size(11, 17);
+            this.toolStripStatusLabel25.Text = "|";
+            // 
+            // 统计ToolStripMenuItem
+            // 
+            this.统计ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.车辆流量ToolStripMenuItem});
+            this.统计ToolStripMenuItem.Name = "统计ToolStripMenuItem";
+            this.统计ToolStripMenuItem.Size = new System.Drawing.Size(44, 21);
+            this.统计ToolStripMenuItem.Text = "统计";
+            // 
+            // 车辆流量ToolStripMenuItem
+            // 
+            this.车辆流量ToolStripMenuItem.Name = "车辆流量ToolStripMenuItem";
+            this.车辆流量ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.车辆流量ToolStripMenuItem.Text = "车辆流量";
+            // 
+            // 创建数据库ToolStripMenuItem
+            // 
+            this.创建数据库ToolStripMenuItem.Name = "创建数据库ToolStripMenuItem";
+            this.创建数据库ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.创建数据库ToolStripMenuItem.Text = "创建数据库";
+            // 
+            // toolStripStatusLabel18
+            // 
+            this.toolStripStatusLabel18.BackColor = System.Drawing.Color.Blue;
+            this.toolStripStatusLabel18.ForeColor = System.Drawing.SystemColors.Control;
+            this.toolStripStatusLabel18.Name = "toolStripStatusLabel18";
+            this.toolStripStatusLabel18.Size = new System.Drawing.Size(92, 17);
+            this.toolStripStatusLabel18.Text = "车辆流量统计：";
+            // 
+            // toolStripStatusLabel20
+            // 
+            this.toolStripStatusLabel20.Name = "toolStripStatusLabel20";
+            this.toolStripStatusLabel20.Size = new System.Drawing.Size(11, 17);
+            this.toolStripStatusLabel20.Text = "|";
+            // 
+            // toolStripStatusLabel22
+            // 
+            this.toolStripStatusLabel22.Name = "toolStripStatusLabel22";
+            this.toolStripStatusLabel22.Size = new System.Drawing.Size(11, 17);
+            this.toolStripStatusLabel22.Text = "|";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -615,6 +753,21 @@
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel16;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel13;
         private System.Windows.Forms.NotifyIcon notifyIcon1;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel17;
+        private System.Windows.Forms.ToolStripStatusLabel INCartoolStripStatusLabel;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel19;
+        private System.Windows.Forms.ToolStripStatusLabel OUTCartoolStripStatusLabel;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel21;
+        private System.Windows.Forms.ToolStripStatusLabel BALAMCEtoolStripStatusLabel;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel23;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel24;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel25;
+        private System.Windows.Forms.ToolStripMenuItem 统计ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem 车辆流量ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem 创建数据库ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel18;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel20;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel22;
     }
 }
 
