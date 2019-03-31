@@ -232,11 +232,10 @@ namespace ZBYGate_Data_Collection
                 string SS = (((int)time.TotalSeconds) % 60).ToString();
                 _Log.logDebug.Debug(string.Format("系统运行时长：{0}小时{1}分钟{2}秒", HH, MM, SS));
 
-                Environment.Exit(0);
+                Environment.Exit(0); //创建窗口句柄时出错
             }
             catch (Exception)
-            {
-                //创建窗口句柄时出错
+            {               
                 throw;
             }
 
