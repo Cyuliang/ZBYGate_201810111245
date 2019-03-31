@@ -96,7 +96,7 @@
             // 
             // toolStrip1
             // 
-            this.toolStrip1.ImageScalingSize = new System.Drawing.Size(25, 25);
+            this.toolStrip1.ImageScalingSize = new System.Drawing.Size(30, 30);
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripButton1,
             this.toolStripButton2,
@@ -106,7 +106,7 @@
             this.toolStripButton6});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(800, 32);
+            this.toolStrip1.Size = new System.Drawing.Size(800, 37);
             this.toolStrip1.TabIndex = 54;
             this.toolStrip1.Text = "toolStrip1";
             // 
@@ -116,7 +116,7 @@
             this.toolStripButton1.Image = global::ZBYGate_Data_Collection.Resource1.初始化;
             this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton1.Name = "toolStripButton1";
-            this.toolStripButton1.Size = new System.Drawing.Size(29, 29);
+            this.toolStripButton1.Size = new System.Drawing.Size(34, 34);
             this.toolStripButton1.Text = "toolStripButton1";
             this.toolStripButton1.ToolTipText = "初始化动态库";
             this.toolStripButton1.Click += new System.EventHandler(this.ToolstripButton_Click);
@@ -127,7 +127,7 @@
             this.toolStripButton2.Image = global::ZBYGate_Data_Collection.Resource1.屏幕;
             this.toolStripButton2.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton2.Name = "toolStripButton2";
-            this.toolStripButton2.Size = new System.Drawing.Size(29, 29);
+            this.toolStripButton2.Size = new System.Drawing.Size(34, 34);
             this.toolStripButton2.Text = "toolStripButton2";
             this.toolStripButton2.ToolTipText = "添加显示屏";
             this.toolStripButton2.Click += new System.EventHandler(this.ToolstripButton_Click);
@@ -138,7 +138,7 @@
             this.toolStripButton3.Image = global::ZBYGate_Data_Collection.Resource1.区域;
             this.toolStripButton3.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton3.Name = "toolStripButton3";
-            this.toolStripButton3.Size = new System.Drawing.Size(29, 29);
+            this.toolStripButton3.Size = new System.Drawing.Size(34, 34);
             this.toolStripButton3.Text = "toolStripButton3";
             this.toolStripButton3.ToolTipText = "添加动态区域";
             this.toolStripButton3.Click += new System.EventHandler(this.ToolstripButton_Click);
@@ -149,7 +149,7 @@
             this.toolStripButton4.Image = global::ZBYGate_Data_Collection.Resource1.文本;
             this.toolStripButton4.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton4.Name = "toolStripButton4";
-            this.toolStripButton4.Size = new System.Drawing.Size(29, 29);
+            this.toolStripButton4.Size = new System.Drawing.Size(34, 34);
             this.toolStripButton4.Text = "toolStripButton4";
             this.toolStripButton4.ToolTipText = "添加文本";
             this.toolStripButton4.Click += new System.EventHandler(this.ToolstripButton_Click);
@@ -160,7 +160,7 @@
             this.toolStripButton5.Image = global::ZBYGate_Data_Collection.Resource1.发送;
             this.toolStripButton5.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton5.Name = "toolStripButton5";
-            this.toolStripButton5.Size = new System.Drawing.Size(29, 29);
+            this.toolStripButton5.Size = new System.Drawing.Size(34, 34);
             this.toolStripButton5.Text = "toolStripButton5";
             this.toolStripButton5.ToolTipText = "发送信息";
             this.toolStripButton5.Click += new System.EventHandler(this.ToolstripButton_Click);
@@ -171,7 +171,7 @@
             this.toolStripButton6.Image = global::ZBYGate_Data_Collection.Resource1.释放;
             this.toolStripButton6.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton6.Name = "toolStripButton6";
-            this.toolStripButton6.Size = new System.Drawing.Size(29, 29);
+            this.toolStripButton6.Size = new System.Drawing.Size(34, 34);
             this.toolStripButton6.Text = "toolStripButton6";
             this.toolStripButton6.ToolTipText = "释放动态库";
             this.toolStripButton6.Click += new System.EventHandler(this.ToolstripButton_Click);

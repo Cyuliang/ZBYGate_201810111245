@@ -8,7 +8,6 @@ namespace ZBYGate_Data_Collection
     {
         private System.Diagnostics.Stopwatch RunTimeWatch = new System.Diagnostics.Stopwatch();
         private System.Threading.Timer _RunTimer;
-        private delegate void UpdateRunTimeTextDelegate();
 
         /// <summary>
         /// 系统运行时长
@@ -48,6 +47,7 @@ namespace ZBYGate_Data_Collection
         private TabPage LocalTable = new TabPage("本地数据库");
         private TabPage InTable = new TabPage("入闸数据库");
         private TabPage OutTable = new TabPage("出闸数据库");
+        private TabPage StatisticsTable = new TabPage("统计数据库");
         private TabPage AboutTable = new TabPage("系统说明");
         #endregion
 
@@ -61,6 +61,8 @@ namespace ZBYGate_Data_Collection
         private delegate void UpdateUiInvok(string Message);
         private delegate void UpdateStatus(string Ip, uint status);
         private delegate void UpdateUiUInvok(int Status, Int32 SN);
+        private delegate void UpdateRunTimeTextDelegate();
+        private delegate void UpdateStatisticsRetuldDelegate(string In, string Out, string Balance);
         #endregion
 
         #region //窗口对象初始化
@@ -72,6 +74,7 @@ namespace ZBYGate_Data_Collection
         private LocalDataBase.LocalDataBaseWindow _LocalDataBaseWindow = null;
         private IEDataBase.InDataWindow _InDataWindow = null;
         private IEDataBase.OutDataWindow _OutDataWindow = null;
+        private IEDataBase.StatisticsWindow _StatisticsWindow = null;
         private Https.HttpWindow _HttpWindow = null;
         #endregion
 
@@ -85,6 +88,7 @@ namespace ZBYGate_Data_Collection
         private IEDataBase.RunData _RunData = new IEDataBase.RunData();
         private Https.CHttp _CHttp = new Https.CHttp();
         private Working _Working = new Working();
+
         #endregion
 
         #region//箱号识别委托
@@ -110,8 +114,8 @@ namespace ZBYGate_Data_Collection
             InitializeComponent();
 
             RunTimeWatch.Start();
-            _RunTimer = new System.Threading.Timer(RunTimeCallBacll, RunTimeWatch, TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(1));
-  
+
+            _RunTimer = new System.Threading.Timer(RunTimeCallBacll, RunTimeWatch, TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(1));  
 
             #region//系统动作初始化
             _Plate.PlateDataCallBackAction += _Working.PlateResult;//出闸车牌识别结果
@@ -124,8 +128,9 @@ namespace ZBYGate_Data_Collection
             _Working.SelectDataBase += _LocalDataBase.SelectData;//本地数据库查询
             _Working.In_InsertDataBaseAction += _RunData.In_Insert;//入闸数据库写入
             _Working.Out_InsertDataBaseAction += _RunData.Out_Insert;//出闸数据写入
-            _Working.Rundata_InsertAction += _RunData.Rundata_Insert;
-            _Working.Rundata_updateAction += _RunData.Rundata_update;
+            _Working.Rundata_InsertAction += _RunData.Rundata_Insert;//运行数据库写入
+            _Working.Rundata_updateAction += _RunData.Rundata_update;//运行数据库更新
+            _Working.StatisticsDataBaseUpdate += _RunData.Statistics_Update;//统计数据库更新
 
             _Working.In_UpdateDataBaseAction += _RunData.In_Update;//更新入闸身份证信息
 
@@ -145,6 +150,11 @@ namespace ZBYGate_Data_Collection
             _Working.HttpPostInAction += _CHttp.SetInJosn;//查询远端服务器
             _Working.HttpJsonSplitAction += _CHttp.JsonSplit;
             _Working.HttpPostOutAction += _CHttp.SetOutJosn;//出闸远端交换数据
+
+            _Working.StatisticsDataBaseInsert += _RunData.Statistics_Insert;//统计数据库插入数据
+            _Working.StatisticsDateBaseSelect += _RunData.Statistics_Select;//查询统计数据库，回显到界面和变量
+            _Working.SetStatisticsLable += SetStatisticsLable;//回写统计数据库值到界面
+
             #endregion
 
             #region //控件状态初始化
@@ -180,7 +190,7 @@ namespace ZBYGate_Data_Collection
 
             #region//出入闸数据库委托
             _RunData.SetMessageAction += GetMessage;
-            #endregion
+            #endregion            
 
             #region//Https 委托
             _CHttp.SetMessageAction += GetMessage;
@@ -212,15 +222,24 @@ namespace ZBYGate_Data_Collection
         /// <param name="e"></param>
         private void Form1_FormClosed(object sender, FormClosedEventArgs e)
         {
-            RunTimeWatch.Stop();
-            TimeSpan time = RunTimeWatch.Elapsed;
+            try
+            {
+                RunTimeWatch.Stop();
+                TimeSpan time = RunTimeWatch.Elapsed;
 
-            string HH = ((int)time.TotalHours).ToString();
-            string MM = (((int)time.TotalMinutes)%60).ToString();
-            string SS = (((int)time.TotalSeconds)%60).ToString();
-            _Log.logDebug.Debug(string.Format("系统运行时长：{0}小时{1}分钟{2}秒", HH,MM,SS));
+                string HH = ((int)time.TotalHours).ToString();
+                string MM = (((int)time.TotalMinutes) % 60).ToString();
+                string SS = (((int)time.TotalSeconds) % 60).ToString();
+                _Log.logDebug.Debug(string.Format("系统运行时长：{0}小时{1}分钟{2}秒", HH, MM, SS));
 
-            Environment.Exit(0);
+                Environment.Exit(0);
+            }
+            catch (Exception)
+            {
+                //创建窗口句柄时出错
+                throw;
+            }
+
         }
 
         #endregion
@@ -685,6 +704,23 @@ namespace ZBYGate_Data_Collection
         }
         #endregion
 
+        #region //统计数据库
+        /// <summary>
+        /// 数据库显示界面
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void StatisticsWindowShow_Click(object sender, EventArgs e)
+        {
+            if (_StatisticsWindow == null || _StatisticsWindow.IsDisposed)
+            {
+                _StatisticsWindow = new IEDataBase.StatisticsWindow();
+            }
+            SetTabPate("StatisticsTable", StatisticsTable, form: _StatisticsWindow);
+        }
+
+        #endregion
+
         #region//Https
         /// <summary>
         /// 数据库显示界面
@@ -713,6 +749,26 @@ namespace ZBYGate_Data_Collection
 
         #endregion
 
+        /// <summary>
+        /// 统计数据库值回写到界面
+        /// </summary>
+        /// <param name="arg1"></param>
+        /// <param name="arg2"></param>
+        /// <param name="arg3"></param>
+        private void SetStatisticsLable(string arg1, string arg2, string arg3)
+        {
+            if (statusStrip1.InvokeRequired)
+            {
+                statusStrip1.Invoke(new UpdateStatisticsRetuldDelegate(SetStatisticsLable), new object[] {arg1,arg2,arg3 });
+            }
+            else
+            {
+                INCartoolStripStatusLabel.Text = arg1;
+                OUTCartoolStripStatusLabel.Text = arg2;
+                BALAMCEtoolStripStatusLabel.Text = arg3; 
+            }
+        }
+
         private void notifyIcon1_MouseDoubleClick(object sender, MouseEventArgs e)
         {
             //this.Visible = true;//这个也可以            
@@ -734,14 +790,6 @@ namespace ZBYGate_Data_Collection
             {
                 e.Cancel = true;
             }
-
-            //DialogResult result = MessageBox.Show("确认关闭程序吗？", "提示", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            //if (result == DialogResult.No)
-            //{
-            //    e.Cancel = true;
-            //    this.WindowState = FormWindowState.Minimized;
-            //    this.notifyIcon1.Visible = true;
-            //}
         }
 
         private bool EXIT = false;

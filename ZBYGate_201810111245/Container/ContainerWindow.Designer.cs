@@ -302,14 +302,14 @@
             // 
             // toolStrip1
             // 
-            this.toolStrip1.ImageScalingSize = new System.Drawing.Size(25, 25);
+            this.toolStrip1.ImageScalingSize = new System.Drawing.Size(30, 30);
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.ContainerLinkButton,
             this.toolStripButton4,
             this.toolStripButton5});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(800, 32);
+            this.toolStrip1.Size = new System.Drawing.Size(800, 37);
             this.toolStrip1.TabIndex = 28;
             this.toolStrip1.Text = "toolStrip2";
             // 
@@ -319,7 +319,7 @@
             this.ContainerLinkButton.Image = global::ZBYGate_Data_Collection.Resource1.link;
             this.ContainerLinkButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.ContainerLinkButton.Name = "ContainerLinkButton";
-            this.ContainerLinkButton.Size = new System.Drawing.Size(29, 29);
+            this.ContainerLinkButton.Size = new System.Drawing.Size(34, 34);
             this.ContainerLinkButton.Text = "Link";
             this.ContainerLinkButton.ToolTipText = "链接箱号识别系统";
             this.ContainerLinkButton.Click += new System.EventHandler(this.ToolstripButton_Click);
@@ -330,7 +330,7 @@
             this.toolStripButton4.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton4.Image")));
             this.toolStripButton4.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton4.Name = "toolStripButton4";
-            this.toolStripButton4.Size = new System.Drawing.Size(29, 29);
+            this.toolStripButton4.Size = new System.Drawing.Size(34, 34);
             this.toolStripButton4.Text = "Abort";
             this.toolStripButton4.ToolTipText = "断开箱号识别系统";
             this.toolStripButton4.Click += new System.EventHandler(this.ToolstripButton_Click);
@@ -341,7 +341,7 @@
             this.toolStripButton5.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton5.Image")));
             this.toolStripButton5.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton5.Name = "toolStripButton5";
-            this.toolStripButton5.Size = new System.Drawing.Size(29, 29);
+            this.toolStripButton5.Size = new System.Drawing.Size(34, 34);
             this.toolStripButton5.Text = "LastResult";
             this.toolStripButton5.ToolTipText = "获取最后一次结果";
             this.toolStripButton5.Click += new System.EventHandler(this.ToolstripButton_Click);

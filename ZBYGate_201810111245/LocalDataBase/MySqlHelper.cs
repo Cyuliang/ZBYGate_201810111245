@@ -29,13 +29,21 @@ namespace ZBYGate_Data_Collection.LocalDataBase
 
             MySqlCommand cmd = new MySqlCommand();
 
-            using (MySqlConnection conn = new MySqlConnection(connectionString))
+            try
             {
-                PrepareCommand(cmd, conn, null, cmdType, cmdText, commandParameters);
-                int val = cmd.ExecuteNonQuery();
-                cmd.Parameters.Clear();
-                return val;
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                {
+                    PrepareCommand(cmd, conn, null, cmdType, cmdText, commandParameters);
+                    int val = cmd.ExecuteNonQuery();
+                    cmd.Parameters.Clear();
+                    return val;
+                }
+
             }
+            catch
+            {
+                throw;
+            } 
         }
 
         /// <summary>
@@ -338,7 +346,7 @@ namespace ZBYGate_Data_Collection.LocalDataBase
             }
             catch
             {
-                throw;
+                //throw;
             }
         }
     }

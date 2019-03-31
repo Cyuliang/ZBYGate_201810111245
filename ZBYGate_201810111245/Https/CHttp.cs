@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Text;
@@ -23,8 +24,9 @@ namespace ZBYGate_Data_Collection.Https
             ServicePointManager.DefaultConnectionLimit = 50;
         }
 
+        private  Dictionary<string, string> ArriveParkJsonDict = new Dictionary<string, string>();
         /// <summary>
-        /// 华为后端入闸数据交换
+        /// 华为后端入闸数据交换(入园)
         /// </summary>
         /// <param name="Id"></param>
         /// <param name="Time"></param>
@@ -39,10 +41,53 @@ namespace ZBYGate_Data_Collection.Https
             request.Timeout = HttpTimeOut;
             request.ReadWriteTimeout = HttpReadWriteTimeout;
             request.ContentType = "application/json";/*x-www-form-urlencoded";*/
+
+            ////////////////////////////////////////201903301515
+            ArriveParkJsonDict["eqId"] = eqid;
+
+            string[] TestType = Container.Split('|');
+            if(TestType.Length==2)
+            {
+                switch (int.Parse(TestType[1]))
+                {
+                    case 3:
+                        ArriveParkJsonDict["ArriveParkTime"] = Time;
+                        break;
+                    case 1:
+                        ArriveParkJsonDict["ArrivePortalTime"] = Time;
+                        break;
+                    case 4:
+                        ArriveParkJsonDict["LeaveParkTime"] = Time;
+                        break;
+                    case 2:
+                        ArriveParkJsonDict["LeavePortalTime"] = Time;
+                        break;
+                }
+                ArriveParkJsonDict["Type"] = TestType[1];//测试状态
+                ArriveParkJsonDict["tranNo"] = TestType[0];//测试箱号
+            }
+            else
+            {
+                ArriveParkJsonDict["Type"] = "3";//默认入园
+                ArriveParkJsonDict["tranNo"] = Container;//默认箱号
+                ArriveParkJsonDict["ArriveParkTime"] = Time;
+                ArriveParkJsonDict["ArrivePortalTime"] = "";
+                ArriveParkJsonDict["LeaveParkTime"] = "";
+                ArriveParkJsonDict["LeavePortalTime"] = "";
+            }
+            ////////////////////////////////////////////////////////////
+
+   
+            ArriveParkJsonDict["truckNumber"] = Plate;
+            ArriveParkJsonDict["OverTimeFlag"] = "";
+            
+
             //string Json = string.Format(@"{{""eqId"":""{0}"",""arrivedTime"":""{1}"",""truckNumber"":""{2}"",""tranNo"":""{3}""}}",
             //    eqid, Time, Plate, Container);
-            string Json = string.Format(@"{{""eqId"":""{0}"",""ArriveParkTime"":""{1}"",""ArrivePortalTime"":"""",""LeaveParkTime"":"""",""LeavePortalTime"":"""",""truckNumber"":""{2}"",""OverTimeFlag"":"""",""Type"":""{3}"",""tranNo"":""{4}""}}",
-                                eqid, Time, Plate,"3", Container);
+            //string Json = string.Format(@"{{""eqId"":""{0}"",""ArriveParkTime"":""{1}"",""ArrivePortalTime"":"""",""LeaveParkTime"":"""",""LeavePortalTime"":"""",""truckNumber"":""{2}"",""OverTimeFlag"":"""",""Type"":""{3}"",""tranNo"":""{4}""}}",
+            //                    eqid, Time, Plate,"3", Container);
+
+            string Json= JsonConvert.SerializeObject(ArriveParkJsonDict);
 
             SetMessageAction?.Invoke(string.Format("Post ArriveParkTime Data：{0}", Json));
             _Log.logInfo.Info(string.Format("Post ArriveParkTime Data：{0}", Json));
@@ -91,6 +136,7 @@ namespace ZBYGate_Data_Collection.Https
             return null;
         }
 
+        private Dictionary<string, string> LeaveParkJsonDict = new Dictionary<string, string>();
         /// <summary>
         /// 华为后端数据交换(离园时间)
         /// </summary>
@@ -105,8 +151,20 @@ namespace ZBYGate_Data_Collection.Https
             request.ReadWriteTimeout = HttpReadWriteTimeout;
             request.ContentType = "application/json";/*x-www-form-urlencoded";*/
 
-            string Json = string.Format(@"{{""eqId"":""{0}"",""ArriveParkTime"":"""",""ArrivePortalTime"":"""",""LeaveParkTime"":""{1}"",""LeavePortalTime"":"""",""truckNumber"":""{2}"",""OverTimeFlag"":"""",""Type"":""{3}"",""tranNo"":""""}}",
-                                eqid, Time, Plate, "4");
+            //string Json = string.Format(@"{{""eqId"":""{0}"",""ArriveParkTime"":"""",""ArrivePortalTime"":"""",""LeaveParkTime"":""{1}"",""LeavePortalTime"":"""",""truckNumber"":""{2}"",""OverTimeFlag"":"""",""Type"":""{3}"",""tranNo"":""""}}",
+            //                    eqid, Time, Plate, "4");
+
+            LeaveParkJsonDict["eqId"] = eqid;
+            LeaveParkJsonDict["ArriveParkTime"] = "";
+            LeaveParkJsonDict["ArrivePortalTime"] = "";
+            LeaveParkJsonDict["LeaveParkTime"] = Time;
+            LeaveParkJsonDict["LeavePortalTime"] = "";
+            LeaveParkJsonDict["truckNumber"] = Plate;
+            LeaveParkJsonDict["OverTimeFlag"] = "";
+            LeaveParkJsonDict["Type"] = "4";
+            LeaveParkJsonDict["tranNo"] = "";
+
+            string Json = JsonConvert.SerializeObject(LeaveParkJsonDict);
 
             SetMessageAction?.Invoke(string.Format("Post LeaveParkTime Data：{0}", Json));
             _Log.logInfo.Info(string.Format("Post LeaveParkTime Data：{0}", Json));
@@ -121,27 +179,6 @@ namespace ZBYGate_Data_Collection.Https
                 {
                     writer.Write(Josntobyte, 0, Josntobyte.Length);
                     writer.Close();
-
-                    //HttpWebResponse respone;
-                    //try
-                    //{
-                    //    respone = (HttpWebResponse)request.GetResponse();
-                    //}
-                    //catch (WebException ex)
-                    //{
-                    //    respone = ex.Response as HttpWebResponse;
-                    //    SetMessageAction?.Invoke(string.Format("Result LeaveParkTime Data Error:{0}", ex.ToString()));
-                    //    _Log.logError.Error("Result LeaveParkTime Data Error", ex);
-                    //}
-                    ////HttpWebResponse response = (HttpWebResponse)webReq.GetResponse();
-                    ////StreamReader sr = new StreamReader(response.GetResponseStream(), Encoding.Default);
-                    ////string ret = sr.ReadToEnd();
-                    //Stream s = respone.GetResponseStream();
-                    //StreamReader sreader = new StreamReader(s);
-                    //string postConent = sreader.ReadToEnd();
-                    //sreader.Close();
-                    //SetMessageAction(string.Format("Return LeaveParkTime Data：{0}", postConent));
-                    //_Log.logInfo.Info(string.Format("Return LeaveParkTime Data：{0}", postConent));
                 }
             }
             catch (Exception ex)
@@ -194,21 +231,21 @@ namespace ZBYGate_Data_Collection.Https
 
     public class JsonPaner
     {
-        public string error_code;
-        public string error_desc;
-        public Result result;
+        public string error_code;       //返回状态码
+        public string error_desc;       //返回状态码描述
+        public Result result;           //返回相关信息
     }
 
     public class Result
     {
-        public string resultList;
-        public string status;
-        public string visitor;
-        public string ledgename;
-        public string platform;
-        public string truckNumber;
-        public string tranNo;
-        public string arrivedTime;
+        public string resultList;       //是否准点
+        public string status;           //车辆状态
+        public string visitor;          //来访者
+        public string ledgename;        //平台
+        public string platform;         //货位
+        public string truckNumber;      //车牌
+        public string tranNo;           //集装箱
+        public string arrivedTime;      //当前时间
         //public string status1;
         //public string sysdate;
     }  

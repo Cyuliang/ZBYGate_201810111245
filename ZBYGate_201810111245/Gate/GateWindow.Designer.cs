@@ -173,13 +173,13 @@
             // 
             // toolStrip1
             // 
-            this.toolStrip1.ImageScalingSize = new System.Drawing.Size(25, 25);
+            this.toolStrip1.ImageScalingSize = new System.Drawing.Size(30, 30);
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripButton19,
             this.toolStripButton20});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(800, 32);
+            this.toolStrip1.Size = new System.Drawing.Size(800, 37);
             this.toolStrip1.TabIndex = 46;
             this.toolStrip1.Text = "toolStrip1";
             // 
@@ -189,7 +189,7 @@
             this.toolStripButton19.Image = global::ZBYGate_Data_Collection.Resource1.开门;
             this.toolStripButton19.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton19.Name = "toolStripButton19";
-            this.toolStripButton19.Size = new System.Drawing.Size(29, 29);
+            this.toolStripButton19.Size = new System.Drawing.Size(34, 34);
             this.toolStripButton19.Text = "toolStripButton19";
             this.toolStripButton19.ToolTipText = "入闸开门";
             this.toolStripButton19.Click += new System.EventHandler(this.ToolstripButton_Click);
@@ -200,7 +200,7 @@
             this.toolStripButton20.Image = global::ZBYGate_Data_Collection.Resource1.开门__1_;
             this.toolStripButton20.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton20.Name = "toolStripButton20";
-            this.toolStripButton20.Size = new System.Drawing.Size(29, 29);
+            this.toolStripButton20.Size = new System.Drawing.Size(34, 34);
             this.toolStripButton20.Text = "toolStripButton20";
             this.toolStripButton20.ToolTipText = "出闸开门";
             this.toolStripButton20.Click += new System.EventHandler(this.ToolstripButton_Click);

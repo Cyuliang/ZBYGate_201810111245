@@ -174,6 +174,12 @@
       <DependentUpon>OutDataWindow.cs</DependentUpon>
     </Compile>
     <Compile Include="IEDataBase\RunData.cs" />
+    <Compile Include="IEDataBase\StatisticsWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="IEDataBase\StatisticsWindow.Designer.cs">
+      <DependentUpon>StatisticsWindow.cs</DependentUpon>
+    </Compile>
     <Compile Include="LED\LED.cs" />
     <Compile Include="LED\LEDWindow.cs">
       <SubType>Form</SubType>
@@ -218,7 +224,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resource1.resx</DependentUpon>
     </Compile>
-    <Compile Include="Working - 副本.cs" />
     <Compile Include="Working.cs" />
     <EmbeddedResource Include="Container\ContainerWindow.resx">
       <DependentUpon>ContainerWindow.cs</DependentUpon>
@@ -243,6 +248,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="IEDataBase\OutDataWindow.resx">
       <DependentUpon>OutDataWindow.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="IEDataBase\StatisticsWindow.resx">
+      <DependentUpon>StatisticsWindow.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="LED\LEDWindow.resx">
       <DependentUpon>LEDWindow.cs</DependentUpon>

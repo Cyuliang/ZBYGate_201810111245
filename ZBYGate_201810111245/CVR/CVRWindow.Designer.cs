@@ -74,7 +74,7 @@
             // StatusLabel
             // 
             this.StatusLabel.Name = "StatusLabel";
-            this.StatusLabel.Size = new System.Drawing.Size(674, 17);
+            this.StatusLabel.Size = new System.Drawing.Size(705, 17);
             this.StatusLabel.Spring = true;
             this.StatusLabel.TextChanged += new System.EventHandler(this.StatusLabel_TextChanged);
             // 
@@ -214,7 +214,7 @@
             // 
             // toolStrip1
             // 
-            this.toolStrip1.ImageScalingSize = new System.Drawing.Size(25, 25);
+            this.toolStrip1.ImageScalingSize = new System.Drawing.Size(30, 30);
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripButton1,
             this.toolStripButton2,
@@ -223,7 +223,7 @@
             this.toolStripButton5});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(800, 32);
+            this.toolStrip1.Size = new System.Drawing.Size(800, 37);
             this.toolStrip1.TabIndex = 74;
             this.toolStrip1.Text = "toolStrip1";
             // 
@@ -233,7 +233,7 @@
             this.toolStripButton1.Image = global::ZBYGate_Data_Collection.Resource1.初始化;
             this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton1.Name = "toolStripButton1";
-            this.toolStripButton1.Size = new System.Drawing.Size(29, 29);
+            this.toolStripButton1.Size = new System.Drawing.Size(34, 34);
             this.toolStripButton1.Text = "toolStripButton1";
             this.toolStripButton1.ToolTipText = "初始化身份证动态库";
             this.toolStripButton1.Click += new System.EventHandler(this.ToolstripButton_Click);
@@ -244,7 +244,7 @@
             this.toolStripButton2.Image = global::ZBYGate_Data_Collection.Resource1.读取;
             this.toolStripButton2.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton2.Name = "toolStripButton2";
-            this.toolStripButton2.Size = new System.Drawing.Size(29, 29);
+            this.toolStripButton2.Size = new System.Drawing.Size(34, 34);
             this.toolStripButton2.Text = "toolStripButton2";
             this.toolStripButton2.ToolTipText = "读取身份证信息";
             this.toolStripButton2.Click += new System.EventHandler(this.ToolstripButton_Click);
@@ -255,7 +255,7 @@
             this.toolStripButton3.Image = global::ZBYGate_Data_Collection.Resource1.关_闭;
             this.toolStripButton3.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton3.Name = "toolStripButton3";
-            this.toolStripButton3.Size = new System.Drawing.Size(29, 29);
+            this.toolStripButton3.Size = new System.Drawing.Size(34, 34);
             this.toolStripButton3.Text = "toolStripButton3";
             this.toolStripButton3.ToolTipText = "关闭串口";
             this.toolStripButton3.Click += new System.EventHandler(this.ToolstripButton_Click);
@@ -267,7 +267,7 @@
             this.toolStripButton4.Image = global::ZBYGate_Data_Collection.Resource1.循环;
             this.toolStripButton4.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton4.Name = "toolStripButton4";
-            this.toolStripButton4.Size = new System.Drawing.Size(29, 29);
+            this.toolStripButton4.Size = new System.Drawing.Size(34, 34);
             this.toolStripButton4.Text = "toolStripButton4";
             this.toolStripButton4.ToolTipText = "循环读取身份证信息";
             this.toolStripButton4.Click += new System.EventHandler(this.ToolstripButton_Click);
@@ -278,7 +278,7 @@
             this.toolStripButton5.Image = global::ZBYGate_Data_Collection.Resource1.定时;
             this.toolStripButton5.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton5.Name = "toolStripButton5";
-            this.toolStripButton5.Size = new System.Drawing.Size(29, 29);
+            this.toolStripButton5.Size = new System.Drawing.Size(34, 34);
             this.toolStripButton5.Text = "toolStripButton5";
             this.toolStripButton5.ToolTipText = "定时读取身份证信息";
             this.toolStripButton5.Click += new System.EventHandler(this.ToolstripButton_Click);

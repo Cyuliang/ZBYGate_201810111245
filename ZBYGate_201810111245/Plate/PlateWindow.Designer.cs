@@ -51,6 +51,7 @@
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.DataTextBox = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
             this.PlatePortTextBox = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
@@ -64,7 +65,6 @@
             this.label2 = new System.Windows.Forms.Label();
             this.IpTextBox = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.DataTextBox = new System.Windows.Forms.TextBox();
             this.statusStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -102,7 +102,7 @@
             // 
             // toolStrip1
             // 
-            this.toolStrip1.ImageScalingSize = new System.Drawing.Size(25, 25);
+            this.toolStrip1.ImageScalingSize = new System.Drawing.Size(30, 30);
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripButton5,
             this.toolStripButton6,
@@ -116,7 +116,7 @@
             this.toolStripButton14});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(873, 32);
+            this.toolStrip1.Size = new System.Drawing.Size(873, 37);
             this.toolStrip1.TabIndex = 2;
             this.toolStrip1.Text = "toolStrip1";
             // 
@@ -126,7 +126,7 @@
             this.toolStripButton5.Image = global::ZBYGate_Data_Collection.Resource1.lingk1;
             this.toolStripButton5.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton5.Name = "toolStripButton5";
-            this.toolStripButton5.Size = new System.Drawing.Size(29, 29);
+            this.toolStripButton5.Size = new System.Drawing.Size(34, 34);
             this.toolStripButton5.Text = "toolStripButton3";
             this.toolStripButton5.ToolTipText = "链接车牌识别";
             this.toolStripButton5.Click += new System.EventHandler(this.ToolstripButton_Click);
@@ -137,7 +137,7 @@
             this.toolStripButton6.Image = global::ZBYGate_Data_Collection.Resource1.断开链接__2_;
             this.toolStripButton6.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton6.Name = "toolStripButton6";
-            this.toolStripButton6.Size = new System.Drawing.Size(29, 29);
+            this.toolStripButton6.Size = new System.Drawing.Size(34, 34);
             this.toolStripButton6.Text = "toolStripButton6";
             this.toolStripButton6.ToolTipText = "断开车牌链接";
             this.toolStripButton6.Click += new System.EventHandler(this.ToolstripButton_Click);
@@ -148,7 +148,7 @@
             this.toolStripButton7.Image = global::ZBYGate_Data_Collection.Resource1.抓拍相机;
             this.toolStripButton7.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton7.Name = "toolStripButton7";
-            this.toolStripButton7.Size = new System.Drawing.Size(29, 29);
+            this.toolStripButton7.Size = new System.Drawing.Size(34, 34);
             this.toolStripButton7.Text = "toolStripButton7";
             this.toolStripButton7.ToolTipText = "手动抓拍";
             this.toolStripButton7.Click += new System.EventHandler(this.ToolstripButton_Click);
@@ -159,7 +159,7 @@
             this.toolStripButton8.Image = global::ZBYGate_Data_Collection.Resource1.开关;
             this.toolStripButton8.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton8.Name = "toolStripButton8";
-            this.toolStripButton8.Size = new System.Drawing.Size(29, 29);
+            this.toolStripButton8.Size = new System.Drawing.Size(34, 34);
             this.toolStripButton8.Text = "toolStripButton8";
             this.toolStripButton8.ToolTipText = "手动抬杆";
             this.toolStripButton8.Click += new System.EventHandler(this.ToolstripButton_Click);
@@ -170,7 +170,7 @@
             this.toolStripButton9.Image = global::ZBYGate_Data_Collection.Resource1.数据;
             this.toolStripButton9.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton9.Name = "toolStripButton9";
-            this.toolStripButton9.Size = new System.Drawing.Size(29, 29);
+            this.toolStripButton9.Size = new System.Drawing.Size(34, 34);
             this.toolStripButton9.Text = "toolStripButton9";
             this.toolStripButton9.ToolTipText = "发送数据";
             this.toolStripButton9.Click += new System.EventHandler(this.ToolstripButton_Click);
@@ -181,7 +181,7 @@
             this.toolStripButton10.Image = global::ZBYGate_Data_Collection.Resource1.搜索;
             this.toolStripButton10.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton10.Name = "toolStripButton10";
-            this.toolStripButton10.Size = new System.Drawing.Size(29, 29);
+            this.toolStripButton10.Size = new System.Drawing.Size(34, 34);
             this.toolStripButton10.Text = "toolStripButton10";
             this.toolStripButton10.ToolTipText = "搜索设备";
             this.toolStripButton10.Click += new System.EventHandler(this.ToolstripButton_Click);
@@ -192,7 +192,7 @@
             this.toolStripButton11.Image = global::ZBYGate_Data_Collection.Resource1.目录;
             this.toolStripButton11.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton11.Name = "toolStripButton11";
-            this.toolStripButton11.Size = new System.Drawing.Size(29, 29);
+            this.toolStripButton11.Size = new System.Drawing.Size(34, 34);
             this.toolStripButton11.Text = "toolStripButton11";
             this.toolStripButton11.ToolTipText = "设置图片保存路径";
             this.toolStripButton11.Click += new System.EventHandler(this.ToolstripButton_Click);
@@ -203,7 +203,7 @@
             this.toolStripButton12.Image = global::ZBYGate_Data_Collection.Resource1.ip;
             this.toolStripButton12.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton12.Name = "toolStripButton12";
-            this.toolStripButton12.Size = new System.Drawing.Size(29, 29);
+            this.toolStripButton12.Size = new System.Drawing.Size(34, 34);
             this.toolStripButton12.Text = "toolStripButton12";
             this.toolStripButton12.ToolTipText = "设置绑定IP";
             this.toolStripButton12.Click += new System.EventHandler(this.ToolstripButton_Click);
@@ -214,7 +214,7 @@
             this.toolStripButton13.Image = global::ZBYGate_Data_Collection.Resource1.视频;
             this.toolStripButton13.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton13.Name = "toolStripButton13";
-            this.toolStripButton13.Size = new System.Drawing.Size(29, 29);
+            this.toolStripButton13.Size = new System.Drawing.Size(34, 34);
             this.toolStripButton13.Text = "toolStripButton13";
             this.toolStripButton13.ToolTipText = "打开视频";
             this.toolStripButton13.Click += new System.EventHandler(this.ToolstripButton_Click);
@@ -225,7 +225,7 @@
             this.toolStripButton14.Image = global::ZBYGate_Data_Collection.Resource1.关闭视频;
             this.toolStripButton14.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton14.Name = "toolStripButton14";
-            this.toolStripButton14.Size = new System.Drawing.Size(29, 29);
+            this.toolStripButton14.Size = new System.Drawing.Size(34, 34);
             this.toolStripButton14.Text = "toolStripButton14";
             this.toolStripButton14.ToolTipText = "关闭视频";
             this.toolStripButton14.Click += new System.EventHandler(this.ToolstripButton_Click);
@@ -238,11 +238,11 @@
             this.tableLayoutPanel1.Controls.Add(this.tabControl1, 1, 0);
             this.tableLayoutPanel1.Controls.Add(this.groupBox1, 0, 0);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 32);
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 37);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 1;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(873, 416);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(873, 411);
             this.tableLayoutPanel1.TabIndex = 3;
             // 
             // tabControl1
@@ -253,7 +253,7 @@
             this.tabControl1.Location = new System.Drawing.Point(383, 3);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(487, 410);
+            this.tabControl1.Size = new System.Drawing.Size(487, 405);
             this.tabControl1.TabIndex = 1;
             // 
             // tabPage1
@@ -262,7 +262,7 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(479, 384);
+            this.tabPage1.Size = new System.Drawing.Size(479, 379);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Picture";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -272,7 +272,7 @@
             this.pictureBox2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pictureBox2.Location = new System.Drawing.Point(3, 3);
             this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(473, 378);
+            this.pictureBox2.Size = new System.Drawing.Size(473, 373);
             this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox2.TabIndex = 0;
             this.pictureBox2.TabStop = false;
@@ -317,9 +317,17 @@
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox1.Location = new System.Drawing.Point(3, 3);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(374, 410);
+            this.groupBox1.Size = new System.Drawing.Size(374, 405);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
+            // 
+            // DataTextBox
+            // 
+            this.DataTextBox.Location = new System.Drawing.Point(108, 224);
+            this.DataTextBox.Multiline = true;
+            this.DataTextBox.Name = "DataTextBox";
+            this.DataTextBox.Size = new System.Drawing.Size(239, 112);
+            this.DataTextBox.TabIndex = 103;
             // 
             // label5
             // 
@@ -425,14 +433,6 @@
             this.label1.Size = new System.Drawing.Size(17, 12);
             this.label1.TabIndex = 90;
             this.label1.Text = "Ip";
-            // 
-            // DataTextBox
-            // 
-            this.DataTextBox.Location = new System.Drawing.Point(108, 224);
-            this.DataTextBox.Multiline = true;
-            this.DataTextBox.Name = "DataTextBox";
-            this.DataTextBox.Size = new System.Drawing.Size(239, 112);
-            this.DataTextBox.TabIndex = 103;
             // 
             // PlateWindow
             // 

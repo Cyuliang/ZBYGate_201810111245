@@ -54,9 +54,9 @@ namespace ZBYGate_Data_Collection
             SetForegroundWindow(instance.MainWindowHandle); //将窗口放置最前端
         }
         [DllImport("User32.dll")]
-        private static extern bool ShowWindowAsync(System.IntPtr hWnd, int cmdShow);
+        private static extern bool ShowWindowAsync(IntPtr hWnd, int cmdShow);
         [DllImport("User32.dll")]
-        private static extern bool SetForegroundWindow(System.IntPtr hWnd);
+        private static extern bool SetForegroundWindow(IntPtr hWnd);
     }
 }
 
