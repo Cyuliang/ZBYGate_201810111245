@@ -153,7 +153,7 @@ namespace ZBYGate_Data_Collection
         }
 
 
-        private DateTime PastTime;
+        private DateTime ZeroPastTime;
         /// <summary>
         /// 循环定时检测
         /// 超过23:00插入traffic数据库新记录
@@ -164,7 +164,7 @@ namespace ZBYGate_Data_Collection
             if(DateTime.Compare(DateTime.Now,EndTime)>0)
             {
                 //判断日期有没有变化，有变化代表隔天，清零数据。
-                if(DateTime.Now.Day!=Passtime.Day)
+                if(DateTime.Now.Day!= ZeroPastTime.Day)
                 {
                     Working.IN = 0;
                     Working.OUT = 0;
@@ -172,7 +172,7 @@ namespace ZBYGate_Data_Collection
                 }
                 else
                 {
-                    PastTime = DateTime.Now;
+                    ZeroPastTime = DateTime.Now;
                 }
 
                 StatisticsDataBaseInsert?.BeginInvoke(DateTime.Now,false, StatisticsDataBaseInsertCallBack, null);
@@ -267,6 +267,8 @@ namespace ZBYGate_Data_Collection
 
             if (Lpn != null || Container != null)//字段其中一个不为空就查询服务器
             {
+                SetMessage?.Invoke("SelectDataBase[函数|Log|开始查询本地数据库]");
+
                 string[] Head = { Lpn, Container };                                                //组合显示车牌和箱号
                 SelectDataBase?.BeginInvoke(Lpn, Container, "", One_SelectDataBaseCallBack, Head);//查询数据库  
             }
@@ -285,9 +287,7 @@ namespace ZBYGate_Data_Collection
         /// </summary>
         /// <param name="ar"></param>
         private void One_SelectDataBaseCallBack(IAsyncResult ar)
-        {
-            SetMessage?.Invoke("One_SelectDataBaseCallBack[函数|Log|开始查询本地数据库]");
-
+        {            
             bool IsOpenDoorD = false;                                             //是否开闸
             var Head = (string[])ar.AsyncState;                                   //车牌和箱号   
             var LedShowDataResult = SelectDataBase.EndInvoke(ar);                 //查询本地数据库回调返回数据
@@ -295,6 +295,8 @@ namespace ZBYGate_Data_Collection
             if (LedShowDataResult.All(string.IsNullOrEmpty))                      //数据库记录为空
             {
                 SetMessage?.Invoke("One_SelectDataBaseCallBack[函数|Log|本地数据库没有记录]");
+
+                SetMessage?.Invoke("HttpPostInAction[函数|Log|开始查询后台服务器]");
                 //查询远端数据库
                 HttpPostInAction?.BeginInvoke(Passtime.ToString("yyyyMMddHHmmss"), Head[0], Head[1], Tow_SelectHttpCallBack, Head);
             }
@@ -309,12 +311,12 @@ namespace ZBYGate_Data_Collection
         }
 
         /// <summary>
-        /// 查询后台数据库
+        /// 查询后台数据库回调函数
         /// </summary>
         /// <param name="ar"></param>
         private void Tow_SelectHttpCallBack(IAsyncResult ar)
         {
-            SetMessage?.Invoke("Tow_SelectHttpCallBack[函数|Log|开始查询后台服务器]");
+            SetMessage?.Invoke("Tow_SelectHttpCallBack[函数|Log|查询后台服务器完成]");
 
             bool IsOpenDoorH = false;                                               //是否开闸
             var Head = (string[])ar.AsyncState;                                     //车牌和箱号

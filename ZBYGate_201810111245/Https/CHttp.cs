@@ -45,8 +45,17 @@ namespace ZBYGate_Data_Collection.Https
             ////////////////////////////////////////201903301515
             ArriveParkJsonDict["eqId"] = eqid;
 
-            string[] TestType = Container.Split('|');
-            if(TestType.Length==2)
+            string[] TestType = new string[] { };
+            if (!string.IsNullOrEmpty(Container))//不为null才分割数据
+            {
+                TestType = Container.Split('|');
+            }
+            else
+            {
+                SetMessageAction?.Invoke(string.Format("DEBUG TestType 索引超出"));
+            }
+
+            if (TestType.Length==2)
             {
                 switch (int.Parse(TestType[1]))
                 {
