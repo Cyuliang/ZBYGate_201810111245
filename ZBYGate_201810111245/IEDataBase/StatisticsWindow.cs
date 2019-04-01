@@ -72,7 +72,7 @@ namespace ZBYGate_Data_Collection.IEDataBase
                 {
                     DefaultExt = "xls",
                     Filter = "Excel文件|*.xls",
-                    FileName = string.Format("StatisticsData_{0:yyyyMMddHHmmss}.xls", DateTime.Now)
+                    FileName = string.Format("StatisticsDataBase_{0:yyyyMMddHHmmss}.xls", DateTime.Now)
                 };
                 saveDialog.ShowDialog();
                 saveFileName = saveDialog.FileName;
