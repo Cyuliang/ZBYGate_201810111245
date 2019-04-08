@@ -7,25 +7,43 @@ namespace ZBYGate_Data_Collection
     class Working : IDisposable//远程服务器和本地数据库同步查询
     {
         #region//统计数据值初始化
+        /// <summary>
+        /// 进闸统计
+        /// </summary>
         public static int IN = 0;
+        /// <summary>
+        /// 出闸统计
+        /// </summary>
         public static int OUT = 0;
+        /// <summary>
+        /// 结余统计
+        /// </summary>
         public static int BALANCE = 0;
         #endregion
 
         #region //对象初始
         private Log.CLog _Log = new Log.CLog();
-        public Action<string> SetMessage;
-        public Action<string, string, string> SetStatisticsLable;//统计信息回写到主界面
+        /// <summary>
+        /// 运行消息委托
+        /// </summary>
+        public Action<string> SetMessage_Action;
+        /// <summary>
+        /// 统计信息回写到主界面委托
+        /// </summary>
+        public Action<string, string, string> SetStatisticsLable_Action;
         #endregion
 
         #region //定时器
+        /// <summary>
+        /// 开机回写统计数据到界面
+        /// </summary>
         private System.Threading.Timer _Timer_Start = null;
         /// <summary>
         /// 定时更新LED显示
         /// </summary>
         private System.Threading.Timer _Timer_LEDSHow = null;
         /// <summary>
-        /// 定时检测时间，创建数据库
+        /// 定时检测时间点，创建数据库
         /// </summary>
         private System.Threading.Timer _Timer_InsertTraffic = null;
         #endregion
@@ -107,7 +125,7 @@ namespace ZBYGate_Data_Collection
         public Working()
         {
             //启动10秒后，检测统计数据库
-            _Timer_Start = new System.Threading.Timer(InsertTrafficNow,null, TimeSpan.FromSeconds(10), TimeSpan.FromSeconds(0));
+            _Timer_Start = new System.Threading.Timer(InsertTraffic_timer_CallBack,null, TimeSpan.FromSeconds(10), TimeSpan.FromSeconds(0));
             //LED初始化
             _Timer_LEDSHow = new System.Threading.Timer(OutLedDefaultShowCallBack, null, TimeSpan.FromSeconds(6), TimeSpan.FromSeconds(0));
             //60秒检测一次，过23点创建一条统计数据库新纪录
@@ -120,7 +138,7 @@ namespace ZBYGate_Data_Collection
         /// 启动创建traffic数据库一次今天记录
         /// </summary>
         /// <param name="state"></param>
-        public void InsertTrafficNow(object state)
+        public void InsertTraffic_timer_CallBack(object state)
         {
             StatisticsDataBaseInsert?.BeginInvoke(DateTime.Now, true, StatisticsDataBaseInsertCallBack, null);
             StatisticsDateBaseSelect?.BeginInvoke(DateTime.Now, StatisticsDateBaseSelectCallBack, null);
@@ -147,9 +165,9 @@ namespace ZBYGate_Data_Collection
             Working.OUT =int.Parse( Retusl[1]);
             Working.BALANCE =int.Parse( Retusl[2]);
 
-            SetStatisticsLable?.BeginInvoke(Working.IN.ToString(), Working.OUT.ToString(), Working.BALANCE.ToString(), null, null);
+            SetStatisticsLable_Action?.BeginInvoke(Working.IN.ToString(), Working.OUT.ToString(), Working.BALANCE.ToString(), null, null);
 
-            SetMessage?.Invoke("StatisticsDateBaseSelect[回调|查询|读取统计数据库数据回写到参数回调函数]");
+            SetMessage_Action?.Invoke("StatisticsDateBaseSelect[回调|查询|读取统计数据库数据回写到参数回调函数]");
         }
 
 
@@ -185,7 +203,7 @@ namespace ZBYGate_Data_Collection
         /// <param name="ar"></param>
         private void StatisticsDataBaseInsertCallBack(IAsyncResult ar)
         {
-            SetMessage?.Invoke("StatisticsDataBaseInsert[回调|插入|插入statistics数据库新记录]");
+            SetMessage_Action?.Invoke("StatisticsDataBaseInsert[回调|插入|插入statistics数据库新记录]");
         }
 
         #endregion
@@ -256,7 +274,7 @@ namespace ZBYGate_Data_Collection
         /// <param name="Container"></param>
         private void SelectLpnCon(string Lpn, string Container)
         {
-            SetMessage?.Invoke("SelectLpnCon[函数|Log|识别完成，数据开始处理]");
+            SetMessage_Action?.Invoke("SelectLpnCon[函数|Log|识别完成，数据开始处理]");
 
             //优先置空车牌和箱号
             NewLpn = string.Empty;
@@ -267,7 +285,7 @@ namespace ZBYGate_Data_Collection
 
             if (Lpn != null || Container != null)//字段其中一个不为空就查询服务器
             {
-                SetMessage?.Invoke("SelectDataBase[函数|Log|开始查询本地数据库]");
+                SetMessage_Action?.Invoke("SelectDataBase[函数|Log|开始查询本地数据库]");
 
                 string[] Head = { Lpn, Container };                                                //组合显示车牌和箱号
                 SelectDataBase?.BeginInvoke(Lpn, Container, "", One_SelectDataBaseCallBack, Head);//查询数据库  
@@ -294,9 +312,9 @@ namespace ZBYGate_Data_Collection
 
             if (LedShowDataResult.All(string.IsNullOrEmpty))                      //数据库记录为空
             {
-                SetMessage?.Invoke("One_SelectDataBaseCallBack[函数|Log|本地数据库没有记录]");
+                SetMessage_Action?.Invoke("One_SelectDataBaseCallBack[函数|Log|本地数据库没有记录]");
 
-                SetMessage?.Invoke("HttpPostInAction[函数|Log|开始查询后台服务器]");
+                SetMessage_Action?.Invoke("HttpPostInAction[函数|Log|开始查询后台服务器]");
                 //查询远端数据库
                 HttpPostInAction?.BeginInvoke(Passtime.ToString("yyyyMMddHHmmss"), Head[0], Head[1], Tow_SelectHttpCallBack, Head);
             }
@@ -316,7 +334,7 @@ namespace ZBYGate_Data_Collection
         /// <param name="ar"></param>
         private void Tow_SelectHttpCallBack(IAsyncResult ar)
         {
-            SetMessage?.Invoke("Tow_SelectHttpCallBack[函数|Log|查询后台服务器完成]");
+            SetMessage_Action?.Invoke("Tow_SelectHttpCallBack[函数|Log|查询后台服务器完成]");
 
             bool IsOpenDoorH = false;                                               //是否开闸
             var Head = (string[])ar.AsyncState;                                     //车牌和箱号
@@ -356,7 +374,7 @@ namespace ZBYGate_Data_Collection
                 var LedShowDataResult = new string[] { string.Format("{0}/{1}", Head[0], Head[1]), "*", "*", "*", "*", Http_HttpNull };
                 LedShow(LedShowDataResult, IsOpenDoorH);
 
-                SetMessage?.Invoke("Tow_SelectHttpCallBack[函数|Log|后台服务器没有返回数据]");
+                SetMessage_Action?.Invoke("Tow_SelectHttpCallBack[函数|Log|后台服务器没有返回数据]");
             }
         }
         #endregion
@@ -368,7 +386,7 @@ namespace ZBYGate_Data_Collection
         /// <param name="ar"></param>
         private void ForDoneCallBack(IAsyncResult ar)
         {
-            SetMessage?.Invoke("CVRForReadAction[回调|查询|查询本地身份证数据库回调函数]");
+            SetMessage_Action?.Invoke("CVRForReadAction[回调|查询|查询本地身份证数据库回调函数]");
 
             ReadForBooen = true;
         }
@@ -415,7 +433,7 @@ namespace ZBYGate_Data_Collection
                 IsOpenDoorD = true;
             }
 
-            SetMessage?.Invoke("SelectDataBase[回调|查询|查询本地身份证数据库回调函数]");
+            SetMessage_Action?.Invoke("SelectDataBase[回调|查询|查询本地身份证数据库回调函数]");
 
             LedShow(LedShowDataResult, IsOpenDoorD);            //推送LED
         }
@@ -426,7 +444,7 @@ namespace ZBYGate_Data_Collection
         /// <param name="ar"></param>
         private void In_UpdateDataBaseActionCallBack(IAsyncResult ar)
         {
-            SetMessage?.Invoke("In_UpdateDataBaseAction[回调|查询|更新入闸RunData数据库身份证信息回调函数]");
+            SetMessage_Action?.Invoke("In_UpdateDataBaseAction[回调|查询|更新入闸RunData数据库身份证信息回调函数]");
         }
 
         #endregion
@@ -451,7 +469,7 @@ namespace ZBYGate_Data_Collection
 
             try//防止非法数据，导致索引超出
             {
-                SetMessage?.Invoke("LedShow[函数|Log|开始插入入闸数据到Run数据库]");
+                SetMessage_Action?.Invoke("LedShow[函数|Log|开始插入入闸数据到Run数据库]");
                 string[] tmpIn = dataBaseResult[0].Split('/');
                 Rundata_InsertAction?.BeginInvoke(tmpIn[0], tmpIn[1], isOpenDoor ? 1 : 0, Passtime, Rundata_InsertCallBack, null);//插入数据库
             }
@@ -463,7 +481,7 @@ namespace ZBYGate_Data_Collection
             {
                 tmp += v + ",";
             }
-            SetMessage?.Invoke(string.Format("LedShow[函数|Message|LED Show {0}]",tmp));
+            SetMessage_Action?.Invoke(string.Format("LedShow[函数|Message|LED Show {0}]",tmp));
             _Log.logInfo.Info(string.Format("LedShow[函数|Log|LED Show {0}]", tmp));
         }
 
@@ -473,7 +491,7 @@ namespace ZBYGate_Data_Collection
         /// <param name="ar"></param>
         private void Rundata_InsertCallBack(IAsyncResult ar)
         {
-            SetMessage?.Invoke("Rundata_InsertAction[回调|插入|插入入闸数据到RunData数据库回调函数]");
+            SetMessage_Action?.Invoke("Rundata_InsertAction[回调|插入|插入入闸数据到RunData数据库回调函数]");
         }
 
         /// <summary>
@@ -482,7 +500,7 @@ namespace ZBYGate_Data_Collection
         /// <param name="ar"></param>
         private void SendCallBack(IAsyncResult ar)
         {
-            SetMessage?.Invoke("SendAction[回调|推送|入闸LED消息推送回调函数]");
+            SetMessage_Action?.Invoke("SendAction[回调|推送|入闸LED消息推送回调函数]");
         }
 
         #endregion
@@ -501,7 +519,7 @@ namespace ZBYGate_Data_Collection
 
             if (!string.IsNullOrEmpty(ChLicesen))//车牌不为空
             {
-                SetMessage?.Invoke("PlateResult[函数|Log|开始插入出闸数据到Run数据库]");
+                SetMessage_Action?.Invoke("PlateResult[函数|Log|开始插入出闸数据到Run数据库]");
 
                 OpenDoorAction?.BeginInvoke(Out_IP, PORT, Out_ControllerSN, OpendoorCallBack, null);//出闸开门
                 SetOutLedMessageAction?.BeginInvoke(string.Format("{0} {1}", ChLicesen, Plate_Local_End_Message),SetOutLedCallBack,null);//LED推送显示
@@ -521,7 +539,7 @@ namespace ZBYGate_Data_Collection
         /// <param name="ar"></param>
         private void OpendoorCallBack(IAsyncResult ar)
         {
-            SetMessage?.Invoke("OpenDoorAction[回调|动作|出闸开闸回调函数]");
+            SetMessage_Action?.Invoke("OpenDoorAction[回调|动作|出闸开闸回调函数]");
 
         }
 
@@ -531,7 +549,7 @@ namespace ZBYGate_Data_Collection
         /// <param name="ar"></param>
         private void Rundata_updateActionCallBack(IAsyncResult ar)
         {
-            SetMessage?.Invoke("Rundata_updateAction[回调|更新|更新出闸数据到RunData数据库回调函数]");
+            SetMessage_Action?.Invoke("Rundata_updateAction[回调|更新|更新出闸数据到RunData数据库回调函数]");
         }
 
         /// <summary>
@@ -540,7 +558,7 @@ namespace ZBYGate_Data_Collection
         /// <param name="ar"></param>
         private void InsertCallBack(IAsyncResult ar)
         {
-            SetMessage?.Invoke("Out_InsertDataBaseAction[回调|插入|插入出闸数据到OutData数据库回调函数]");
+            SetMessage_Action?.Invoke("Out_InsertDataBaseAction[回调|插入|插入出闸数据到OutData数据库回调函数]");
         }
 
         /// <summary>
@@ -549,7 +567,7 @@ namespace ZBYGate_Data_Collection
         /// <param name="ar"></param>
         private void HttpPostOutActionCallBack(IAsyncResult ar)
         {
-            SetMessage?.Invoke("HttpPostOutAction[回调|查询|推送出闸数据到后台服务器回调函数]");
+            SetMessage_Action?.Invoke("HttpPostOutAction[回调|查询|推送出闸数据到后台服务器回调函数]");
         }
 
         /// <summary>
@@ -568,7 +586,7 @@ namespace ZBYGate_Data_Collection
         private void OutLedDefaultShowCallBack(object state)
         {
             SetOutLedMessageAction?.BeginInvoke(Plate_local_Message,null,null);
-            SetMessage?.Invoke("SetOutLedCallBack[定时器|推送|恢复出闸LED默认显示]");
+            SetMessage_Action?.Invoke("SetOutLedCallBack[定时器|推送|恢复出闸LED默认显示]");
         }
 
         #endregion
@@ -583,7 +601,7 @@ namespace ZBYGate_Data_Collection
             Working.BALANCE = Working.IN - Working.OUT;
 
             //写统计数据到主界面
-            SetStatisticsLable?.BeginInvoke(Working.IN.ToString(), Working.OUT.ToString(), Working.BALANCE.ToString(), null, null);
+            SetStatisticsLable_Action?.BeginInvoke(Working.IN.ToString(), Working.OUT.ToString(), Working.BALANCE.ToString(), null, null);
 
             StatisticsDataBaseUpdate?.BeginInvoke(Working.BALANCE, Working.IN, 0, DateTime.Now, Calculation_InCallBack, null);
         }
@@ -597,7 +615,7 @@ namespace ZBYGate_Data_Collection
             Working.BALANCE = Working.IN - Working.OUT;
 
             //写统计数据到主界面
-            SetStatisticsLable?.BeginInvoke(Working.IN.ToString(), Working.OUT.ToString(), Working.BALANCE.ToString(),null,null);
+            SetStatisticsLable_Action?.BeginInvoke(Working.IN.ToString(), Working.OUT.ToString(), Working.BALANCE.ToString(),null,null);
 
             StatisticsDataBaseUpdate?.BeginInvoke(Working.BALANCE, 0, Working.OUT, DateTime.Now, Calculation_OutCallBack, null);
         }
@@ -608,7 +626,7 @@ namespace ZBYGate_Data_Collection
         /// <param name="ar"></param>
         private void Calculation_OutCallBack(IAsyncResult ar)
         {
-            SetMessage?.Invoke("StatisticsDataBaseUpdate[回调|更新|统计出闸数据库回调函数完成]");
+            SetMessage_Action?.Invoke("StatisticsDataBaseUpdate[回调|更新|统计出闸数据库回调函数完成]");
         }
 
         /// <summary>
@@ -617,7 +635,7 @@ namespace ZBYGate_Data_Collection
         /// <param name="ar"></param>
         private void Calculation_InCallBack(IAsyncResult ar)
         {
-            SetMessage?.Invoke("StatisticsDataBaseUpdate[回调|更新|统计入闸数据库回调函数完成]");
+            SetMessage_Action?.Invoke("StatisticsDataBaseUpdate[回调|更新|统计入闸数据库回调函数完成]");
         }
         #endregion
 

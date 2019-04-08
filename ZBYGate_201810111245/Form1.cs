@@ -145,7 +145,7 @@ namespace ZBYGate_Data_Collection
 
             _Working.OpenDoorAction += _Gate.OpenDoor;//开闸
 
-            _Working.SetMessage += GetMessage;//动作日志
+            _Working.SetMessage_Action += GetMessage;//动作日志
 
             _Working.HttpPostInAction += _CHttp.SetInJosn;//查询远端服务器
             _Working.HttpJsonSplitAction += _CHttp.JsonSplit;
@@ -153,7 +153,7 @@ namespace ZBYGate_Data_Collection
 
             _Working.StatisticsDataBaseInsert += _RunData.Statistics_Insert;//统计数据库插入数据
             _Working.StatisticsDateBaseSelect += _RunData.Statistics_Select;//查询统计数据库，回显到界面和变量
-            _Working.SetStatisticsLable += SetStatisticsLable;//回写统计数据库值到界面
+            _Working.SetStatisticsLable_Action += SetStatisticsLable;//回写统计数据库值到界面
 
             #endregion
 
