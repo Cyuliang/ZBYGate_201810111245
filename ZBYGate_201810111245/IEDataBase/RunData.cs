@@ -196,11 +196,13 @@ namespace ZBYGate_Data_Collection.IEDataBase
             {
                 if(!string.IsNullOrEmpty(Container))
                 {
-                    Inserttext = string.Format("INSERT INTO `hw`.`rundata` (`Plate`,`Container`,`InDatetime`,`Auto`) VALUES('{0}','{1}','{2}'.'{3}')", Plate, Container, dt.ToUniversalTime().AddHours(8), auto);
+                    Inserttext = string.Format("INSERT INTO `hw`.`rundata` (`Plate`,`Container`,`InDatetime`,`Auto`) VALUES('{0}','{1}','{2}','{3}')", Plate, Container, dt.ToUniversalTime().AddHours(8), auto);
+                    SetMessageAction?.Invoke("车牌，箱号");
                 }
                 else
                 {
                     Inserttext = string.Format("INSERT INTO `hw`.`rundata` (`Plate`,`InDatetime`,`Auto`) VALUES('{0}','{1}','{2}')", Plate, dt.ToUniversalTime().AddHours(8), auto);
+                    SetMessageAction?.Invoke("车牌");
                 }
             }
             else 
@@ -208,6 +210,7 @@ namespace ZBYGate_Data_Collection.IEDataBase
                 if (!string.IsNullOrEmpty(Container))
                 {
                     Inserttext = string.Format("INSERT INTO `hw`.`rundata` (`Container`,`InDatetime`,`Auto`) VALUES('{0}','{1}','{2}')", Container, dt.ToUniversalTime().AddHours(8), auto);
+                    SetMessageAction?.Invoke("箱号");
                 }
                 else
                 {
@@ -216,8 +219,10 @@ namespace ZBYGate_Data_Collection.IEDataBase
             }
 
             SetMessageAction?.Invoke(string.Format("Rundata_Insert[函数|插入|{0}]", Inserttext));
-
+            //SetMessageAction?.Invoke("------------------------------------------------");
             int i= LocalDataBase.MySqlHelper.ExecuteNonQuery(LocalDataBase.MySqlHelper.Conn, CommandType.Text, Inserttext, null);
+
+
 
             if (i != 0)
             {
@@ -227,7 +232,7 @@ namespace ZBYGate_Data_Collection.IEDataBase
             {
                 SetMessageAction?.Invoke(string.Format("Rundata_Insert[函数|Log|{0} 失败]", Inserttext));
             }
-
+            
             _Log.logInfo.Info(Inserttext);
         }
 

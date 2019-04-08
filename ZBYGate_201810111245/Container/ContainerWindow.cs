@@ -141,8 +141,9 @@ namespace ZBYGate_Data_Collection.Container
             int i = 1;
             foreach (object _Control in toolStrip1.Items)
             {
-                if (_Control is ToolStripButton _ToolStripButton)
+                if (_Control is ToolStripButton )
                 {
+                    ToolStripButton _ToolStripButton = new ToolStripButton();
                     _ToolStripButton.Tag = i;
                     i++;
                 }

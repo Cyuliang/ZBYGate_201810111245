@@ -36,6 +36,7 @@ namespace ZBYGate_Data_Collection.LocalDataBase
                     PrepareCommand(cmd, conn, null, cmdType, cmdText, commandParameters);
                     int val = cmd.ExecuteNonQuery();
                     cmd.Parameters.Clear();
+
                     return val;
                 }
 
