@@ -130,7 +130,6 @@ namespace ZBYGate_Data_Collection
             _Working.Out_InsertDataBaseAction += _RunData.Out_Insert;//出闸数据写入
             _Working.Rundata_InsertAction += _RunData.Rundata_Insert;//运行数据库写入
             _Working.Rundata_updateAction += _RunData.Rundata_update;//运行数据库更新
-            _Working.StatisticsDataBaseUpdate += _RunData.Statistics_Update;//统计数据库更新
 
             _Working.In_UpdateDataBaseAction += _RunData.In_Update;//更新入闸身份证信息
 
@@ -153,6 +152,8 @@ namespace ZBYGate_Data_Collection
 
             _Working.StatisticsDataBaseInsert += _RunData.Statistics_Insert;//统计数据库插入数据
             _Working.StatisticsDateBaseSelect += _RunData.Statistics_Select;//查询统计数据库，回显到界面和变量
+            _Working.StatisticsDataBaseUpdate += _RunData.Statistics_Update;//统计数据库更新
+
             _Working.SetStatisticsLable_Action += SetStatisticsLable;//回写统计数据库值到界面
 
             #endregion

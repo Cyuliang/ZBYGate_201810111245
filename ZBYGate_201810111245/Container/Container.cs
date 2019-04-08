@@ -23,7 +23,7 @@ namespace ZBYGate_Data_Collection.Container
         public Action<IVECONclientEvents_OnNewLPNEventEvent> NewLPNEventAction;
         public Action<IVECONclientEvents_OnUpdateLPNEventEvent> UpdateLPNEventAction;
         public Action<IVECONclientEvents_OnCombinedRecognitionResultISOEvent> CombinResultAction;
-        public Action<IVECONclientEvents_OnIntermediateRecognitionResultISOEvent> Intermediate;       
+        //public Action<IVECONclientEvents_OnIntermediateRecognitionResultISOEvent> Intermediate;       
         #endregion
 
         public Container()

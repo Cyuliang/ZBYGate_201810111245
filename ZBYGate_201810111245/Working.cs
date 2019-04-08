@@ -45,7 +45,7 @@ namespace ZBYGate_Data_Collection
         /// <summary>
         /// 定时检测时间点，创建数据库
         /// </summary>
-        private System.Threading.Timer _Timer_InsertTraffic = null;
+        //private System.Threading.Timer _Timer_InsertTraffic = null;
         #endregion
 
         #region//集装箱
@@ -76,7 +76,7 @@ namespace ZBYGate_Data_Collection
         #endregion
 
         #region //统计数据库
-        public Action<int, int, int, DateTime> StatisticsDataBaseUpdate;//更新统计数据库
+        public Func<int, int, int, DateTime,int> StatisticsDataBaseUpdate;//更新统计数据库
         public Action<DateTime,bool> StatisticsDataBaseInsert;//插入统计数据
         public Func<DateTime, string[]> StatisticsDateBaseSelect;//查询统计数据库，回写到参数和界面；
         #endregion
@@ -124,12 +124,9 @@ namespace ZBYGate_Data_Collection
 
         public Working()
         {
-            //启动10秒后，检测统计数据库
             _Timer_Start = new System.Threading.Timer(InsertTraffic_timer_CallBack,null, TimeSpan.FromSeconds(10), TimeSpan.FromSeconds(0));
-            //LED初始化
             _Timer_LEDSHow = new System.Threading.Timer(OutLedDefaultShowCallBack, null, TimeSpan.FromSeconds(6), TimeSpan.FromSeconds(0));
-            //60秒检测一次，过23点创建一条统计数据库新纪录
-            _Timer_InsertTraffic = new System.Threading.Timer(TimerInsertTrafficCallBack, _Timer_InsertTraffic, TimeSpan.FromSeconds(60), TimeSpan.FromSeconds(60));
+            //_Timer_InsertTraffic = new System.Threading.Timer(TimerInsertTrafficCallBack, _Timer_InsertTraffic, TimeSpan.FromSeconds(60), TimeSpan.FromSeconds(60));
         }
 
         #region //traffic数据库
@@ -140,25 +137,29 @@ namespace ZBYGate_Data_Collection
         /// <param name="state"></param>
         public void InsertTraffic_timer_CallBack(object state)
         {
-            StatisticsDataBaseInsert?.BeginInvoke(DateTime.Now, true, StatisticsDataBaseInsertCallBack, null);
-            StatisticsDateBaseSelect?.BeginInvoke(DateTime.Now, StatisticsDateBaseSelectCallBack, null);
+            StatisticsDateBaseSelect?.BeginInvoke(DateTime.Now, StatisticsDateBase_Select_CallBack, null);
         }
 
         /// <summary>
         /// 读取统计数据库数据回写到参数回调函数
         /// </summary>
         /// <param name="ar"></param>
-        private void StatisticsDateBaseSelectCallBack(IAsyncResult ar)
+        private void StatisticsDateBase_Select_CallBack(IAsyncResult ar)
         {
             string[] Retusl = new string[3] {"0","0","0"};
             try
             {
-                //右可能发生错误，未处理
+                //可能发生错误，未处理
                 Retusl = StatisticsDateBaseSelect?.EndInvoke(ar);
+                if(string.IsNullOrEmpty(Retusl[0]))
+                {
+                    //查询不到数据，创建数据
+                    StatisticsDataBaseInsert?.BeginInvoke(DateTime.Now, true, StatisticsDataBase_Insert_CallBack, null);
+                }
             }
             catch
             {
-                throw;
+                ;
             }
 
             Working.IN =int.Parse( Retusl[0]);
@@ -171,37 +172,37 @@ namespace ZBYGate_Data_Collection
         }
 
 
-        private DateTime ZeroPastTime;
-        /// <summary>
-        /// 循环定时检测
-        /// 超过23:00插入traffic数据库新记录
-        /// </summary>
-        /// <param name="state"></param>
-        private void TimerInsertTrafficCallBack(object state)
-        {
-            if(DateTime.Compare(DateTime.Now,EndTime)>0)
-            {
-                //判断日期有没有变化，有变化代表隔天，清零数据。
-                if(DateTime.Now.Day!= ZeroPastTime.Day)
-                {
-                    Working.IN = 0;
-                    Working.OUT = 0;
-                    Working.BALANCE = 0;
-                }
-                else
-                {
-                    ZeroPastTime = DateTime.Now;
-                }
+        //private DateTime ZeroPastTime;
+        ///// <summary>
+        ///// 循环定时检测
+        ///// 超过23:00插入traffic数据库新记录
+        ///// </summary>
+        ///// <param name="state"></param>
+        //private void TimerInsertTrafficCallBack(object state)
+        //{
+        //    if (DateTime.Compare(DateTime.Now, EndTime) > 0)
+        //    {
+        //        //判断日期有没有变化，有变化代表隔天，清零数据。
+        //        if (DateTime.Now.Day != ZeroPastTime.Day)
+        //        {
+        //            Working.IN = 0;
+        //            Working.OUT = 0;
+        //            Working.BALANCE = 0;
+        //        }
+        //        else
+        //        {
+        //            ZeroPastTime = DateTime.Now;
+        //        }
 
-                StatisticsDataBaseInsert?.BeginInvoke(DateTime.Now,false, StatisticsDataBaseInsertCallBack, null);
-            }
-        }
+        //        StatisticsDataBaseInsert?.BeginInvoke(DateTime.Now, false, StatisticsDataBase_Insert_CallBack, null);
+        //    }
+        //}
 
         /// <summary>
         /// 插入statistics数据库新记录
         /// </summary>
         /// <param name="ar"></param>
-        private void StatisticsDataBaseInsertCallBack(IAsyncResult ar)
+        private void StatisticsDataBase_Insert_CallBack(IAsyncResult ar)
         {
             SetMessage_Action?.Invoke("StatisticsDataBaseInsert[回调|插入|插入statistics数据库新记录]");
         }
@@ -600,10 +601,18 @@ namespace ZBYGate_Data_Collection
             Working.IN = Working.IN + 1;
             Working.BALANCE = Working.IN - Working.OUT;
 
+            if(StatisticsDataBaseUpdate?.Invoke(Working.BALANCE, Working.IN, 0, DateTime.Now)!=1)
+            {
+                //查询不到数据，创建数据
+                StatisticsDataBaseInsert?.BeginInvoke(DateTime.Now, true, StatisticsDataBase_Insert_CallBack, null);
+                Working.IN = 1;
+                Working.OUT = 0;
+                Working.BALANCE = 1;
+            }
+
             //写统计数据到主界面
             SetStatisticsLable_Action?.BeginInvoke(Working.IN.ToString(), Working.OUT.ToString(), Working.BALANCE.ToString(), null, null);
 
-            StatisticsDataBaseUpdate?.BeginInvoke(Working.BALANCE, Working.IN, 0, DateTime.Now, Calculation_InCallBack, null);
         }
 
         /// <summary>
@@ -614,10 +623,17 @@ namespace ZBYGate_Data_Collection
             Working.OUT = Working.OUT + 1;
             Working.BALANCE = Working.IN - Working.OUT;
 
+            if (StatisticsDataBaseUpdate?.Invoke(Working.BALANCE, Working.IN, 0, DateTime.Now) != 1)
+            {
+                //查询不到数据，创建数据
+                StatisticsDataBaseInsert?.BeginInvoke(DateTime.Now, true, StatisticsDataBase_Insert_CallBack, null);
+                Working.IN = 0;
+                Working.OUT = 1;
+                Working.BALANCE = -1;
+            }
+
             //写统计数据到主界面
             SetStatisticsLable_Action?.BeginInvoke(Working.IN.ToString(), Working.OUT.ToString(), Working.BALANCE.ToString(),null,null);
-
-            StatisticsDataBaseUpdate?.BeginInvoke(Working.BALANCE, 0, Working.OUT, DateTime.Now, Calculation_OutCallBack, null);
         }
 
         /// <summary>
@@ -650,7 +666,7 @@ namespace ZBYGate_Data_Collection
                 {
                     // TODO: 释放托管状态(托管对象)。
                     _Timer_LEDSHow.Dispose();
-                    _Timer_InsertTraffic.Dispose();
+                    //_Timer_InsertTraffic.Dispose();
                     _Timer_Start.Dispose();
                 }
 

@@ -16,7 +16,7 @@ namespace ZBYGate_Data_Collection.IEDataBase
         /// <returns></returns>
         public string[] Statistics_Select(DateTime dt)
         {
-            string[] ReturnDatabse = new string[3];
+            string[] ReturnDatabse = new string[3] {null,null,null};
 
             string Selecttext = string.Format("SELECT * FROM `hw`.`traffic` WHERE `Date`='{0}'", dt.ToUniversalTime().AddHours(8).ToString("yyyy-MM-dd"));
 
@@ -33,12 +33,12 @@ namespace ZBYGate_Data_Collection.IEDataBase
         }
 
         /// <summary>
-        /// 插入统计数据库
+        /// 更新统计数据库
         /// </summary>
         /// <param name="Sum">结余</param>
         /// <param name="In">进闸数量</param>
         /// <param name="Out">出闸数量</param>
-        public void Statistics_Update(int Balance, int In ,int Out,DateTime dt)
+        public int Statistics_Update(int Balance, int In ,int Out,DateTime dt)
         {
             string Updatetext = string.Empty;
             //入闸和出闸数量变化
@@ -64,11 +64,15 @@ namespace ZBYGate_Data_Collection.IEDataBase
                 SetMessageAction?.Invoke(string.Format("Statistics_Update[函数|Log|{0} 失败]", Updatetext));
             }
 
+
+            SetMessageAction?.Invoke(i.ToString());
             _Log.logInfo.Info(Updatetext);
+
+            return i;//判断更新数据成功没有
         }
 
         /// <summary>
-        /// 每天23点创建一条明天数据
+        /// 插入数据
         /// </summary>
         /// <param name="da"></param>
         public void Statistics_Insert(DateTime dt ,bool now)
