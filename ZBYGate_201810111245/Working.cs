@@ -601,17 +601,19 @@ namespace ZBYGate_Data_Collection
             Working.IN = Working.IN + 1;
             Working.BALANCE = Working.IN - Working.OUT;
 
-            if(StatisticsDataBaseUpdate?.Invoke(Working.BALANCE, Working.IN, 0, DateTime.Now)!=1)
-            {
-                //查询不到数据，创建数据
-                StatisticsDataBaseInsert?.BeginInvoke(DateTime.Now, true, StatisticsDataBase_Insert_CallBack, null);
-                Working.IN = 1;
-                Working.OUT = 0;
-                Working.BALANCE = 1;
-            }
+            StatisticsDataBaseUpdate?.BeginInvoke(Working.BALANCE, Working.IN, 0, DateTime.Now, Calculation_InCallBack,null);
 
-            //写统计数据到主界面
-            SetStatisticsLable_Action?.BeginInvoke(Working.IN.ToString(), Working.OUT.ToString(), Working.BALANCE.ToString(), null, null);
+            //if (StatisticsDataBaseUpdate?.Invoke(Working.BALANCE, Working.IN, 0, DateTime.Now)!=1)
+            //{
+            //    //查询不到数据，创建数据
+            //    StatisticsDataBaseInsert?.BeginInvoke(DateTime.Now, true, StatisticsDataBase_Insert_CallBack, null);
+            //    Working.IN = 1;
+            //    Working.OUT = 0;
+            //    Working.BALANCE = 1;
+            //}
+
+            ////写统计数据到主界面
+            //SetStatisticsLable_Action?.BeginInvoke(Working.IN.ToString(), Working.OUT.ToString(), Working.BALANCE.ToString(), null, null);
 
         }
 
@@ -623,7 +625,29 @@ namespace ZBYGate_Data_Collection
             Working.OUT = Working.OUT + 1;
             Working.BALANCE = Working.IN - Working.OUT;
 
-            if (StatisticsDataBaseUpdate?.Invoke(Working.BALANCE, Working.IN, 0, DateTime.Now) != 1)
+            StatisticsDataBaseUpdate?.BeginInvoke(Working.BALANCE, 0,Working.OUT ,DateTime.Now, Calculation_OutCallBack, null);
+
+            //if (StatisticsDataBaseUpdate?.Invoke(Working.BALANCE, 0, Working.OUT, DateTime.Now) != 1)
+            //{
+            //    //查询不到数据，创建数据
+            //    StatisticsDataBaseInsert?.BeginInvoke(DateTime.Now, true, StatisticsDataBase_Insert_CallBack, null);
+            //    Working.IN = 0;
+            //    Working.OUT = 1;
+            //    Working.BALANCE = -1;
+            //}
+
+            ////写统计数据到主界面
+            //SetStatisticsLable_Action?.BeginInvoke(Working.IN.ToString(), Working.OUT.ToString(), Working.BALANCE.ToString(),null,null);
+        }
+
+        /// <summary>
+        /// 统计出闸回调函数
+        /// </summary>
+        /// <param name="ar"></param>
+        private void Calculation_OutCallBack(IAsyncResult ar)
+        {
+
+            if(1!= StatisticsDataBaseUpdate.EndInvoke(ar))
             {
                 //查询不到数据，创建数据
                 StatisticsDataBaseInsert?.BeginInvoke(DateTime.Now, true, StatisticsDataBase_Insert_CallBack, null);
@@ -633,15 +657,8 @@ namespace ZBYGate_Data_Collection
             }
 
             //写统计数据到主界面
-            SetStatisticsLable_Action?.BeginInvoke(Working.IN.ToString(), Working.OUT.ToString(), Working.BALANCE.ToString(),null,null);
-        }
+            SetStatisticsLable_Action?.BeginInvoke(Working.IN.ToString(), Working.OUT.ToString(), Working.BALANCE.ToString(), null, null);
 
-        /// <summary>
-        /// 统计出闸回调函数
-        /// </summary>
-        /// <param name="ar"></param>
-        private void Calculation_OutCallBack(IAsyncResult ar)
-        {
             SetMessage_Action?.Invoke("StatisticsDataBaseUpdate[回调|更新|统计出闸数据库回调函数完成]");
         }
 
@@ -650,7 +667,18 @@ namespace ZBYGate_Data_Collection
         /// </summary>
         /// <param name="ar"></param>
         private void Calculation_InCallBack(IAsyncResult ar)
-        {
+        {           
+            if(1 != StatisticsDataBaseUpdate.EndInvoke(ar))
+            {
+                //查询不到数据，创建数据
+                StatisticsDataBaseInsert?.BeginInvoke(DateTime.Now, true, StatisticsDataBase_Insert_CallBack, null);
+                Working.IN = 1;
+                Working.OUT = 0;
+                Working.BALANCE = 1;          
+            }
+            //写统计数据到主界面
+            SetStatisticsLable_Action?.BeginInvoke(Working.IN.ToString(), Working.OUT.ToString(), Working.BALANCE.ToString(), null, null);
+
             SetMessage_Action?.Invoke("StatisticsDataBaseUpdate[回调|更新|统计入闸数据库回调函数完成]");
         }
         #endregion
