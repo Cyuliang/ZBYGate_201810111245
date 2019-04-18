@@ -9,6 +9,7 @@ namespace ZBYGate_Data_Collection.Https
 {
     class CHttp
     {
+
         private Log.CLog _Log = new Log.CLog();
         public Action<string> SetMessageAction;
 
@@ -40,7 +41,7 @@ namespace ZBYGate_Data_Collection.Https
             request.Method = "POST";
             request.Timeout = HttpTimeOut;
             request.ReadWriteTimeout = HttpReadWriteTimeout;
-            request.ContentType = "application/json";/*x-www-form-urlencoded";*/
+            request.ContentType = "application/json";/*x-www-form-urlencoded";*/            
 
             ////////////////////////////////////////201903301515
             ArriveParkJsonDict["eqId"] = eqid;
@@ -52,7 +53,7 @@ namespace ZBYGate_Data_Collection.Https
             }
             else
             {
-                SetMessageAction?.Invoke(string.Format("DEBUG TestType 索引超出"));
+                SetMessageAction?.Invoke(string.Format("DEBUG TestType 索引超出,测试使用"));
             }
 
             if (TestType.Length==2)
@@ -106,6 +107,8 @@ namespace ZBYGate_Data_Collection.Https
             Stream writer = null;
             try
             {
+                System.Net.ServicePointManager.DefaultConnectionLimit = 200;
+
                 writer = request.GetRequestStream();
                 if (writer != null)
                 {
@@ -133,12 +136,18 @@ namespace ZBYGate_Data_Collection.Https
                     SetMessageAction(string.Format("Return ArriveParkTime Data：{0}", postConent));
                     _Log.logInfo.Info(string.Format("Return ArriveParkTime Data：{0}", postConent));
 
+                    request.Abort();
+                    request = null;
+
                     return postConent;
                 }
             }
             catch (Exception ex)
             {
                 request.Abort();
+                request = null;
+
+
                 SetMessageAction?.Invoke(string.Format("Send ArriveParkTime Data Error:{0}", ex.ToString()));
                 _Log.logError.Error("Send ArriveParkTime Data Error", ex);
             }      
@@ -183,16 +192,23 @@ namespace ZBYGate_Data_Collection.Https
             Stream writer = null;
             try
             {
+                System.Net.ServicePointManager.DefaultConnectionLimit = 200;
+
                 writer = request.GetRequestStream();
                 if (writer != null)
                 {
                     writer.Write(Josntobyte, 0, Josntobyte.Length);
                     writer.Close();
                 }
+
+                request.Abort();
+                request = null;
             }
             catch (Exception ex)
             {
                 request.Abort();
+                request = null;
+
                 SetMessageAction?.Invoke(string.Format("Send LeaveParkTime Data Error:{0}", ex.ToString()));
                 _Log.logError.Error("Send LeaveParkTime Data Error", ex);
             }
