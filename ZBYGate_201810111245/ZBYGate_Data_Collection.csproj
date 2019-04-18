@@ -294,6 +294,11 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <None Include="release\SysSetup.ini" />
+    <None Include="release\ZBYGate Data Collection.exe.config" />
+    <None Include="release\ZBYGate Data Collection.exe.lastcodeanalysissucceeded" />
+    <None Include="release\ZBYGate Data Collection.vshost.exe.config" />
+    <None Include="release\ZBYGate Data Collection.vshost.exe.manifest" />
     <None Include="SysSetup.ini" />
   </ItemGroup>
   <ItemGroup>
@@ -381,6 +386,31 @@
     <Content Include="MySql.Web.dll" />
     <Content Include="n3kAdrtB.dll" />
     <Content Include="Newtonsoft.Json.dll" />
+    <Content Include="release\AxInterop.VeconclientProj.dll" />
+    <Content Include="release\borlndmm.dll" />
+    <Content Include="release\COM.DLL" />
+    <Content Include="release\Google.Protobuf.dll" />
+    <Content Include="release\Interop.VeconclientProj.dll" />
+    <Content Include="release\LedDynamicArea.dll" />
+    <Content Include="release\log4net.dll" />
+    <Content Include="release\MSComDlg.dll" />
+    <Content Include="release\MySql.Data.dll" />
+    <Content Include="release\MySql.Web.dll" />
+    <Content Include="release\n3kAdrtB.dll" />
+    <Content Include="release\Newtonsoft.Json.dll" />
+    <Content Include="release\Newtonsoft.Json.xml" />
+    <Content Include="release\OCX.DLL" />
+    <Content Include="release\sdtapi.dll" />
+    <Content Include="release\stdole.dll" />
+    <Content Include="release\Termb.dll" />
+    <Content Include="release\TransNet.dll" />
+    <Content Include="release\VeconclientProj.dll" />
+    <Content Include="release\WltRS.dll" />
+    <Content Include="release\WTY.dll" />
+    <Content Include="release\ZBYGate Data Collection.exe" />
+    <Content Include="release\ZBYGate Data Collection.exe.CodeAnalysisLog.xml" />
+    <Content Include="release\ZBYGate Data Collection.pdb" />
+    <Content Include="release\ZBYGate Data Collection.vshost.exe" />
     <Content Include="sdtapi.dll" />
     <Content Include="Termb.dll" />
     <Content Include="TransNet.dll" />
