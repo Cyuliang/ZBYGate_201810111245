@@ -28,6 +28,7 @@ namespace ZBYGate_Data_Collection
             else
             {
                 MessageBox.Show("密码错误,请重新输入!");
+                PasswordTextBox.Focus();
                 //PasswordAction?.Invoke(false);
             }
         }
